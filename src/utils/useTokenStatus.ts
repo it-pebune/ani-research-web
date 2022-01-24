@@ -25,8 +25,9 @@ const useTokenStatus = () => {
         } else {
           let response: any;
           try {
-            response = await auth.refreshToken();
+            response = await auth.refreshToken(authContext.refreshToken);
             const data = await response.data;
+            console.log(data);
             authContext.setToken(data.token.access);
             authContext.setTokenExpAt(
               new Date().getTime() + data.token.TokenExpAt * 1000
