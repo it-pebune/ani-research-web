@@ -23,6 +23,7 @@ const userService = {
     }
     return response;
   },
+
 };
 
 export default userService;

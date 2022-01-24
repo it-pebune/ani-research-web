@@ -6,6 +6,8 @@ export interface User {
     profileImageUrl: string,
     email: string;
     provider: string;
+    socialInfo: string,
+    phone: string,
     created: Date;
     updated: Date;
     lastLogin: Date;
