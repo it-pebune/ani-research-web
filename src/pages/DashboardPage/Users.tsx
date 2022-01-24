@@ -9,6 +9,7 @@ import {
 import React, { useState, useEffect } from "react";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
 import ModalEditUser from "../../components/ModalEditUser/ModalEditUser";
+import ModalEditUser from "../../components/ModalEditUser/ModalEditUser";
 import UsersSearchBarWithFilters from "../../components/UsersComponents/UsersSearchBarWithFilters";
 import UsersTableHeader from "../../components/UsersComponents/UsersTableHeader";
 import UsersTableRow from "../../components/UsersComponents/UsersTableRow";
@@ -63,6 +64,9 @@ const Users = (props: any) => {
   return (
     <div className="users-wrapper">
       <ModalEditUser focusedUser={focusedUser!} modalIsOpen={modalIsOpen} handleCloseModal={handleClosingModal}></ModalEditUser>
+            <CustomButton onClick={()=>{handleOpeningModal(user)}}>
+              <CustomTypography withBg transKey='second-main'/>
+            </CustomButton>
             <CustomButton onClick={()=>{handleOpeningModal(user)}}>
               <CustomTypography withBg transKey='second-main'/>
             </CustomButton>
