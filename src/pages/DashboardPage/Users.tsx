@@ -8,12 +8,15 @@ import {
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
+import ModalEditUser from "../../components/ModalEditUser/ModalEditUser";
 import UsersSearchBarWithFilters from "../../components/UsersComponents/UsersSearchBarWithFilters";
 import UsersTableHeader from "../../components/UsersComponents/UsersTableHeader";
 import UsersTableRow from "../../components/UsersComponents/UsersTableRow";
 import { User } from "../../interfaces/UserInterfaces";
 
 import userService from "../../services/userService";
+import CustomButton from "../../shared/CustomButton";
+import CustomTypography from "../../shared/CustomTypography";
 import useTokenStatus from "../../utils/useTokenStatus";
 
 import "./Users.css";
@@ -23,6 +26,17 @@ const Users = (props: any) => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const tokenStatus = useTokenStatus();
 
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const [focusedUser, setFocusedUser] = useState<User>();
+
+  const handleOpeningModal = (userOnFocus: User) => {
+    setModalIsOpen(true);
+    setFocusedUser(userOnFocus);
+  } 
+
+  const handleClosingModal = () => {
+    setModalIsOpen(false);
+  } 
 
   const handleFiltersOpen = () =>{
     setDialogOpened(true);
@@ -48,6 +62,10 @@ const Users = (props: any) => {
 
   return (
     <div className="users-wrapper">
+      <ModalEditUser focusedUser={focusedUser!} modalIsOpen={modalIsOpen} handleCloseModal={handleClosingModal}></ModalEditUser>
+            <CustomButton onClick={()=>{handleOpeningModal(user)}}>
+              <CustomTypography withBg transKey='second-main'/>
+            </CustomButton>
 
       <div className="search-field">
       <UsersSearchBarWithFilters onFiltersOpen={handleFiltersOpen}></UsersSearchBarWithFilters>

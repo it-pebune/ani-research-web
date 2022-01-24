@@ -1,0 +1,15 @@
+{
+    "components" : {
+        "modal-edit-user" : {
+            "header" : {
+                "title": "Edit user"
+            },
+            "content": {
+                "edit-user-form": {}
+            },
+            "actions": {
+                "update-user": "Update"
+            }
+        }
+    }
+}

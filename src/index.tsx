@@ -1,12 +1,14 @@
 import React, { Children } from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import AuthProvider from "./providers/AuthProvider";
 import { AuthContextProvider } from "./store/AuthContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import { UserContextProvider } from "./store/UserContext";
+
+import './i18n.tsx';
+import "./index.css";
 
 ReactDOM.render(
   <React.StrictMode>
