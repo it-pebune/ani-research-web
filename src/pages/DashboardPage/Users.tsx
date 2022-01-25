@@ -22,6 +22,8 @@ const Users = (props: any) => {
   const [filteredResult, setFilteredResult] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [myFilters, setFilters] = useState<Filters>({statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:""}});
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [page, setPage] = useState(0)
   const [dialogOpened, setDialogOpened] = useState(false)
   const tokenStatus = useTokenStatus();
 
@@ -29,21 +31,27 @@ const Users = (props: any) => {
     setDialogOpened(true);
   }
 
-  const handleChangePage = () => {};
+  const handleChangePage = (e:any, newPage:number) => {
+    setPage(newPage);
+  };
 
-  const handleChangeRowsPerPage = () => {};
+  const handleChangeRowsPerPage = (e:any) => {
+    setRowsPerPage(e.target.value)
+    setPage(0);
+  };
 
   const handleFilters = (filters:Filters) => {
     setDialogOpened(false);
     setFilters(filters);
+    setPage(0);
   }
 
   const handleSearch = (string: string)=>{
     setFilteredUsers(users.filter(user=>user.displayName.toLowerCase().includes(string.toLowerCase())));
+    setPage(0);
   }
 
   const handleSortByName = (direction: string) => {
-    console.log(direction);
     if(direction==="asc"){
       setFilteredResult([...filteredResult.sort((a,b)=>a.displayName < b.displayName ? -1 : a.displayName > b.displayName ? 1 : 0)])
     }else if(direction==="desc"){
@@ -109,7 +117,7 @@ const Users = (props: any) => {
             <UsersTableHeader changeNameDirection={handleSortByName} changeLastLoginDirection={handleSortByLastLogin}></UsersTableHeader>
             <TableBody style={{ flex: "1", overflow: "auto" }}>
               {filteredResult.length > 0 &&
-                filteredResult.map((user, index) => (
+                filteredResult.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, index) => (
                   <UsersTableRow
                     key={`table-row-${index}`}
                     user={user}
@@ -123,9 +131,9 @@ const Users = (props: any) => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={users.length}
-            rowsPerPage={10}
-            page={0}
+            count={filteredResult.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
             labelRowsPerPage="Randuri pe pagina"
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
