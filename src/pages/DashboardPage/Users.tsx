@@ -1,19 +1,16 @@
 import {
-  Avatar,
   Table,
   TableBody,
   TableContainer,
   TablePagination,
-  TextField,
 } from "@mui/material";
 import moment from "moment";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
 import UsersSearchBarWithFilters from "../../components/UsersComponents/UsersSearchBarWithFilters";
 import UsersTableHeader from "../../components/UsersComponents/UsersTableHeader";
 import UsersTableRow from "../../components/UsersComponents/UsersTableRow";
 import { User, Filters } from "../../interfaces/UserInterfaces";
-import { userRoles } from "../../resources/userRoles";
 
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
@@ -22,7 +19,9 @@ import "./Users.css";
 
 const Users = (props: any) => {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredResult, setFilteredResult] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [myFilters, setFilters] = useState<Filters>({statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:""}});
   const [dialogOpened, setDialogOpened] = useState(false)
   const tokenStatus = useTokenStatus();
 
@@ -37,28 +36,35 @@ const Users = (props: any) => {
 
   const handleFilters = (filters:Filters) => {
     setDialogOpened(false);
-    console.log(filters);
-    if(filters.statusFilters.length===0 && filters.roleFilters.length===0 && filters.lastDateFilter.period===null){
-      setFilteredUsers(users);
+    setFilters(filters);
+  }
+
+  const handleSearch = (string: string)=>{
+    setFilteredUsers(users.filter(user=>user.displayName.toLowerCase().includes(string.toLowerCase())));
+  }
+
+  useEffect(()=>{
+    console.log('bla');
+    if(myFilters.statusFilters.length===0 && myFilters.roleFilters.length===0 && myFilters.lastDateFilter.period===null){
+      setFilteredResult(filteredUsers);
     }else{
-      let filteredResult = users;
-      if(filters.statusFilters.length===1){
-        filteredResult = filters.statusFilters.includes(1) ? filteredResult.filter(user=>user.role) : filteredResult.filter(user=>!user.role)
+      let filteredResult = filteredUsers;
+      if(myFilters.statusFilters.length===1){
+        filteredResult = myFilters.statusFilters.includes(1) ? filteredResult.filter(user=>user.role) : filteredResult.filter(user=>!user.role)
       };
-      if((filters.statusFilters.length===0 || filters.statusFilters.includes(1))&&filters.roleFilters.length>0){
-        filteredResult = filteredResult.filter(user=>filters.roleFilters.includes(user.roleId))
+      if((myFilters.statusFilters.length===0 || myFilters.statusFilters.includes(1))&&myFilters.roleFilters.length>0){
+        filteredResult = filteredResult.filter(user=>myFilters.roleFilters.includes(user.roleId))
       }
-      if(filters.lastDateFilter.period!==null){
-        if(filters.lastDateFilter.logged===0){
-          filteredResult = filteredResult.filter(user=> moment(user.lastLogin).isBefore(moment().subtract(filters.lastDateFilter.period,'d').format('YYYY-MM-DD'), 'day'))
+      if(myFilters.lastDateFilter.period!==""){
+        if(myFilters.lastDateFilter.logged===0){
+          filteredResult = filteredResult.filter(user=> moment(user.lastLogin).isBefore(moment().subtract(myFilters.lastDateFilter.period,'d').format('YYYY-MM-DD'), 'day'))
         }else{
-          filteredResult = filteredResult.filter(user=> moment(user.lastLogin).isSameOrAfter(moment().subtract(filters.lastDateFilter.period,'d').format('YYYY-MM-DD'), 'day'))
+          filteredResult = filteredResult.filter(user=> moment(user.lastLogin).isSameOrAfter(moment().subtract(myFilters.lastDateFilter.period,'d').format('YYYY-MM-DD'), 'day'))
         }
       }
-      setFilteredUsers(filteredResult);
-    }
-
-  }
+      setFilteredResult(filteredResult);
+    }  
+  }, [filteredUsers, myFilters])
 
   useEffect(() => {
     if (tokenStatus.active) {
@@ -75,7 +81,7 @@ const Users = (props: any) => {
     <div className="users-wrapper">
 
       <div className="search-field">
-      <UsersSearchBarWithFilters onFiltersOpen={handleFiltersOpen}></UsersSearchBarWithFilters>
+      <UsersSearchBarWithFilters onSearchChanged={handleSearch} onFiltersOpen={handleFiltersOpen}></UsersSearchBarWithFilters>
       </div>
       <div className="table-wrapper">
         <div className="table-holder">
@@ -87,8 +93,8 @@ const Users = (props: any) => {
           >
             <UsersTableHeader></UsersTableHeader>
             <TableBody style={{ flex: "1", overflow: "auto" }}>
-              {filteredUsers.length > 0 &&
-                filteredUsers.map((user, index) => (
+              {filteredResult.length > 0 &&
+                filteredResult.map((user, index) => (
                   <UsersTableRow
                     key={`table-row-${index}`}
                     user={user}
@@ -111,7 +117,7 @@ const Users = (props: any) => {
           />
         </div>
       </div>
-      <UsersFiltersDialog open={dialogOpened} onClose={()=>setDialogOpened(false)} onFilters={handleFilters}></UsersFiltersDialog>
+      <UsersFiltersDialog open={dialogOpened} onClose={()=>setDialogOpened(false)} onFilters={handleFilters} filters={myFilters}></UsersFiltersDialog>
     </div>
   );
 };

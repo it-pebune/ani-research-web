@@ -6,11 +6,17 @@ import IconButton from "@mui/material/IconButton";
 import Icon from "@mui/material/Icon";
 
 interface Props{
-    onFiltersOpen:any
+    onFiltersOpen:any,
+    onSearchChanged: any
 }
 
 
-const UsersSearchBarWithFilters: React.FC<Props> = ({onFiltersOpen}) => {
+const UsersSearchBarWithFilters: React.FC<Props> = ({onSearchChanged, onFiltersOpen}) => {
+
+  const handleSearch = (e:any) => {
+    onSearchChanged(e.target.value)
+  }
+
   return (
     <Paper
       component="form"
@@ -27,7 +33,8 @@ const UsersSearchBarWithFilters: React.FC<Props> = ({onFiltersOpen}) => {
       <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder="Cauta in lista"
-        inputProps={{ "aria-label": "search google maps" }}
+        inputProps={{ "aria-label": "search-field" }}
+        onKeyUp={handleSearch}
       />
 
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
