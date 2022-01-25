@@ -29,11 +29,10 @@ interface Props {
 
 const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
 
-  const [filters, setFilters] = useState<Filters>({statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:null}});
+  const [filters, setFilters] = useState<Filters>({statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:""}});
   const [wereLogged, setWereLogged] =useState<number|null>(null)
 
   const handleStatuses = (e:any) =>{
-    console.log(parseInt(e.target.value));
     const statuses =  filters.statusFilters.includes(parseInt(e.target.value)) ? filters.statusFilters.filter(item=>item!==parseInt(e.target.value)) : [...filters.statusFilters, parseInt(e.target.value)];
     setFilters({...filters, statusFilters: [...statuses]});
   }
@@ -56,7 +55,6 @@ const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
 
   const handleClose = () =>{
     onFilters(filters);
-    setFilters({statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:null}})
   }
 
   return (
@@ -77,11 +75,13 @@ const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
             <FormControlLabel
               value = {0}
               onChange={handleStatuses}
+              checked={filters.statusFilters.includes(0)}
               control={<Checkbox />}
               label="in asteptare"
             ></FormControlLabel>
             <FormControlLabel
               value = {1}
+              checked={filters.statusFilters.includes(1)}
               onChange={handleStatuses}
               control={<Checkbox />}
               label="activi"
@@ -93,12 +93,14 @@ const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
             <FormControlLabel
               value = {250}
+              checked={filters.roleFilters.includes(250)}
               onChange={handleRoles}
               control={<Checkbox />}
               label="admin"
             ></FormControlLabel>
             <FormControlLabel
               value = {150}
+              checked={filters.roleFilters.includes(150)}
               onChange={handleRoles}
               control={<Checkbox />}
               label="coordinator"
@@ -106,11 +108,13 @@ const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
             <FormControlLabel
               value = {70}
               onChange={handleRoles}
+              checked={filters.roleFilters.includes(70)}
               control={<Checkbox />}
               label="reviewer"
             ></FormControlLabel>
             <FormControlLabel
               value = {10}
+              checked={filters.roleFilters.includes(10)}
               onChange={handleRoles}
               control={<Checkbox />}
               label="researcher"
@@ -139,7 +143,7 @@ const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
 
             <FormControl fullWidth>
               <InputLabel>alege perioada</InputLabel>
-              <Select defaultValue="" label="alege perioada" onChange={handlePeriod}>
+              <Select value={filters.lastDateFilter.period} label="alege perioada" onChange={handlePeriod}>
                 <MenuItem value={7}>ultima saptamana</MenuItem>
                 <MenuItem value={30}>ultima luna</MenuItem>
                 <MenuItem value={90}>ultimile 3 luni</MenuItem>

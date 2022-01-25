@@ -28,6 +28,6 @@ export interface Filters {
     roleFilters: number[],
     lastDateFilter:{
       logged: number|null,
-      period?: number|null
+      period?: number|null|string
     }
   }
