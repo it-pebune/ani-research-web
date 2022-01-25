@@ -6,9 +6,8 @@ import {
   TablePagination,
   TextField,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
-import ModalEditUser from "../../components/ModalEditUser/ModalEditUser";
 import ModalEditUser from "../../components/ModalEditUser/ModalEditUser";
 import UsersSearchBarWithFilters from "../../components/UsersComponents/UsersSearchBarWithFilters";
 import UsersTableHeader from "../../components/UsersComponents/UsersTableHeader";
@@ -30,22 +29,22 @@ const Users = (props: any) => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [focusedUser, setFocusedUser] = useState<User>();
 
-  const handleOpeningModal = (userOnFocus: User) => {
-    setModalIsOpen(true);
-    setFocusedUser(userOnFocus);
-  } 
+  // const handleOpeningModal = (userOnFocus: User) => {
+  //   setModalIsOpen(true);
+  //   setFocusedUser(userOnFocus);
+  // }
 
   const handleClosingModal = () => {
     setModalIsOpen(false);
-  } 
+  }
 
-  const handleFiltersOpen = () =>{
+  const handleFiltersOpen = () => {
     setDialogOpened(true);
   }
 
-  const handleChangePage = () => {};
+  const handleChangePage = () => { };
 
-  const handleChangeRowsPerPage = () => {};
+  const handleChangeRowsPerPage = () => { };
 
   const handleFilters = () => {
 
@@ -63,50 +62,44 @@ const Users = (props: any) => {
 
   return (
     <div className="users-wrapper">
-      <ModalEditUser focusedUser={focusedUser!} modalIsOpen={modalIsOpen} handleCloseModal={handleClosingModal}></ModalEditUser>
-            <CustomButton onClick={()=>{handleOpeningModal(user)}}>
-              <CustomTypography withBg transKey='second-main'/>
-            </CustomButton>
-            <CustomButton onClick={()=>{handleOpeningModal(user)}}>
-              <CustomTypography withBg transKey='second-main'/>
-            </CustomButton>
+      <ModalEditUser focusedUser={focusedUser!} modalIsOpen={modalIsOpen} handleCloseModal={handleClosingModal} />
 
       <div className="search-field">
-      <UsersSearchBarWithFilters onFiltersOpen={handleFiltersOpen}></UsersSearchBarWithFilters>
+        <UsersSearchBarWithFilters onFiltersOpen={handleFiltersOpen}></UsersSearchBarWithFilters>
       </div>
       <div className="table-wrapper">
         <div className="table-holder">
-        <TableContainer
-          style={{ display: "flex",  flexDirection: "column", height: "100%" }}
-        >
-          <Table
+          <TableContainer
             style={{ display: "flex", flexDirection: "column", height: "100%" }}
           >
-            <UsersTableHeader></UsersTableHeader>
-            <TableBody style={{ flex: "1", overflow: "auto" }}>
-              {users.length > 0 &&
-                users.map((user, index) => (
-                  <UsersTableRow
-                    key={`table-row-${index}`}
-                    user={user}
-                  ></UsersTableRow>
-                ))}
-              {users.length > 0 &&
-                users.map((user, index) => (
-                  <UsersTableRow
-                    key={`table-rox-${index}`}
-                    user={user}
-                  ></UsersTableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            <Table
+              style={{ display: "flex", flexDirection: "column", height: "100%" }}
+            >
+              <UsersTableHeader></UsersTableHeader>
+              <TableBody style={{ flex: "1", overflow: "auto" }}>
+                {users.length > 0 &&
+                  users.map((user, index) => (
+                    <UsersTableRow
+                      key={`table-row-${index}`}
+                      user={user}
+                    ></UsersTableRow>
+                  ))}
+                {users.length > 0 &&
+                  users.map((user, index) => (
+                    <UsersTableRow
+                      key={`table-rox-${index}`}
+                      user={user}
+                    ></UsersTableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
         <div className="table-pagination">
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={users.length*2}
+            count={users.length * 2}
             rowsPerPage={10}
             page={0}
             labelRowsPerPage="Randuri pe pagina"
@@ -115,7 +108,7 @@ const Users = (props: any) => {
           />
         </div>
       </div>
-      <UsersFiltersDialog open={dialogOpened} onClose={()=>setDialogOpened(false)} onFilters={handleFilters}></UsersFiltersDialog>
+      <UsersFiltersDialog open={dialogOpened} onClose={() => setDialogOpened(false)} onFilters={handleFilters}></UsersFiltersDialog>
     </div>
   );
 };
