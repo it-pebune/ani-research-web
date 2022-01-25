@@ -7,6 +7,7 @@ import {
 import moment from "moment";
 import { useState, useEffect } from "react";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
+import UsersFIltersOverview from "../../components/UsersComponents/UsersFIltersOverview";
 import UsersSearchBarWithFilters from "../../components/UsersComponents/UsersSearchBarWithFilters";
 import UsersTableHeader from "../../components/UsersComponents/UsersTableHeader";
 import UsersTableRow from "../../components/UsersComponents/UsersTableRow";
@@ -67,8 +68,12 @@ const Users = (props: any) => {
     }
   }
 
+  const handleFiltersChanged = (changedFilters: Filters) => {
+    setFilters(changedFilters)
+  }
+
   useEffect(()=>{
-    if(myFilters.statusFilters.length===0 && myFilters.roleFilters.length===0 && myFilters.lastDateFilter.period===null){
+    if(myFilters.statusFilters.length===0 && myFilters.roleFilters.length===0 && myFilters.lastDateFilter.period===""){
       setFilteredResult(filteredUsers);
     }else{
       let filteredResult = filteredUsers;
@@ -102,7 +107,9 @@ const Users = (props: any) => {
 
   return (
     <div className="users-wrapper">
-
+      <div className="filters-overview">
+        <UsersFIltersOverview filters={myFilters} onFiltersChanged={handleFiltersChanged}></UsersFIltersOverview>
+      </div>
       <div className="search-field">
       <UsersSearchBarWithFilters onSearchChanged={handleSearch} onFiltersOpen={handleFiltersOpen}></UsersSearchBarWithFilters>
       </div>

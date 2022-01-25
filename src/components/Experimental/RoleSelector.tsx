@@ -1,6 +1,6 @@
 import { Button, Tabs, Tab } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import { userRoles } from '../resources/userRoles';
+import { userRoles } from '../../resources/userRoles';
 
 import "./RoleSelector.css";
 
