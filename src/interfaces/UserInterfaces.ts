@@ -22,3 +22,12 @@ export interface CurrentUser {
     profileImageUrl: string
     roles: number[]
 }
+
+export interface Filters {
+    statusFilters: number[],
+    roleFilters: number[],
+    lastDateFilter:{
+      logged: number|null,
+      period?: number|null
+    }
+  }

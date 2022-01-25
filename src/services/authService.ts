@@ -36,7 +36,7 @@ const auth = {
     let response: any;
     try {
       response = await axios.get(`${API_BASE_URL}/auth/refresh`, {
-        params: { token: refreshToken },
+        data: { token: refreshToken },
       });
       const data = await response.data;
       return data;

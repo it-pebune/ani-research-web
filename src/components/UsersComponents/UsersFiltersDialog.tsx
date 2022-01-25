@@ -16,7 +16,9 @@ import {
 } from "@mui/material";
 
 import "./UsersFiltersDialog.css";
-import { CheckBoxSharp } from "@mui/icons-material";
+
+import { Filters } from "../../interfaces/UserInterfaces";
+import CustomDialogHeader from "../Custom/CustomDialogHeader";
 
 interface Props {
   open: boolean;
@@ -24,39 +26,38 @@ interface Props {
   onFilters: any;
 }
 
-interface Filters {
-  statusFilters: number[],
-  roleFilters: number[],
-  lastDateFilter:{
-    logged: number[],
-    period: string
-  }
-}
 
 const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
 
-  const [filters, setFilters] = useState<Filters>({statusFilters:[], roleFilters:[], lastDateFilter:{logged:[], period:""}});
-  const handleClose = () => {};
+  const [filters, setFilters] = useState<Filters>({statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:null}});
+  const [wereLogged, setWereLogged] =useState<number|null>(null)
 
   const handleStatuses = (e:any) =>{
-    const statuses =  filters.statusFilters.includes(e.target?.value) ? filters.statusFilters.filter(item=>item!==e.target.value) : [...filters.statusFilters, e.target.value];
+    console.log(parseInt(e.target.value));
+    const statuses =  filters.statusFilters.includes(parseInt(e.target.value)) ? filters.statusFilters.filter(item=>item!==parseInt(e.target.value)) : [...filters.statusFilters, parseInt(e.target.value)];
     setFilters({...filters, statusFilters: [...statuses]});
-
-
   }
 
   const handleRoles = (e:any) =>{
-    console.log(e.target?.value)
+    const roles = filters.roleFilters.includes(parseInt(e.target.value)) ? filters.roleFilters.filter(item=>item!==parseInt(e.target.value)) : [...filters.roleFilters, parseInt(e.target.value)];
+    setFilters({...filters, roleFilters: [...roles]});
   }
 
   const handleWereLogged = (e:any) =>{
-    console.log(e.target?.value)
+    setWereLogged(parseInt(e.target.value));
+    setFilters({...filters, lastDateFilter:{logged:parseInt(e.target.value), period: filters.lastDateFilter.period}});
   }
 
-  useEffect(()=>{
-    console.log(filters);
-  },[filters])
+  const handlePeriod = (e:any) => {
+    const loggedSelected = filters.lastDateFilter.logged;
+    setWereLogged(!loggedSelected ? 0 : loggedSelected);
+    setFilters({...filters, lastDateFilter:{logged: !loggedSelected ? 0 : loggedSelected,  period:parseInt(e.target.value)}});
+  }
 
+  const handleClose = () =>{
+    onFilters(filters);
+    setFilters({statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:null}})
+  }
 
   return (
     <Dialog
@@ -68,22 +69,7 @@ const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
       onClose={onClose}
       open={open}
     >
-      <DialogTitle
-        sx={{
-          color: "#6B636B",
-          fontSize: "17px",
-          borderBottom: "1px solid #bdbdbd",
-        }}
-      >
-        <Icon sx={{ fontSize: "16px", marginRight: "16px" }}>tune</Icon>
-        Filtre utilizatori
-        <IconButton
-          sx={{ position: "absolute", right: "8px", top: "8px" }}
-          onClick={onClose}
-        >
-          <Icon>close</Icon>
-        </IconButton>
-      </DialogTitle>
+      <CustomDialogHeader title="Filtreaza utilizatori" icon="tune" onClose={onClose}></CustomDialogHeader>
       <DialogContent>
         <div className="filters-section">
           <h5>filtreaza utilizatori dupa status</h5>
@@ -139,29 +125,31 @@ const UsersFiltersDialog: React.FC<Props> = ({ open, onClose, onFilters }) => {
                 control={<Checkbox />}
                 label="s-au logat"
                 value = {1}
+                checked = { wereLogged == 1}
                 onChange={handleWereLogged}
               ></FormControlLabel>
               <FormControlLabel
                 control={<Checkbox />}
                 label="nu s-au logat"
                 value = {0}
+                checked = { wereLogged == 0 }
                 onChange={handleWereLogged}
               ></FormControlLabel>
             </div>
 
             <FormControl fullWidth>
               <InputLabel>alege perioada</InputLabel>
-              <Select defaultValue="" label="alege perioada">
-                <MenuItem value={0}>ultima saptamana</MenuItem>
-                <MenuItem value={1}>ultima luna</MenuItem>
-                <MenuItem value={2}>ultimile 3 luni</MenuItem>
+              <Select defaultValue="" label="alege perioada" onChange={handlePeriod}>
+                <MenuItem value={7}>ultima saptamana</MenuItem>
+                <MenuItem value={30}>ultima luna</MenuItem>
+                <MenuItem value={90}>ultimile 3 luni</MenuItem>
               </Select>
             </FormControl>
           </div>
         </div>
       </DialogContent>
-      <DialogActions>
-        <Button>Filtreaza</Button>
+      <DialogActions sx={{padding: "16px", borderTop: "1px solid #bdbdbd"}}>
+        <Button onClick={()=>handleClose()}>Filtreaza</Button>
       </DialogActions>
     </Dialog>
   );

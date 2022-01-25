@@ -27,7 +27,6 @@ const UsersTableRow: React.FC<Props> = ({ user }) => {
       sx={{
         display: "grid",
         gridTemplateColumns: "60px 200px 1fr 200px 150px 70px",
-        gridGap: "16px",
       }}
     >
       <TableCell className={classes.tableCell}>

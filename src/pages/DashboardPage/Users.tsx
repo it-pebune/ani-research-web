@@ -6,12 +6,14 @@ import {
   TablePagination,
   TextField,
 } from "@mui/material";
+import moment from "moment";
 import React, { useState, useEffect } from "react";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
 import UsersSearchBarWithFilters from "../../components/UsersComponents/UsersSearchBarWithFilters";
 import UsersTableHeader from "../../components/UsersComponents/UsersTableHeader";
 import UsersTableRow from "../../components/UsersComponents/UsersTableRow";
-import { User } from "../../interfaces/UserInterfaces";
+import { User, Filters } from "../../interfaces/UserInterfaces";
+import { userRoles } from "../../resources/userRoles";
 
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
@@ -20,6 +22,7 @@ import "./Users.css";
 
 const Users = (props: any) => {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [dialogOpened, setDialogOpened] = useState(false)
   const tokenStatus = useTokenStatus();
 
@@ -32,7 +35,28 @@ const Users = (props: any) => {
 
   const handleChangeRowsPerPage = () => {};
 
-  const handleFilters = () => {
+  const handleFilters = (filters:Filters) => {
+    setDialogOpened(false);
+    console.log(filters);
+    if(filters.statusFilters.length===0 && filters.roleFilters.length===0 && filters.lastDateFilter.period===null){
+      setFilteredUsers(users);
+    }else{
+      let filteredResult = users;
+      if(filters.statusFilters.length===1){
+        filteredResult = filters.statusFilters.includes(1) ? filteredResult.filter(user=>user.role) : filteredResult.filter(user=>!user.role)
+      };
+      if((filters.statusFilters.length===0 || filters.statusFilters.includes(1))&&filters.roleFilters.length>0){
+        filteredResult = filteredResult.filter(user=>filters.roleFilters.includes(user.roleId))
+      }
+      if(filters.lastDateFilter.period!==null){
+        if(filters.lastDateFilter.logged===0){
+          filteredResult = filteredResult.filter(user=> moment(user.lastLogin).isBefore(moment().subtract(filters.lastDateFilter.period,'d').format('YYYY-MM-DD'), 'day'))
+        }else{
+          filteredResult = filteredResult.filter(user=> moment(user.lastLogin).isSameOrAfter(moment().subtract(filters.lastDateFilter.period,'d').format('YYYY-MM-DD'), 'day'))
+        }
+      }
+      setFilteredUsers(filteredResult);
+    }
 
   }
 
@@ -41,6 +65,7 @@ const Users = (props: any) => {
       const usersResponse = async () => {
         const response = await userService.getUsers({ ...tokenStatus });
         setUsers(response);
+        setFilteredUsers(response);
       };
       usersResponse();
     }
@@ -62,17 +87,10 @@ const Users = (props: any) => {
           >
             <UsersTableHeader></UsersTableHeader>
             <TableBody style={{ flex: "1", overflow: "auto" }}>
-              {users.length > 0 &&
-                users.map((user, index) => (
+              {filteredUsers.length > 0 &&
+                filteredUsers.map((user, index) => (
                   <UsersTableRow
                     key={`table-row-${index}`}
-                    user={user}
-                  ></UsersTableRow>
-                ))}
-              {users.length > 0 &&
-                users.map((user, index) => (
-                  <UsersTableRow
-                    key={`table-rox-${index}`}
                     user={user}
                   ></UsersTableRow>
                 ))}
@@ -84,7 +102,7 @@ const Users = (props: any) => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={users.length*2}
+            count={users.length}
             rowsPerPage={10}
             page={0}
             labelRowsPerPage="Randuri pe pagina"
