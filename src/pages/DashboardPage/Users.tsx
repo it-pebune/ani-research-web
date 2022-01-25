@@ -25,7 +25,6 @@ const Users = (props: any) => {
   const [dialogOpened, setDialogOpened] = useState(false)
   const tokenStatus = useTokenStatus();
 
-
   const handleFiltersOpen = () =>{
     setDialogOpened(true);
   }
@@ -43,8 +42,24 @@ const Users = (props: any) => {
     setFilteredUsers(users.filter(user=>user.displayName.toLowerCase().includes(string.toLowerCase())));
   }
 
+  const handleSortByName = (direction: string) => {
+    console.log(direction);
+    if(direction==="asc"){
+      setFilteredResult([...filteredResult.sort((a,b)=>a.displayName < b.displayName ? -1 : a.displayName > b.displayName ? 1 : 0)])
+    }else if(direction==="desc"){
+      setFilteredResult([...filteredResult.sort((a,b)=>a.displayName < b.displayName ? 1 : a.displayName > b.displayName ? -1 : 0)])
+    }
+  }
+
+  const handleSortByLastLogin = (direction: string) => {
+    if(direction==="asc"){
+      setFilteredResult([...filteredResult.sort((a,b)=>a.lastLogin < b.lastLogin ? -1 : a.lastLogin > b.lastLogin ? 1 : 0)])
+    }else if(direction==="desc"){
+      setFilteredResult([...filteredResult.sort((a,b)=>a.lastLogin < b.lastLogin ? 1 : a.lastLogin > b.lastLogin ? -1 : 0)])
+    }
+  }
+
   useEffect(()=>{
-    console.log('bla');
     if(myFilters.statusFilters.length===0 && myFilters.roleFilters.length===0 && myFilters.lastDateFilter.period===null){
       setFilteredResult(filteredUsers);
     }else{
@@ -91,7 +106,7 @@ const Users = (props: any) => {
           <Table
             style={{ display: "flex", flexDirection: "column", height: "100%" }}
           >
-            <UsersTableHeader></UsersTableHeader>
+            <UsersTableHeader changeNameDirection={handleSortByName} changeLastLoginDirection={handleSortByLastLogin}></UsersTableHeader>
             <TableBody style={{ flex: "1", overflow: "auto" }}>
               {filteredResult.length > 0 &&
                 filteredResult.map((user, index) => (

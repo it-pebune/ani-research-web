@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   TableHead,
   TableRow,
@@ -24,8 +24,27 @@ const useStyles = makeStyles({
   }
 });
 
-const UsersTableHeader = () => {
+interface Props{
+  changeNameDirection:any,
+  changeLastLoginDirection: any
+}
+
+const UsersTableHeader: React.FC<Props> = ({changeNameDirection, changeLastLoginDirection}) => {
   const classes = useStyles();
+
+  const [nDirection, setNDirection] = useState<"asc"|"desc">("asc")
+  const [lLDirection, setLLDirection] = useState<"asc"|"desc">("asc")
+
+  const handleNDirection = (direction:"asc"|"desc") =>{
+    console.log(direction);
+    setNDirection(direction);
+    changeNameDirection(direction);
+  }
+
+  const handleLLDirection = (direction:"asc"|"desc") =>{
+    setLLDirection(direction);
+    changeLastLoginDirection(direction);
+  }
 
   return (
 
@@ -40,10 +59,13 @@ const UsersTableHeader = () => {
         <TableCell className={classes.tableCell} align="justify">
           NUME
           <TableSortLabel
-            direction="asc"
+            direction={nDirection}
             active={true}
             IconComponent={() => (
-              <Icon className={classes.tableCellSortLabel}>arrow_drop_down</Icon>
+              <>
+              {nDirection==="desc"&&<Icon onClick={()=>{handleNDirection("asc")}} className={classes.tableCellSortLabel}>arrow_drop_down</Icon>}
+              {nDirection==="asc"&&<Icon onClick={()=>{handleNDirection("desc")}} className={classes.tableCellSortLabel}>arrow_drop_up</Icon>}
+              </>
             )}
           ></TableSortLabel>
         </TableCell>
@@ -51,10 +73,13 @@ const UsersTableHeader = () => {
         <TableCell className={classes.tableCell} align="center">
           ULTIMA LOGARE
           <TableSortLabel
-            direction="asc"
+            direction={lLDirection}
             active={true}
             IconComponent={() => (
-              <Icon sx={{ fontSize: 30 }}>arrow_drop_down</Icon>
+              <>
+              {lLDirection==="asc"&&<Icon onClick={()=>{handleLLDirection("desc")}} className={classes.tableCellSortLabel}>arrow_drop_down</Icon>}
+              {lLDirection==="desc"&&<Icon onClick={()=>{handleLLDirection("asc")}} className={classes.tableCellSortLabel}>arrow_drop_up</Icon>}
+              </>
             )}
           ></TableSortLabel>
         </TableCell>
