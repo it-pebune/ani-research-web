@@ -1,10 +1,12 @@
 import { Avatar, Icon } from "@mui/material";
-import React, { useContext } from "react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "../store/AuthContext";
 import UserContext from "../store/UserContext";
 import "./DashHeader.css";
 
 const DashHeader = () => {
+  const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const userContext = useContext(UserContext);
 
@@ -22,6 +24,7 @@ const DashHeader = () => {
       email: undefined,
       profileImageUrl: undefined,
     });
+    navigate("/");
   };
 
   return (
