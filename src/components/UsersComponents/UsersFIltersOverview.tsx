@@ -201,8 +201,7 @@ const UsersFIltersOverview: React.FC<Props> = ({
           height: "32px",
           width: "32px",
           marginTop: "16px",
-          position: "absolute",
-          right: "24px",
+
         }}
       >
         <Icon sx={{ fontSize: "18" }}>close</Icon>

@@ -23,7 +23,7 @@ const Users = (props: any) => {
   const [filteredResult, setFilteredResult] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [myFilters, setFilters] = useState<Filters>({statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:""}});
-  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   const [page, setPage] = useState(0)
   const [dialogOpened, setDialogOpened] = useState(false)
   const tokenStatus = useTokenStatus();
