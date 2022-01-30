@@ -8,6 +8,7 @@ import moment from 'moment'
 
 interface Props {
   user: User;
+  columnsGrid: string
 }
 
 const useStyles = makeStyles({
@@ -19,14 +20,14 @@ const useStyles = makeStyles({
   },
 });
 
-const UsersTableRow: React.FC<Props> = ({ user }) => {
+const UsersTableRow: React.FC<Props> = ({ user, columnsGrid }) => {
   const classes = useStyles();
 
   return (
     <TableRow
       sx={{
         display: "grid",
-        gridTemplateColumns: "60px 200px 1fr 200px 150px 70px",
+        gridTemplateColumns: columnsGrid,
       }}
     >
       <TableCell className={classes.tableCell}>

@@ -6,17 +6,7 @@ import {
   TableSortLabel,
   Icon,
 } from "@mui/material";
-
-
-
-interface HeaderCell {
-  field?: string|undefined;
-  align?: "center"|"justify"|"left"|"right"|"inherit";
-  title?: string|undefined;
-  hasSortFunction?: boolean;
-  sortActive?: boolean;
-  direction: "asc"|"desc"|undefined;
-}
+import { HeaderCell } from '../../interfaces/TableHeaderInterface';
 
 interface Props {
   headerCells: HeaderCell[];
