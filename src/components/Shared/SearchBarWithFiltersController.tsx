@@ -11,7 +11,7 @@ interface Props{
 }
 
 
-const UsersSearchBarWithFilters: React.FC<Props> = ({onSearchChanged, onFiltersOpen}) => {
+const SearchBarWithFiltersController: React.FC<Props> = ({onSearchChanged, onFiltersOpen}) => {
 
   const handleSearch = (e:any) => {
     onSearchChanged(e.target.value)
@@ -45,4 +45,4 @@ const UsersSearchBarWithFilters: React.FC<Props> = ({onSearchChanged, onFiltersO
   );
 };
 
-export default UsersSearchBarWithFilters;
+export default SearchBarWithFiltersController;

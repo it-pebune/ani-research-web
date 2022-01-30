@@ -8,9 +8,9 @@ import moment from "moment";
 import { useState, useEffect } from "react";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
 import UsersFIltersOverview from "../../components/UsersComponents/UsersFIltersOverview";
-import UsersSearchBarWithFilters from "../../components/UsersComponents/UsersSearchBarWithFilters";
 import UsersTableRow from "../../components/UsersComponents/UsersTableRow";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
+import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
 import { User, Filters } from "../../interfaces/UserInterfaces";
 
 import userService from "../../services/userService";
@@ -157,10 +157,10 @@ const Users = (props: any) => {
         ></UsersFIltersOverview>
       </div>
       <div className="search-field">
-        <UsersSearchBarWithFilters
+        <SearchBarWithFiltersController
           onSearchChanged={handleSearch}
           onFiltersOpen={handleFiltersOpen}
-        ></UsersSearchBarWithFilters>
+        ></SearchBarWithFiltersController>
       </div>
       <div className="table-wrapper">
         <div className="table-holder">
