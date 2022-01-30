@@ -15,7 +15,7 @@ import {
 import "./UsersFiltersDialog.css";
 
 import { Filters } from "../../interfaces/UserInterfaces";
-import CustomDialogHeader from "../Custom/CustomDialogHeader";
+import CustomDialogHeader from "../Shared/CustomDialogHeader";
 
 interface Props {
   open: boolean;
