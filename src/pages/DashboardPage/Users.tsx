@@ -1,4 +1,5 @@
 import {
+  Box,
   Table,
   TableBody,
   TableContainer,
@@ -19,11 +20,8 @@ import useTokenStatus from "../../utils/useTokenStatus";
 import { usersTableHeaderData } from "../../resources/tableHeaders/usersTableHeaderData";
 import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDefs";
 
-import "./Users.css";
-
 const Users = (props: any) => {
-
-  const columnsGrid ="60px 200px 1fr 200px 150px 70px";
+  const columnsGrid = "60px 200px 1fr 200px 150px 70px";
   const [users, setUsers] = useState<User[]>([]);
   const [filteredResult, setFilteredResult] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -65,25 +63,20 @@ const Users = (props: any) => {
     setPage(0);
   };
 
-
   const handleSort = (direction: "asc" | "desc" | undefined, field: string) => {
     if (direction === "asc") {
       setFilteredResult([
         ...filteredResult.sort((a, b) =>
           a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0
-        )
+        ),
       ]);
     } else if (direction === "desc") {
       setFilteredResult([
         ...filteredResult.sort((a, b) =>
           a[field] < b[field] ? 1 : a[field] > b[field] ? -1 : 0
-        )
+        ),
       ]);
     }
-  };
-
-  const handleFiltersChanged = (changedFilters: Filters) => {
-    setFilters(changedFilters);
   };
 
   useEffect(() => {
@@ -134,7 +127,6 @@ const Users = (props: any) => {
     }
   }, [filteredUsers, myFilters]);
 
-
   useEffect(() => {
     if (tokenStatus.active) {
       const usersResponse = async () => {
@@ -147,72 +139,69 @@ const Users = (props: any) => {
   }, []);
 
   return (
-    <div className="users-wrapper">
-      <div className="filters-overview">
-        <UsersFIltersOverview
-          filters={myFilters}
-          onFiltersChanged={handleFiltersChanged}
-        ></UsersFIltersOverview>
-      </div>
-      <div className="search-field">
-        <SearchBarWithFiltersController
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <Box>
+      <UsersFIltersOverview
+        filters={myFilters}
+        onFiltersChanged={setFilters}
+      ></UsersFIltersOverview>
+      </Box>
+      <Box sx={{p:"16px 16px 0 16px"}}>
+      <SearchBarWithFiltersController
           onSearchChanged={handleSearch}
           onFiltersOpen={handleFiltersOpen}
         ></SearchBarWithFiltersController>
-      </div>
-      <div className="table-wrapper">
-        <div className="table-holder">
-          <TableContainer
-            style={{ display: "flex", flexDirection: "column", height: "100%" }}
+      </Box>
+       
+
+        <TableContainer
+          style={{ display: "flex", flexDirection: "column", height: "100%" }}
+        >
+          <Table
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+            }}
           >
-            <Table
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-              }}
-            >
-              <CustomTableHeader
-                columnsGrid={columnsGrid}
-                headerCells={usersTableHeaderData}
-                onSorted={handleSort}
-              ></CustomTableHeader>
-              <TableBody style={{ flex: "1", overflow: "auto" }}>
-                {filteredResult.length > 0 &&
-                  filteredResult
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((user, index) => (
-                      <CustomTableRow
-                        columnsGrid={columnsGrid}
-                        rowDefs={usersTableRowDefs}
-                        key={`table-row-${index}`}
-                        data={user}
-                      ></CustomTableRow>
-                    ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </div>
-        <div className="table-pagination">
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={filteredResult.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            labelRowsPerPage="Randuri pe pagina"
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </div>
-      </div>
+            <CustomTableHeader
+              columnsGrid={columnsGrid}
+              headerCells={usersTableHeaderData}
+              onSorted={handleSort}
+            ></CustomTableHeader>
+            <TableBody style={{ flex: "1", overflow: "auto" }}>
+              {filteredResult.length > 0 &&
+                filteredResult
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((user, index) => (
+                    <CustomTableRow
+                      columnsGrid={columnsGrid}
+                      rowDefs={usersTableRowDefs}
+                      key={`table-row-${index}`}
+                      data={user}
+                    ></CustomTableRow>
+                  ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          style={{ height: "70px", borderTop: "1px solid #bdbdbd" }}
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={filteredResult.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          labelRowsPerPage="Randuri pe pagina"
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       <UsersFiltersDialog
         open={dialogOpened}
         onClose={() => setDialogOpened(false)}
         onFilters={handleFilters}
         filters={myFilters}
       ></UsersFiltersDialog>
-    </div>
+    </Box>
   );
 };
 

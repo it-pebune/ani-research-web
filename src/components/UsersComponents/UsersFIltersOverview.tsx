@@ -61,7 +61,7 @@ const UsersFIltersOverview: React.FC<Props> = ({
         boxSizing: "border-box",
         alignItems: "center",
         display: hasFilters ? "flex" : "none",
-        padding: "0 24px",
+        padding: "0 16px",
       }}
     >
       {filters.statusFilters.length > 0 && (
@@ -69,7 +69,7 @@ const UsersFIltersOverview: React.FC<Props> = ({
           <div className="filter-overview-title">STATUS</div>
           <div className="filter-overview-list">
             {filters.statusFilters.map((item) => (
-              <div>
+              <div key={item}>
                 {item === 0 && (
                   <span>
                     <Icon
