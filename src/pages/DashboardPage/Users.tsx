@@ -19,6 +19,7 @@ import useTokenStatus from "../../utils/useTokenStatus";
 
 import { usersTableHeaderData } from "../../resources/tableHeaders/usersTableHeaderData";
 import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDefs";
+import AddRolesDialog from "../../components/UsersComponents/AddRolesDialog";
 
 const Users = (props: any) => {
   const columnsGrid = "60px 200px 1fr 200px 150px 70px";
@@ -212,6 +213,12 @@ const Users = (props: any) => {
         onFilters={handleFilters}
         filters={myFilters}
       ></UsersFiltersDialog>
+      <AddRolesDialog
+        open={rolesDialogOpened}
+        onClose={() => setRolesDialogOpened(false)}
+        id={selectedId}
+        onRoles={handleRoles}
+      ></AddRolesDialog>
     </Box>
   );
 };
