@@ -8,7 +8,7 @@ import moment from "moment";
 import { useState, useEffect } from "react";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
 import UsersFIltersOverview from "../../components/UsersComponents/UsersFIltersOverview";
-import UsersTableRow from "../../components/UsersComponents/UsersTableRow";
+import CustomTableRow from "../../components/Shared/CustomTableRow";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
 import { User, Filters } from "../../interfaces/UserInterfaces";
@@ -17,6 +17,7 @@ import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
 
 import { usersTableHeaderData } from "../../resources/tableHeaders/usersTableHeaderData";
+import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDefs";
 
 import "./Users.css";
 
@@ -133,9 +134,6 @@ const Users = (props: any) => {
     }
   }, [filteredUsers, myFilters]);
 
-  useEffect(()=>{
-    console.log(filteredResult)
-  },[filteredResult]);
 
   useEffect(() => {
     if (tokenStatus.active) {
@@ -184,11 +182,12 @@ const Users = (props: any) => {
                   filteredResult
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((user, index) => (
-                      <UsersTableRow
+                      <CustomTableRow
                         columnsGrid={columnsGrid}
+                        rowDefs={usersTableRowDefs}
                         key={`table-row-${index}`}
-                        user={user}
-                      ></UsersTableRow>
+                        data={user}
+                      ></CustomTableRow>
                     ))}
               </TableBody>
             </Table>

@@ -1,6 +1,5 @@
 export interface User {
-    [key: string]: string | number | boolean | Date;
-    id: number;
+    [key: string]: any;
     role: string;
     roleId: number;
     displayName: string;
