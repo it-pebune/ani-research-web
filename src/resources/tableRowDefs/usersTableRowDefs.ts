@@ -31,6 +31,6 @@ export const usersTableRowDefs:RowCell[]=[
     },
     {
         cellType: "dropdown-button",
-        menuItems: [{action: "add-role", text:"Adauga roluri"}, {action: "blacklist", text:"Blacklist"}, {action: "delete", text:"Sterge"}]
+        menuItems: [{action: "add-role", text:"Modifica roluri"}, {action: "blacklist", text:"Blacklist"}, {action: "delete", text:"Sterge"}]
     }
 ]

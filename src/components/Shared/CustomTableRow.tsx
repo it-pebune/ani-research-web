@@ -18,9 +18,10 @@ interface Props {
   data: User;
   columnsGrid: string;
   rowDefs: RowCell[];
+  onAction: any;
 }
 
-const CustomTableRow: React.FC<Props> = ({ data, rowDefs, columnsGrid }) => {
+const CustomTableRow: React.FC<Props> = ({ data, rowDefs, onAction,columnsGrid }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -30,6 +31,7 @@ const CustomTableRow: React.FC<Props> = ({ data, rowDefs, columnsGrid }) => {
 
   const handleAction = (action:string)=>{
     setAnchorEl(null);
+    onAction(action, data.id)
   }
 
   const handleClose = () => {

@@ -63,6 +63,10 @@ const Users = (props: any) => {
     setPage(0);
   };
 
+  const handleUserAction = (action:string, id: string|number) => {
+    console.log(action, id)
+  }
+
   const handleSort = (direction: "asc" | "desc" | undefined, field: string) => {
     if (direction === "asc") {
       setFilteredResult([
@@ -175,6 +179,7 @@ const Users = (props: any) => {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((user, index) => (
                     <CustomTableRow
+                      onAction={handleUserAction}
                       columnsGrid={columnsGrid}
                       rowDefs={usersTableRowDefs}
                       key={`table-row-${index}`}
