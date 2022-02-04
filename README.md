@@ -4,12 +4,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## First installation
 
-In the project root folder (where package.json is) run the following
+In the project root folder (where package.json is) run
 
 ### `yarn install`
 
 It installs all dependencies.
-
 
 ## Available Scripts
 
@@ -56,4 +55,6 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+# Setup code formatting
 
+See [Prettier](https://prettier.io/docs/en/install.html) installation and configuration.
