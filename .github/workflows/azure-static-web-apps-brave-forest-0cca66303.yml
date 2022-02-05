@@ -18,8 +18,12 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Check code formatting
+      - name: Installing dependencies
+        run: yarn install
+      - name: Running Prettier
         run: yarn format:check
+      - name: Running ESLint
+        run: eslint . --ext .js,.jsx,.ts,.tsx
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
