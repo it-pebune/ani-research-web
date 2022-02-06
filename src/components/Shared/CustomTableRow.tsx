@@ -21,7 +21,12 @@ interface Props {
   onAction: any;
 }
 
-const CustomTableRow: React.FC<Props> = ({ data, rowDefs, onAction,columnsGrid }) => {
+const CustomTableRow: React.FC<Props> = ({
+  data,
+  rowDefs,
+  onAction,
+  columnsGrid,
+}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -29,10 +34,10 @@ const CustomTableRow: React.FC<Props> = ({ data, rowDefs, onAction,columnsGrid }
     setAnchorEl(event.currentTarget);
   };
 
-  const handleAction = (action:string)=>{
+  const handleAction = (action: string) => {
     setAnchorEl(null);
-    onAction(action, data.id)
-  }
+    onAction(action, data.id);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -130,7 +135,12 @@ const CustomTableRow: React.FC<Props> = ({ data, rowDefs, onAction,columnsGrid }
                 }}
               >
                 {cellDef.menuItems.map((item) => (
-                  <MenuItem key={item.action} onClick={()=>handleAction(item.action)}>{item.text}</MenuItem>
+                  <MenuItem
+                    key={item.action}
+                    onClick={() => handleAction(item.action)}
+                  >
+                    {item.text}
+                  </MenuItem>
                 ))}
               </Menu>
             </>

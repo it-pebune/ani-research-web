@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import auth from "../services/authService";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { SignUpResponse } from "../interfaces/AuthInterfaces";
@@ -12,7 +12,6 @@ import UserContext from "../store/UserContext";
 interface Props {}
 
 const AuthProvider: React.FC<Props> = ({ children }) => {
-
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const userContext = useContext(UserContext);
@@ -20,7 +19,6 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const [authUrl, setAuthUrl] = useState("");
   const params = new URLSearchParams(document.location.search);
   const googleState = params.get("state");
-
 
   useEffect(() => {
     if (!authContext.token && !googleState) {
@@ -47,7 +45,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     if (appData?.token) {
-      authContext.setToken(appData.token.access)
+      authContext.setToken(appData.token.access);
       authContext.setRefreshToken(appData.token.refresh);
       authContext.setTokenExpAt(
         new Date().getTime() + appData.token.accessExpiresIn * 1000
@@ -61,11 +59,11 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
     }
   }, [appData]);
 
-
   return (
     <>
       {!authContext.token ||
-      (authContext.refreshTokenExpAt && new Date().getTime() > authContext.refreshTokenExpAt) ? (
+      (authContext.refreshTokenExpAt &&
+        new Date().getTime() > authContext.refreshTokenExpAt) ? (
         <Routes>
           <Route path="/terms" element={<Terms></Terms>}></Route>
           <Route path="/gdpr" element={<Gdpr></Gdpr>}></Route>

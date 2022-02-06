@@ -5,17 +5,18 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Icon from "@mui/material/Icon";
 
-interface Props{
-    onFiltersOpen:any,
-    onSearchChanged: any
+interface Props {
+  onFiltersOpen: any;
+  onSearchChanged: any;
 }
 
-
-const SearchBarWithFiltersController: React.FC<Props> = ({onSearchChanged, onFiltersOpen}) => {
-
-  const handleSearch = (e:any) => {
-    onSearchChanged(e.target.value)
-  }
+const SearchBarWithFiltersController: React.FC<Props> = ({
+  onSearchChanged,
+  onFiltersOpen,
+}) => {
+  const handleSearch = (e: any) => {
+    onSearchChanged(e.target.value);
+  };
 
   return (
     <Paper
@@ -26,7 +27,7 @@ const SearchBarWithFiltersController: React.FC<Props> = ({onSearchChanged, onFil
         display: "flex",
         alignItems: "center",
         width: "100%",
-        boxSizing:"border-box"
+        boxSizing: "border-box",
       }}
     >
       <Icon>search</Icon>
@@ -38,7 +39,11 @@ const SearchBarWithFiltersController: React.FC<Props> = ({onSearchChanged, onFil
       />
 
       <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <IconButton sx={{ p: "10px" }} aria-label="directions" onClick={onFiltersOpen}>
+      <IconButton
+        sx={{ p: "10px" }}
+        aria-label="directions"
+        onClick={onFiltersOpen}
+      >
         <Icon>tune</Icon>
       </IconButton>
     </Paper>

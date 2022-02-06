@@ -23,18 +23,21 @@ const userService = {
     }
     return response;
   },
-    
-  getSpecifiedUser: async(tokenStatus: {
-    token: string;
-    active: boolean;
-  }, id: number): Promise<User> => {
+
+  getSpecifiedUser: async (
+    tokenStatus: {
+      token: string;
+      active: boolean;
+    },
+    id: number
+  ): Promise<User> => {
     let response: any;
-    if(tokenStatus.active){
+    if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
       try {
-        response = await axios.get(`${API_BASE_URL}/users/${id}` , config);
+        response = await axios.get(`${API_BASE_URL}/users/${id}`, config);
         const resData = await response.data;
         return resData;
       } catch (error) {
@@ -45,12 +48,12 @@ const userService = {
     return response;
   },
 
-  getCurrentUser: async(tokenStatus: {
+  getCurrentUser: async (tokenStatus: {
     token: string;
     active: boolean;
   }): Promise<User> => {
     let response: any;
-    if(tokenStatus.active){
+    if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
@@ -66,18 +69,24 @@ const userService = {
     return response;
   },
 
-
-  updateSpecifiedUser: async(tokenStatus: {
-    token: string;
-    active: boolean;
-  }, userData: User): Promise<User> => {
+  updateSpecifiedUser: async (
+    tokenStatus: {
+      token: string;
+      active: boolean;
+    },
+    userData: User
+  ): Promise<User> => {
     let response: any;
-    if(tokenStatus.active){
+    if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
       try {
-        response = await axios.put(`${API_BASE_URL}/users/${userData.id}`,userData , config);
+        response = await axios.put(
+          `${API_BASE_URL}/users/${userData.id}`,
+          userData,
+          config
+        );
         const resData = await response.data;
         return resData;
       } catch (error) {
@@ -88,17 +97,20 @@ const userService = {
     return response;
   },
 
-  updateCurrentUser: async(tokenStatus: {
-    token: string;
-    active: boolean;
-  }, userData: User): Promise<User> => {
+  updateCurrentUser: async (
+    tokenStatus: {
+      token: string;
+      active: boolean;
+    },
+    userData: User
+  ): Promise<User> => {
     let response: any;
-    if(tokenStatus.active){
+    if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
       try {
-        response = await axios.put(`${API_BASE_URL}/users`,userData , config);
+        response = await axios.put(`${API_BASE_URL}/users`, userData, config);
         const resData = await response.data;
         return resData;
       } catch (error) {
@@ -109,18 +121,23 @@ const userService = {
     return response;
   },
 
-
-  deleteSpecifiedUser: async(tokenStatus: {
-    token: string;
-    active: boolean;
-  }, id: number): Promise<User> => {
+  deleteSpecifiedUser: async (
+    tokenStatus: {
+      token: string;
+      active: boolean;
+    },
+    id: number
+  ): Promise<User> => {
     let response: any;
-    if(tokenStatus.active){
+    if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
       try {
-        response = await axios.put(`${API_BASE_URL}/users/${id}/delete` , config);
+        response = await axios.put(
+          `${API_BASE_URL}/users/${id}/delete`,
+          config
+        );
         const resData = await response.data;
         return resData;
       } catch (error) {
@@ -131,17 +148,20 @@ const userService = {
     return response;
   },
 
-  deleteCurrentUser: async(tokenStatus: {
-    token: string;
-    active: boolean;
-  }, id: number): Promise<User> => {
+  deleteCurrentUser: async (
+    tokenStatus: {
+      token: string;
+      active: boolean;
+    },
+    id: number
+  ): Promise<User> => {
     let response: any;
-    if(tokenStatus.active){
+    if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
       try {
-        response = await axios.put(`${API_BASE_URL}/users/delete` , config);
+        response = await axios.put(`${API_BASE_URL}/users/delete`, config);
         const resData = await response.data;
         return resData;
       } catch (error) {
@@ -152,17 +172,25 @@ const userService = {
     return response;
   },
 
-  updateUserNotes: async(tokenStatus: {
-    token: string;
-    active: boolean;
-  },id:number, notes: string): Promise<User> => {
+  updateUserNotes: async (
+    tokenStatus: {
+      token: string;
+      active: boolean;
+    },
+    id: number,
+    notes: string
+  ): Promise<User> => {
     let response: any;
-    if(tokenStatus.active){
+    if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
       try {
-        response = await axios.put(`${API_BASE_URL}/users/${id}/notes`, {notes} , config);
+        response = await axios.put(
+          `${API_BASE_URL}/users/${id}/notes`,
+          { notes },
+          config
+        );
         const resData = await response.data;
         return resData;
       } catch (error) {

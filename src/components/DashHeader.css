@@ -1,20 +1,20 @@
-.header-wrapper{
-    background: #ededed;
-    padding: 8px 24px;
-    border-bottom: 1px solid #bdbdbd;
-    display: flex;
-    gap: 24px;
-    justify-content: flex-end;
-    align-items: center;
-    color: #999;
-    font-size: 13px;
+.header-wrapper {
+  background: #ededed;
+  padding: 8px 24px;
+  border-bottom: 1px solid #bdbdbd;
+  display: flex;
+  gap: 24px;
+  justify-content: flex-end;
+  align-items: center;
+  color: #999;
+  font-size: 13px;
 }
 
-.logout-icon{
-    height: 12px;
-    cursor: pointer;
+.logout-icon {
+  height: 12px;
+  cursor: pointer;
 }
 
-.logout-icon:hover{
-    color: #3A63DE;
+.logout-icon:hover {
+  color: #3a63de;
 }

@@ -48,7 +48,9 @@ const Gdpr: React.FC<Props> = () => {
           sint. Irure dolor nisi sint pariatur ut excepteur commodo eu ut.
           Labore labore ullamco ullamco esse aute Lorem nisi exercitation.
         </p>
-        <Button className="main-button" href="/" variant="contained">Sunt de acord</Button>
+        <Button className="main-button" href="/" variant="contained">
+          Sunt de acord
+        </Button>
       </div>
     </div>
   );

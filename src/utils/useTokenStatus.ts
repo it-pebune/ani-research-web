@@ -48,14 +48,14 @@ const useTokenStatus = () => {
         authContext.setRefreshTokenExpAt(0);
         authContext.setTokenExpAt(0);
         setResult({
-          token:"",
+          token: "",
           active: false,
         });
       }
-    }
+    };
 
-    if(authContext.token){
-      checkTokenStatus()
+    if (authContext.token) {
+      checkTokenStatus();
     }
   }, [authContext]);
   return result;
