@@ -19,15 +19,14 @@ const MainMenu = () => {
     setUserRoles(userContext.roles);
   }, [userContext]);
 
-  useEffect(()=>{
-      console.log(userRoles);
-    if(userRoles.length===0){
-        setMenuItems(unverifiedMenuItems);
-    }else if(userRoles.includes(250)){
-        setMenuItems(adminMenuItems);
+  useEffect(() => {
+    console.log(userRoles);
+    if (userRoles.length === 0) {
+      setMenuItems(unverifiedMenuItems);
+    } else if (userRoles.includes(250)) {
+      setMenuItems(adminMenuItems);
     }
-  },[userRoles])
-
+  }, [userRoles]);
 
   return (
     <div className="menu-wrapper">

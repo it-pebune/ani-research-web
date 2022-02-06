@@ -1,15 +1,15 @@
 import { createContext } from "react";
 import useLocalStorage from "../utils/useLocalStorage";
 
-interface AuthContextI{
-    token: any,
-    refreshToken: any,
-    tokenExpAt: any,
-    refreshTokenExpAt: any,
-    setToken:any,
-    setRefreshToken: any,
-    setTokenExpAt: any,
-    setRefreshTokenExpAt: any
+interface AuthContextI {
+  token: any;
+  refreshToken: any;
+  tokenExpAt: any;
+  refreshTokenExpAt: any;
+  setToken: any;
+  setRefreshToken: any;
+  setTokenExpAt: any;
+  setRefreshTokenExpAt: any;
 }
 
 const AuthContext = createContext<AuthContextI>({
@@ -27,9 +27,8 @@ export function AuthContextProvider(props: any) {
   const [token, setToken] = useLocalStorage("token");
   const [refreshToken, setRefreshToken] = useLocalStorage("refreshToken");
   const [tokenExpAt, setTokenExpAt] = useLocalStorage("tokenExpAt");
-  const [refreshTokenExpAt, setRefreshTokenExpAt] = useLocalStorage(
-    "refreshTokenExpAt"
-  );
+  const [refreshTokenExpAt, setRefreshTokenExpAt] =
+    useLocalStorage("refreshTokenExpAt");
 
   const setTokenHandler = (value: string) => {
     setToken(value);
@@ -47,7 +46,7 @@ export function AuthContextProvider(props: any) {
     setRefreshTokenExpAt(value);
   };
 
-  const context : AuthContextI = {
+  const context: AuthContextI = {
     token,
     refreshToken,
     tokenExpAt,

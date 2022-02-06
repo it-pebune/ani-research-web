@@ -1,5 +1,12 @@
-import { Dispatch, SetStateAction, useCallback, useState, useRef, useLayoutEffect } from 'react';
-import { isBrowser, noop } from './misc';
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useState,
+  useRef,
+  useLayoutEffect,
+} from "react";
+import { isBrowser, noop } from "./misc";
 
 type parserOptions<T> =
   | {
@@ -20,19 +27,23 @@ const useLocalStorage = <T>(
     return [initialValue as T, noop, noop];
   }
   if (!key) {
-    throw new Error('useLocalStorage key may not be falsy');
+    throw new Error("useLocalStorage key may not be falsy");
   }
 
   const deserializer = options
     ? options.raw
-      ? (value:any) => value
+      ? (value: any) => value
       : options.deserializer
     : JSON.parse;
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const initializer = useRef((key: string) => {
     try {
-      const serializer = options ? (options.raw ? String : options.serializer) : JSON.stringify;
+      const serializer = options
+        ? options.raw
+          ? String
+          : options.serializer
+        : JSON.stringify;
 
       const localStorageValue = localStorage.getItem(key);
       if (localStorageValue !== null) {
@@ -50,23 +61,27 @@ const useLocalStorage = <T>(
   });
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [state, setState] = useState<T | undefined >(() => initializer.current(key));
+  const [state, setState] = useState<T | undefined>(() =>
+    initializer.current(key)
+  );
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useLayoutEffect(() => setState(initializer.current(key)), [key]);
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const set: Dispatch<SetStateAction<T | undefined >> = useCallback(
+  const set: Dispatch<SetStateAction<T | undefined>> = useCallback(
     (valOrFunc) => {
       try {
         const newState =
-          typeof valOrFunc === 'function' ? (valOrFunc as Function)(state) : valOrFunc;
-        if (typeof newState === 'undefined') return;
+          typeof valOrFunc === "function"
+            ? (valOrFunc as Function)(state)
+            : valOrFunc;
+        if (typeof newState === "undefined") return;
         let value: string;
 
         if (options)
           if (options.raw)
-            if (typeof newState === 'string') value = newState;
+            if (typeof newState === "string") value = newState;
             else value = JSON.stringify(newState);
           else if (options.serializer) value = options.serializer(newState);
           else value = JSON.stringify(newState);
@@ -96,10 +111,10 @@ const useLocalStorage = <T>(
   return [state, set, remove];
 };
 
-export const getStorageFieldValue = (key:string) => {
-  if(localStorage.getItem(key)){
-    return JSON.parse(localStorage.getItem(key)|| '{}')
+export const getStorageFieldValue = (key: string) => {
+  if (localStorage.getItem(key)) {
+    return JSON.parse(localStorage.getItem(key) || "{}");
   }
-}
+};
 
 export default useLocalStorage;

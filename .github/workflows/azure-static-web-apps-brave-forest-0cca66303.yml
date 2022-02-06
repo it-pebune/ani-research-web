@@ -18,11 +18,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: true
-      - name: Installing dependencies
+      - name: Install dependencies
         run: yarn install
-      - name: Running Prettier
+      - name: Run Prettier
         run: yarn format:check
-      - name: Running ESLint
+      - name: Run ESLint
         run: eslint . --ext .js,.jsx,.ts,.tsx
       - name: Build And Deploy
         id: builddeploy

@@ -1,6 +1,6 @@
 import { HeaderCell } from "../../interfaces/TableHeaderInterface";
 
-export const usersTableHeaderData:HeaderCell[] = [
+export const usersTableHeaderData: HeaderCell[] = [
   {
     field: "",
   },

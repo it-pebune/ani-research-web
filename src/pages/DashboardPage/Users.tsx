@@ -34,7 +34,7 @@ const Users = (props: any) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [dialogOpened, setDialogOpened] = useState(false);
-  const [selectedId, setSelectedId] = useState<number|string>();
+  const [selectedId, setSelectedId] = useState<number | string>();
   const [rolesDialogOpened, setRolesDialogOpened] = useState(false);
   const tokenStatus = useTokenStatus();
 
@@ -67,7 +67,7 @@ const Users = (props: any) => {
   };
 
   const handleUserAction = (action: string, id: string | number) => {
-    if(action==="modify-roles"){
+    if (action === "modify-roles") {
       setRolesDialogOpened(true);
       setSelectedId(id);
     }

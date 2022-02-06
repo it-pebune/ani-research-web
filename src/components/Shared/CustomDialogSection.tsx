@@ -7,14 +7,26 @@ interface Props {
   children: JSX.Element[] | JSX.Element;
 }
 
-const CustomDialogSection: React.FC<Props> = ({title, columnsGrid, children}) => {
+const CustomDialogSection: React.FC<Props> = ({
+  title,
+  columnsGrid,
+  children,
+}) => {
   return (
-    <Box sx={{color:"#6B636B"}}>
-      <Typography sx={{fontSize:"0.8rem", fontWeight:"700", textTransform:"uppercase", color:"#6B636B", my:"16px"}}>{title}</Typography>
-      <Box
-        sx={{ display: "grid", gridTemplateColumns: columnsGrid }}
+    <Box sx={{ color: "#6B636B" }}>
+      <Typography
+        sx={{
+          fontSize: "0.8rem",
+          fontWeight: "700",
+          textTransform: "uppercase",
+          color: "#6B636B",
+          my: "16px",
+        }}
       >
-          {children}
+        {title}
+      </Typography>
+      <Box sx={{ display: "grid", gridTemplateColumns: columnsGrid }}>
+        {children}
       </Box>
     </Box>
   );

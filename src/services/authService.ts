@@ -35,7 +35,9 @@ const auth = {
   refreshToken: async (refreshToken: string): Promise<any> => {
     let response: any;
     try {
-      response = await axios.post(`${API_BASE_URL}/auth/refresh`, { token: refreshToken });
+      response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
+        token: refreshToken,
+      });
       const data = await response.data;
       return data;
     } catch (error) {

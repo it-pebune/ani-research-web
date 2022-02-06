@@ -6,7 +6,7 @@ import {
   TableSortLabel,
   Icon,
 } from "@mui/material";
-import { HeaderCell } from '../../interfaces/TableHeaderInterface';
+import { HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 interface Props {
   headerCells: HeaderCell[];
@@ -21,8 +21,11 @@ const CustomTableHeader: React.FC<Props> = ({
 }) => {
   const [headerData, setHeaderData] = useState(headerCells);
 
-  const handleDirection = (direction:"asc"|"desc"|undefined, field:string|undefined) => {
-    setHeaderData((prevState:HeaderCell[]) => {
+  const handleDirection = (
+    direction: "asc" | "desc" | undefined,
+    field: string | undefined
+  ) => {
+    setHeaderData((prevState: HeaderCell[]) => {
       onSorted(direction, field);
       return prevState.map((cell) =>
         cell.field === field ? { ...cell, direction } : cell

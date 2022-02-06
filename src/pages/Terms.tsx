@@ -47,7 +47,9 @@ const Terms: React.FC<Props> = () => {
           sint ea eu excepteur esse reprehenderit. Deserunt anim occaecat
           eiusmod dolor.
         </p>
-        <Button className="main-button" href="/" variant="contained">Sunt de acord</Button>
+        <Button className="main-button" href="/" variant="contained">
+          Sunt de acord
+        </Button>
       </div>
     </div>
   );

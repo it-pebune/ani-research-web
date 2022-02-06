@@ -1,59 +1,56 @@
-.auth-wrapper{
-    display: grid;
-    width: 100%;
-    height: 100vh;
-    align-content: center;
-    justify-content: center;
+.auth-wrapper {
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  align-content: center;
+  justify-content: center;
 }
 
-
-.auth-container{
-    height: 500px;
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: white;
+.auth-container {
+  height: 500px;
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
 }
 
-.auth-button{
-    width: 60%;
-    margin:0 auto 60px auto;
-    padding: 10px 50px 6px 24px;
-    outline: none;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.16), 0 1px 3px rgba(0,0,0,0.23);
-    transition: all .2s ease-in;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    cursor: pointer;
-    text-decoration: none;
+.auth-button {
+  width: 60%;
+  margin: 0 auto 60px auto;
+  padding: 10px 50px 6px 24px;
+  outline: none;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16), 0 1px 3px rgba(0, 0, 0, 0.23);
+  transition: all 0.2s ease-in;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-.auth-button>span{
-    font-family: 'Montserrat',  sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #888888;
-    transition: all .2s ease-in;
-    text-decoration: none;
+.auth-button > span {
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #888888;
+  transition: all 0.2s ease-in;
+  text-decoration: none;
 }
 
-.auth-button:hover>span{
-    color: #444444;
+.auth-button:hover > span {
+  color: #444444;
 }
 
-
-.auth-button:hover{
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+.auth-button:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
-.auth-container>p{
-    color: #888888;
-    font-family: 'Montserrat',  sans-serif;
-    text-align: center;
-    margin: 0 70px;
-    font-size: 12px;
+.auth-container > p {
+  color: #888888;
+  font-family: "Montserrat", sans-serif;
+  text-align: center;
+  margin: 0 70px;
+  font-size: 12px;
 }
-

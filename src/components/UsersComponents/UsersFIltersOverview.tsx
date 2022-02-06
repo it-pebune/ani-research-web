@@ -16,30 +16,34 @@ const UsersFIltersOverview: React.FC<Props> = ({
 
   const handleClearStatus = () => {
     const newFilters = {
-        ...filters,
-        statusFilters:[]    
-    }
-    onFiltersChanged(newFilters)
+      ...filters,
+      statusFilters: [],
+    };
+    onFiltersChanged(newFilters);
   };
 
   const handleClearRoles = () => {
     const newFilters = {
-        ...filters,
-        roleFilters:[]    
-    }
-    onFiltersChanged(newFilters)
+      ...filters,
+      roleFilters: [],
+    };
+    onFiltersChanged(newFilters);
   };
 
   const handleClearPeriod = () => {
-      const newFilters = {
-          ...filters,
-          lastDateFilter:{logged:null, period:""}
-      }
-      onFiltersChanged(newFilters)
+    const newFilters = {
+      ...filters,
+      lastDateFilter: { logged: null, period: "" },
+    };
+    onFiltersChanged(newFilters);
   };
 
   const handleClearAll = () => {
-     onFiltersChanged( {statusFilters:[], roleFilters:[], lastDateFilter:{logged:null, period:""}})
+    onFiltersChanged({
+      statusFilters: [],
+      roleFilters: [],
+      lastDateFilter: { logged: null, period: "" },
+    });
   };
 
   useEffect(() => {
@@ -201,7 +205,6 @@ const UsersFIltersOverview: React.FC<Props> = ({
           height: "32px",
           width: "32px",
           marginTop: "16px",
-
         }}
       >
         <Icon sx={{ fontSize: "18" }}>close</Icon>

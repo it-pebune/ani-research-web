@@ -55,6 +55,24 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-# Setup code formatting
+# Code formatting
 
-See [Prettier](https://prettier.io/docs/en/install.html) installation and configuration.
+We use [Prettier](https://prettier.io/docs/en/install.html) for formatting the code.
+
+Prettier is already configured for this project. The only thing you still need to do is to enable Git hooks by running
+
+`yarn prepare`
+
+Code formatting is run:
+
+- when saving changed files in VSCode
+- when commiting staged changes, as pre-commit hook
+- from the command line
+
+  `yarn format`
+
+Code formatting is checked:
+
+- in the GitHub CI/CD pipeline
+
+  `yarn format:check`

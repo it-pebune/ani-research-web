@@ -9,7 +9,6 @@ import {
   Radio,
 } from "@mui/material";
 
-
 import { Filters } from "../../interfaces/UserInterfaces";
 import CustomDialogSection from "../Shared/CustomDialogSection";
 import { Box } from "@mui/system";
