@@ -8,6 +8,8 @@ import { AuthContextProvider } from "./store/AuthContext";
 import { BrowserRouter as Router } from "react-router-dom";
 import { UserContextProvider } from "./store/UserContext";
 
+import "./i18n";
+
 ReactDOM.render(
   <React.StrictMode>
     <Router>
