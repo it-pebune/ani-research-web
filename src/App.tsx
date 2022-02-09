@@ -8,6 +8,7 @@ import DashHeader from "./components/DashHeader";
 import UserContext from "./store/UserContext";
 import NotVerified from "./pages/NotVerified";
 import { Box } from "@mui/material";
+import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 
 interface Props {}
 
@@ -41,6 +42,7 @@ const App: React.FC<Props> = (props) => {
             <Route path="/users" element={<Users />}></Route>
             <Route path="/terms" element={<Terms />}></Route>
             <Route path="/gdpr" element={<Gdpr />}></Route>
+            <Route path="/profile" element={<UserProfilePage />}></Route>
           </Routes>
         </Box>
       </Box>

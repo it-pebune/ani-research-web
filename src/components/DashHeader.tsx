@@ -1,6 +1,6 @@
 import { Avatar, Icon } from "@mui/material";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../store/AuthContext";
 import UserContext from "../store/UserContext";
 import "./DashHeader.css";
@@ -29,7 +29,12 @@ const DashHeader = () => {
 
   return (
     <div className="header-wrapper">
-      <Avatar alt={userContext.displayName} src={userContext.profileImageUrl} />
+      <Link to={"/profile"}>
+        <Avatar
+          alt={userContext.displayName}
+          src={userContext.profileImageUrl}
+        />
+      </Link>
       <p>{userContext.displayName}</p>
       <p>{userContext.email}</p>
       <Icon
