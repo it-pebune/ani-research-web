@@ -2,6 +2,7 @@ import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { makeStyles, styled } from "@mui/styles";
+import { Theme } from "@mui/system";
 
 const CustomTypographyPrimary = styled(Typography)({
   fontSize: "25px",
@@ -14,13 +15,13 @@ const CustomTypographySecondary = styled(Typography)({
   fontWeight: "500",
 });
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   socialMediaIcon: {
     "&:hover": {
       color: "blue",
     },
   },
-});
+}));
 
 interface UserProfileHeaderProps {
   firstName: string | undefined;
@@ -41,13 +42,9 @@ const UserProfileHeader = (props: UserProfileHeaderProps) => {
         boxShadow: "-4px 10px 40px rgba(44, 63, 88, 0.05)",
       }}
     >
-      <Grid
-        container
-        direction={"row"}
-        sx={{ height: "200px", padding: "30px 0px" }}
-      >
+      <Grid container direction={"row"} sx={{ padding: "30px 0px" }}>
         {/* avatar area */}
-        <Grid item xs={2} container justifyContent={"center"}>
+        <Grid item xs={12} md={6} lg={2} container justifyContent={"center"}>
           <Box sx={{ display: "absolute", maxHeight: "150px" }}>
             <Avatar
               variant="rounded"
@@ -66,7 +63,7 @@ const UserProfileHeader = (props: UserProfileHeaderProps) => {
           </Box>
         </Grid>
         {/* name & social media area */}
-        <Grid item xs={4} container direction={"column"}>
+        <Grid item xs={12} md={6} lg={4} container direction={"column"}>
           <CustomTypographyPrimary sx={{ fontSize: "40px !important" }}>
             {props.firstName + " " + props.lastName}
           </CustomTypographyPrimary>
@@ -87,7 +84,9 @@ const UserProfileHeader = (props: UserProfileHeaderProps) => {
         {/* email & phone area */}
         <Grid
           item
-          xs={3}
+          xs={12}
+          md={6}
+          lg={3}
           container
           direction={"column"}
           sx={{ borderLeft: "2px #818386 ridge", paddingLeft: "60px" }}
@@ -100,7 +99,9 @@ const UserProfileHeader = (props: UserProfileHeaderProps) => {
         {/* location & birthday */}
         <Grid
           item
-          xs={3}
+          xs={12}
+          md={6}
+          lg={3}
           container
           direction={"column"}
           sx={{ paddingLeft: "60px" }}
