@@ -3,6 +3,8 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { makeStyles, styled } from "@mui/styles";
 import { Theme } from "@mui/system";
+import { SocialInfo } from "../../interfaces/UserInterfaces";
+import { userRoleConvertor } from "../../utils/userRoles";
 
 const CustomTypographyPrimary = styled(Typography)({
   fontSize: "25px",
@@ -24,11 +26,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface UserProfileHeaderProps {
-  firstName: string | undefined;
-  lastName: string | undefined;
+  email: string;
+  firstName: string;
+  lastName: string;
+  profileImageUrl: string;
+  socialInfo: SocialInfo;
+  phone: string;
   roles: number[];
-  email: string | undefined;
-  profileImageUrl: string | undefined;
 }
 
 const UserProfileHeader = (props: UserProfileHeaderProps) => {
@@ -68,17 +72,22 @@ const UserProfileHeader = (props: UserProfileHeaderProps) => {
             {props.firstName + " " + props.lastName}
           </CustomTypographyPrimary>
           <CustomTypographySecondary sx={{ fontSize: "30px !important" }}>
-            Creative Director
+            {props.roles.map((roleId) => userRoleConvertor(roleId))}
           </CustomTypographySecondary>
           <Grid item container direction={"row"} sx={{ marginTop: "10px" }}>
-            <FacebookIcon
-              fontSize="large"
-              className={classes.socialMediaIcon}
-            />
-            <LinkedInIcon
-              fontSize="large"
-              className={classes.socialMediaIcon}
-            />
+            {props.socialInfo && (
+              <FacebookIcon
+                fontSize="large"
+                className={classes.socialMediaIcon}
+                href={props.socialInfo.facebook}
+              />
+            )}
+            {props.socialInfo && (
+              <LinkedInIcon
+                fontSize="large"
+                className={classes.socialMediaIcon}
+              />
+            )}
           </Grid>
         </Grid>
         {/* email & phone area */}
@@ -92,24 +101,13 @@ const UserProfileHeader = (props: UserProfileHeaderProps) => {
           sx={{ borderLeft: "2px #818386 ridge", paddingLeft: "60px" }}
         >
           <CustomTypographySecondary>Email</CustomTypographySecondary>
-          <CustomTypographyPrimary>{props.email}</CustomTypographyPrimary>
+          <CustomTypographyPrimary>
+            {props.email || "Not found"}
+          </CustomTypographyPrimary>
           <CustomTypographySecondary>Phone</CustomTypographySecondary>
-          <CustomTypographyPrimary>+22 22 22</CustomTypographyPrimary>
-        </Grid>
-        {/* location & birthday */}
-        <Grid
-          item
-          xs={12}
-          md={6}
-          lg={3}
-          container
-          direction={"column"}
-          sx={{ paddingLeft: "60px" }}
-        >
-          <CustomTypographySecondary>Birthday</CustomTypographySecondary>
-          <CustomTypographyPrimary>17.09.1988</CustomTypographyPrimary>
-          <CustomTypographySecondary>Location</CustomTypographySecondary>
-          <CustomTypographyPrimary>Iasi, IS, RO</CustomTypographyPrimary>
+          <CustomTypographyPrimary>
+            {props.phone || "Not found"}
+          </CustomTypographyPrimary>
         </Grid>
       </Grid>
     </Paper>

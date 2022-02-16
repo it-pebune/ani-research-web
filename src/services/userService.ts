@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_BASE_URL } from "../resources/apiLinks";
-import { User } from "../interfaces/UserInterfaces";
+import { SpecifiedUser, User } from "../interfaces/UserInterfaces";
 
 const userService = {
   getUsers: async (tokenStatus: {
@@ -29,8 +29,8 @@ const userService = {
       token: string;
       active: boolean;
     },
-    id: number
-  ): Promise<User> => {
+    id: number | undefined
+  ): Promise<SpecifiedUser> => {
     let response: any;
     if (tokenStatus.active) {
       const config = {
