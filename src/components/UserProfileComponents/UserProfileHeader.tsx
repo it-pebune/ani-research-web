@@ -26,13 +26,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface UserProfileHeaderProps {
-  email: string;
-  firstName: string;
-  lastName: string;
-  profileImageUrl: string;
-  socialInfo: SocialInfo;
-  phone: string;
-  roles: number[];
+  email: string | undefined;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  profileImageUrl: string | undefined;
+  socialInfo: SocialInfo | undefined;
+  phone: string | undefined;
+  roles: number[] | undefined;
 }
 
 const UserProfileHeader = (props: UserProfileHeaderProps) => {
@@ -72,7 +72,8 @@ const UserProfileHeader = (props: UserProfileHeaderProps) => {
             {props.firstName + " " + props.lastName}
           </CustomTypographyPrimary>
           <CustomTypographySecondary sx={{ fontSize: "30px !important" }}>
-            {props.roles.map((roleId) => userRoleConvertor(roleId))}
+            {props.roles &&
+              props.roles.map((roleId) => userRoleConvertor(roleId))}
           </CustomTypographySecondary>
           <Grid item container direction={"row"} sx={{ marginTop: "10px" }}>
             {props.socialInfo && (

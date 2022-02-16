@@ -1,5 +1,6 @@
-import { Box } from "@mui/material";
+import { Box, Card } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
+import UserProfileBody from "../../components/UserProfileComponents/UserProfileBody";
 import UserProfileHeader from "../../components/UserProfileComponents/UserProfileHeader";
 import { SpecifiedUser } from "../../interfaces/UserInterfaces";
 import userService from "../../services/userService";
@@ -24,9 +25,9 @@ const UserProfilePage = () => {
     }
   }, [id, tokenStatus]);
 
-  return (
-    <Box sx={{ padding: "100px 90px" }}>
-      {userData && (
+  if (userData)
+    return (
+      <Box sx={{ padding: "100px 90px" }}>
         <UserProfileHeader
           email={userData.email}
           firstName={userData.firstName}
@@ -36,9 +37,12 @@ const UserProfilePage = () => {
           phone={userData.phone}
           roles={userData.roles}
         />
-      )}
-    </Box>
-  );
+        <UserProfileBody notes={userData.notes} />
+      </Box>
+    );
+  else {
+    return <Card>Not Found</Card>;
+  }
 };
 
 export default UserProfilePage;

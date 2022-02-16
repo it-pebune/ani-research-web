@@ -38,6 +38,8 @@ export interface SpecifiedUser {
   roles: number[];
 
   settings: object;
+
+  notes: string[];
 }
 
 export interface Filters {
