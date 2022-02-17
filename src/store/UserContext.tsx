@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import useLocalStorage from "../utils/useLocalStorage";
-import { CurrentUser, User } from "../interfaces/UserInterfaces";
+import { CurrentUser } from "../interfaces/UserInterfaces";
 
 interface UserContextI {
   id: number | undefined;
@@ -14,7 +14,7 @@ interface UserContextI {
 }
 
 const UserContext = createContext<UserContextI>({
-  id: undefined,
+  id: 0,
   roles: [],
   displayName: undefined,
   firstName: undefined,
