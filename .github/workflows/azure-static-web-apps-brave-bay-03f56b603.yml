@@ -10,6 +10,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    environment: staging
     steps:
       - uses: actions/checkout@v2
         with:
