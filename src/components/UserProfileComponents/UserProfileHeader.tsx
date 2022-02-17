@@ -1,8 +1,10 @@
 import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { makeStyles, styled } from "@mui/styles";
 import { Theme } from "@mui/system";
+
+import FacebookIcon from "@mui/icons-material/Facebook";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
 import { SocialInfo } from "../../interfaces/UserInterfaces";
 import { userRoleConvertor } from "../../utils/userRoles";
 

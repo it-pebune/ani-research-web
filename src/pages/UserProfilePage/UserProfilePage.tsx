@@ -1,4 +1,4 @@
-import { Box, Card } from "@mui/material";
+import { Box, Card, CircularProgress, Grid } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import UserProfileBody from "../../components/UserProfileComponents/UserProfileBody";
 import UserProfileHeader from "../../components/UserProfileComponents/UserProfileHeader";
@@ -9,8 +9,9 @@ import useTokenStatus from "../../utils/useTokenStatus";
 
 const UserProfilePage = () => {
   const { id } = useContext(UserContext);
-  const [userData, setUserData] = useState<SpecifiedUser>();
   const tokenStatus = useTokenStatus();
+
+  const [userData, setUserData] = useState<SpecifiedUser>();
 
   useEffect(() => {
     if (tokenStatus.active) {
@@ -25,7 +26,13 @@ const UserProfilePage = () => {
     }
   }, [id, tokenStatus]);
 
-  if (userData)
+  if (!userData)
+    return (
+      <Box sx={{ display: "flex", justifyContent: "center", paddingTop: 20 }}>
+        <CircularProgress />
+      </Box>
+    );
+  else
     return (
       <Box sx={{ padding: "100px 90px" }}>
         <UserProfileHeader
@@ -40,9 +47,6 @@ const UserProfilePage = () => {
         <UserProfileBody notes={userData.notes} />
       </Box>
     );
-  else {
-    return <Card>Not Found</Card>;
-  }
 };
 
 export default UserProfilePage;
