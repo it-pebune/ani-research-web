@@ -8,7 +8,7 @@ const auth = {
     let response: any;
     try {
       response = await axios.get(`${API_BASE_URL}/auth/google/auth-url`, {
-        params: { redirect_uri: process.env.REACT_APP_WEB_BASE_URL },
+        params: { redirect_uri: WEB_BASE_URL },
       });
       const data = await response.data;
       return data;
@@ -22,7 +22,7 @@ const auth = {
     let response: any;
     try {
       response = await axios.get(`${API_BASE_URL}/auth/google/signin`, {
-        params: { code, redirect_uri: process.env.REACT_APP_WEB_BASE_URL },
+        params: { code, redirect_uri: WEB_BASE_URL },
       });
       const data = await response.data;
       return data;
