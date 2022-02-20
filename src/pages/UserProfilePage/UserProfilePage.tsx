@@ -1,7 +1,7 @@
-import { Box, Card, CircularProgress, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import UserProfileBody from "../../components/UserProfileComponents/UserProfileBody";
-import UserProfileHeader from "../../components/UserProfileComponents/UserProfileHeader";
+import UserProfileBody from "./UserProfileBody";
+import UserProfileHeader from "./UserProfileHeader";
 import { SpecifiedUser } from "../../interfaces/UserInterfaces";
 import userService from "../../services/userService";
 import UserContext from "../../store/UserContext";
@@ -12,41 +12,37 @@ const UserProfilePage = () => {
   const tokenStatus = useTokenStatus();
 
   const [userData, setUserData] = useState<SpecifiedUser>();
+  const [pageIsLoading, setPageIsLoading] = useState<boolean>(true);
+  const [fetchDataError, setFetchDataError] = useState<boolean>(false);
 
   useEffect(() => {
     if (tokenStatus.active) {
       const usersResponse = async () => {
+        setPageIsLoading(true);
         const response = await userService.getSpecifiedUser(
           { ...tokenStatus },
           id
         );
         setUserData(response);
+        setPageIsLoading(false);
       };
-      usersResponse();
+      usersResponse().catch((error) => {
+        setFetchDataError(true);
+        setPageIsLoading(false);
+      });
     }
-  }, [id, tokenStatus]);
+  }, []);
 
-  if (!userData)
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center", paddingTop: 20 }}>
-        <CircularProgress />
-      </Box>
-    );
-  else
-    return (
-      <Box sx={{ padding: "100px 90px" }}>
-        <UserProfileHeader
-          email={userData.email}
-          firstName={userData.firstName}
-          lastName={userData.lastName}
-          profileImageUrl={userData.profileImageUrl}
-          socialInfo={userData.socialInfo}
-          phone={userData.phone}
-          roles={userData.roles}
-        />
-        <UserProfileBody notes={userData.notes} />
-      </Box>
-    );
+  return (
+    <Box sx={{ padding: "100px 90px" }}>
+      <UserProfileHeader
+        userData={userData}
+        pageIsLoading={pageIsLoading}
+        fetchDataError={fetchDataError}
+      />
+      {/* <UserProfileBody notes={userData.notes} /> */}
+    </Box>
+  );
 };
 
 export default UserProfilePage;

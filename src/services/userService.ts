@@ -36,14 +36,12 @@ const userService = {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
-      try {
-        response = await axios.get(`${API_BASE_URL}/users/${id}`, config);
-        const resData = await response.data;
-        return resData;
-      } catch (error) {
-        response = error;
-        console.log(error);
+      response = await axios.get(`${API_BASE_URL}/users/${id}`, config);
+
+      if (response.status !== 200) {
+        throw new Error(response);
       }
+      return response.data;
     }
     return response;
   },
