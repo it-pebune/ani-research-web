@@ -13,6 +13,7 @@ import { Filters } from "../../interfaces/UserInterfaces";
 import CustomDialogSection from "../Shared/CustomDialogSection";
 import { Box } from "@mui/system";
 import CustomDialog from "../Shared/CustomDialog";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   open: boolean;
@@ -77,21 +78,23 @@ const UsersFiltersDialog: React.FC<Props> = ({
     onFilters(selectedFilters);
   };
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     setFilters(filters);
   }, [filters]);
 
   return (
     <CustomDialog
-      title="Filtreaza utilizatori"
-      actionText="filtreaza"
+      title={t("Users.FilterUsers")} //Filtreaza utilizatori
+      actionText="filtreaza" //filtreaza
       icon="tune"
       open={open}
       onClose={onClose}
       onAction={handleActions}
     >
       <CustomDialogSection
-        title="filtreaza utilizatori dupa status"
+        title="filtreaza utilizatori dupa status" //filtreaza utilizatori dupa status
         columnsGrid="1fr 1fr 1fr"
       >
         <FormControlLabel
@@ -99,18 +102,18 @@ const UsersFiltersDialog: React.FC<Props> = ({
           onChange={handleStatuses}
           checked={selectedFilters.statusFilters.includes(0)}
           control={<Checkbox />}
-          label="in asteptare"
+          label="in asteptare" //in asteptare
         ></FormControlLabel>
         <FormControlLabel
           value={1}
           checked={selectedFilters.statusFilters.includes(1)}
           onChange={handleStatuses}
           control={<Checkbox />}
-          label="activi"
+          label="activi" //activi
         ></FormControlLabel>
       </CustomDialogSection>
       <CustomDialogSection
-        title="filtreaza utilizatori dupa rol"
+        title="filtreaza utilizatori dupa rol" //filtreaza utilizatori dupa rol
         columnsGrid="1fr 1fr 1fr"
       >
         <FormControlLabel
@@ -118,28 +121,28 @@ const UsersFiltersDialog: React.FC<Props> = ({
           checked={selectedFilters.roleFilters.includes(250)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label="admin"
+          label="admin" //admin
         ></FormControlLabel>
         <FormControlLabel
           value={150}
           checked={selectedFilters.roleFilters.includes(150)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label="coordinator"
+          label="coordinator" //coordinator
         ></FormControlLabel>
         <FormControlLabel
           value={70}
           onChange={handleRoles}
           checked={selectedFilters.roleFilters.includes(70)}
           control={<Checkbox />}
-          label="reviewer"
+          label="reviewer" //reviewer
         ></FormControlLabel>
         <FormControlLabel
           value={10}
           checked={selectedFilters.roleFilters.includes(10)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label="researcher"
+          label="researcher" //researcher
         ></FormControlLabel>
       </CustomDialogSection>
 
@@ -150,14 +153,14 @@ const UsersFiltersDialog: React.FC<Props> = ({
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <FormControlLabel
             control={<Radio />}
-            label="s-au logat"
+            label="s-au logat" //s-au logat
             value={1}
             checked={wereLogged === 1}
             onChange={handleWereLogged}
           ></FormControlLabel>
           <FormControlLabel
             control={<Radio />}
-            label="nu s-au logat"
+            label="nu s-au logat" //nu s-au logat
             value={0}
             checked={wereLogged === 0}
             onChange={handleWereLogged}
