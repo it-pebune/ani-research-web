@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## First installation
 
-In the project root folder (where package.json is) run the following cmd
+In the project root folder (where package.json is) run
 
 ### `yarn install`
 
