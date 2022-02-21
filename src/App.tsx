@@ -9,6 +9,7 @@ import UserContext from "./store/UserContext";
 import NotVerified from "./pages/NotVerified";
 import { Box } from "@mui/material";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
+import i18n from "./i18n";
 
 interface Props {}
 
@@ -16,6 +17,12 @@ const App: React.FC<Props> = (props) => {
   const navigate = useNavigate();
 
   const userCtx = useContext(UserContext);
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
+
+  //changeLanguage("ro");
 
   useEffect(() => {
     if (userCtx.roles.length === 0) {
@@ -29,6 +36,8 @@ const App: React.FC<Props> = (props) => {
     <Box sx={{ display: "grid", gridTemplateColumns: "150px 1fr" }}>
       <MainMenu></MainMenu>
       <Box>
+        <button onClick={() => changeLanguage("ro")}>ro</button>
+        <button onClick={() => changeLanguage("en")}>en</button>
         <DashHeader></DashHeader>
         <Box
           sx={{
