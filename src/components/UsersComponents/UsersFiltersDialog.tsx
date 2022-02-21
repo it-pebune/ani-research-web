@@ -109,7 +109,7 @@ const UsersFiltersDialog: React.FC<Props> = ({
           checked={selectedFilters.statusFilters.includes(1)}
           onChange={handleStatuses}
           control={<Checkbox />}
-          label="activi" //{t("UserStatus.Active")} //activi
+          label={t("UserStatus.Active")} //activi
         ></FormControlLabel>
       </CustomDialogSection>
       <CustomDialogSection
@@ -121,28 +121,28 @@ const UsersFiltersDialog: React.FC<Props> = ({
           checked={selectedFilters.roleFilters.includes(250)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label="admin" //{t("UserRoles.Admin")} //admin
+          label={t("UserRoles.Admin")} //admin
         ></FormControlLabel>
         <FormControlLabel
           value={150}
           checked={selectedFilters.roleFilters.includes(150)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label="coordinator" //{t("UserRoles.Coordinator")} //coordinator
+          label={t("UserRoles.Coordinator")} //coordinator
         ></FormControlLabel>
         <FormControlLabel
           value={70}
           onChange={handleRoles}
           checked={selectedFilters.roleFilters.includes(70)}
           control={<Checkbox />}
-          label="reviewer" //{t("UserRoles.Reviewer")} //reviewer
+          label={t("UserRoles.Reviewer")} //reviewer
         ></FormControlLabel>
         <FormControlLabel
           value={10}
           checked={selectedFilters.roleFilters.includes(10)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label="researcher" //{t("UserRoles.Researcher")} //researcher
+          label={t("UserRoles.Researcher")} //researcher
         ></FormControlLabel>
       </CustomDialogSection>
 
@@ -153,14 +153,14 @@ const UsersFiltersDialog: React.FC<Props> = ({
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <FormControlLabel
             control={<Radio />}
-            label="s-au logat" //{t("UsersFiltersDialog.HaveLoggedIn")} //s-au logat
+            label={t("UsersFiltersDialog.HaveLoggedIn")} //s-au logat
             value={1}
             checked={wereLogged === 1}
             onChange={handleWereLogged}
           ></FormControlLabel>
           <FormControlLabel
             control={<Radio />}
-            label="nu s-au logat" //{t("UsersFiltersDialog.NeverLoggedIn")} //nu s-au logat
+            label={t("UsersFiltersDialog.NeverLoggedIn")} //nu s-au logat
             value={0}
             checked={wereLogged === 0}
             onChange={handleWereLogged}
