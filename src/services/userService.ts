@@ -74,7 +74,7 @@ const userService = {
       token: string;
       active: boolean;
     },
-    userData: User
+    userData: any
   ): Promise<User> => {
     let response: any;
     if (tokenStatus.active) {
@@ -84,7 +84,14 @@ const userService = {
       try {
         response = await axios.put(
           `${API_BASE_URL}/users/${userData.id}`,
-          userData,
+          {
+            lastName: userData.lastName,
+            firstName: userData.firstName,
+            displayName: userData.displayName,
+            roles: userData.roles,
+            socialInfo: userData.socialInfo,
+            phone: userData.phone,
+          },
           config
         );
         const resData = await response.data;

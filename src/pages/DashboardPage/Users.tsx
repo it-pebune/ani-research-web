@@ -73,7 +73,20 @@ const Users = (props: any) => {
     }
   };
 
-  const handleRoles = (id: number, roles: number[]) => {};
+  const handleRoles = async (id: number, roles: number[]) => {
+    const newRoles = Array.from(new Set(roles));
+
+    const theUser = await userService.getSpecifiedUser(tokenStatus, id);
+    console.log(theUser);
+
+    const updatedUser = {
+      ...theUser,
+      phone: "",
+      socialInfo: "{}",
+      roles: newRoles,
+    };
+    userService.updateSpecifiedUser(tokenStatus, updatedUser);
+  };
 
   const handleSort = (direction: "asc" | "desc" | undefined, field: string) => {
     if (direction === "asc") {
