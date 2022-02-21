@@ -3,12 +3,19 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../store/AuthContext";
 import UserContext from "../store/UserContext";
+import i18n from "../i18n";
+import { useTranslation } from "react-i18next";
+
 import "./DashHeader.css";
 
 const DashHeader = () => {
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const userContext = useContext(UserContext);
+  const { t } = useTranslation();
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   const handlePurgeUser = () => {
     authContext.setToken("");
@@ -37,6 +44,8 @@ const DashHeader = () => {
       </Link>
       <p>{userContext.displayName}</p>
       <p>{userContext.email}</p>
+      <button onClick={() => changeLanguage("ro")}>ro</button>
+      <button onClick={() => changeLanguage("en")}>en</button>
       <Icon
         sx={{ fontSize: 16 }}
         className="logout-icon"
