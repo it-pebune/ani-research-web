@@ -30,6 +30,7 @@ const UsersFiltersDialog: React.FC<Props> = ({
 }) => {
   const [selectedFilters, setFilters] = useState<Filters>(filters);
   const [wereLogged, setWereLogged] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   const handleStatuses = (e: any) => {
     const statuses = selectedFilters.statusFilters.includes(
@@ -78,23 +79,21 @@ const UsersFiltersDialog: React.FC<Props> = ({
     onFilters(selectedFilters);
   };
 
-  const { t } = useTranslation();
-
   useEffect(() => {
     setFilters(filters);
   }, [filters]);
 
   return (
     <CustomDialog
-      title={t("UsersFiltersDialog.FilterUsers")} //Filtreaza utilizatori
-      actionText={t("UsersFiltersDialog.Filter")} //filtreaza
+      title={t("UsersFiltersDialog.FilterUsers")}
+      actionText={t("UsersFiltersDialog.Filter")}
       icon="tune"
       open={open}
       onClose={onClose}
       onAction={handleActions}
     >
       <CustomDialogSection
-        title={t("UsersFiltersDialog.FilterByStatus")} //filtreaza utilizatori dupa status
+        title={t("UsersFiltersDialog.FilterByStatus")}
         columnsGrid="1fr 1fr 1fr"
       >
         <FormControlLabel
@@ -102,18 +101,18 @@ const UsersFiltersDialog: React.FC<Props> = ({
           onChange={handleStatuses}
           checked={selectedFilters.statusFilters.includes(0)}
           control={<Checkbox />}
-          label={t("UserStatus.Pending")} //"in asteptare" //{t("UserStatus.Pending")}
+          label={t("UserStatus.Pending")}
         ></FormControlLabel>
         <FormControlLabel
           value={1}
           checked={selectedFilters.statusFilters.includes(1)}
           onChange={handleStatuses}
           control={<Checkbox />}
-          label={t("UserStatus.Active")} //activi
+          label={t("UserStatus.Active")}
         ></FormControlLabel>
       </CustomDialogSection>
       <CustomDialogSection
-        title={t("UsersFiltersDialog.FilterByRole")} //filtreaza utilizatori dupa rol
+        title={t("UsersFiltersDialog.FilterByRole")}
         columnsGrid="1fr 1fr 1fr"
       >
         <FormControlLabel
@@ -121,46 +120,46 @@ const UsersFiltersDialog: React.FC<Props> = ({
           checked={selectedFilters.roleFilters.includes(250)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label={t("UserRoles.Admin")} //admin
+          label={t("UserRoles.Admin")}
         ></FormControlLabel>
         <FormControlLabel
           value={150}
           checked={selectedFilters.roleFilters.includes(150)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label={t("UserRoles.Coordinator")} //coordinator
+          label={t("UserRoles.Coordinator")}
         ></FormControlLabel>
         <FormControlLabel
           value={70}
           onChange={handleRoles}
           checked={selectedFilters.roleFilters.includes(70)}
           control={<Checkbox />}
-          label={t("UserRoles.Reviewer")} //reviewer
+          label={t("UserRoles.Researcher")}
         ></FormControlLabel>
         <FormControlLabel
           value={10}
           checked={selectedFilters.roleFilters.includes(10)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label={t("UserRoles.Researcher")} //researcher
+          label={t("UserRoles.Reviewer")}
         ></FormControlLabel>
       </CustomDialogSection>
 
       <CustomDialogSection
-        title={t("UsersFiltersDialog.FilterByLastLogIn")} //"filtreaza utilizatori dupa ultima logare"
+        title={t("UsersFiltersDialog.FilterByLastLogIn")}
         columnsGrid="1fr 1fr"
       >
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <FormControlLabel
             control={<Radio />}
-            label={t("UsersFiltersDialog.HaveLoggedIn")} //s-au logat
+            label={t("UsersFiltersDialog.HaveLoggedIn")}
             value={1}
             checked={wereLogged === 1}
             onChange={handleWereLogged}
           ></FormControlLabel>
           <FormControlLabel
             control={<Radio />}
-            label={t("UsersFiltersDialog.NeverLoggedIn")} //nu s-au logat
+            label={t("UsersFiltersDialog.NeverLoggedIn")}
             value={0}
             checked={wereLogged === 0}
             onChange={handleWereLogged}
@@ -171,7 +170,7 @@ const UsersFiltersDialog: React.FC<Props> = ({
           <InputLabel>{t("UsersFiltersDialog.ChoosePeriod")}</InputLabel>
           <Select
             value={selectedFilters.lastDateFilter.period}
-            label={t("UsersFiltersDialog.ChoosePeriod")} //"alege perioada"
+            label={t("UsersFiltersDialog.ChoosePeriod")}
             onChange={handlePeriod}
           >
             <MenuItem value={7}>{t("UsersFiltersDialog.LastWeek")}</MenuItem>
