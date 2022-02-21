@@ -23,7 +23,14 @@ const AddRolesDialog: React.FC<Props> = ({ open, onClose, id, onRoles }) => {
 
   const handleActions = () => {};
 
-  const handleRoles = () => {};
+  const handleRoles = (e: any) => {
+    setRoles((prevValue: number[]) => [...prevValue, e.target.value]);
+  };
+
+  useEffect(() => {
+    console.log(roles);
+    onRoles(id, roles);
+  }, [roles]);
   return (
     <CustomDialog
       title="Modifica roluri urilizator"

@@ -1,16 +1,16 @@
 export interface User {
   [key: string]: any;
-  role: string;
+  role?: string | undefined;
   roleId: number;
   displayName: string;
-  profileImageUrl: string;
-  email: string;
-  provider: string;
-  socialInfo: SocialInfo;
-  phone: string;
-  created: Date;
-  updated: Date;
-  lastLogin: Date;
+  profileImageUrl: string | undefined;
+  email: string | undefined;
+  provider: string | undefined;
+  socialInfo: string | undefined;
+  phone: string | undefined;
+  created: Date | undefined;
+  updated: Date | undefined;
+  lastLogin: Date | undefined;
 }
 
 export interface CurrentUser {
