@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../store/AuthContext";
 import UserContext from "../store/UserContext";
-import LanguageSelector from "../utils/LanguageSelector";
+import LanguageSelector from "./LanguageSelector";
 
 import "./DashHeader.css";
 
