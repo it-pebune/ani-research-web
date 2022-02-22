@@ -16,7 +16,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-.MuiSelect-select-language .MuiSelect-select {
-  padding: 5px 8px 0;
-}
