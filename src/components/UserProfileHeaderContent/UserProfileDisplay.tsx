@@ -106,6 +106,19 @@ const UserProfileDisplay = (props: UserProfileDisplayProps) => {
         </CustomTypographyPrimary>
         <Button onClick={props.switchToEditModeHandler}></Button>
       </Grid>
+      <Grid
+        item
+        xs={12}
+        md={6}
+        lg={3}
+        container
+        direction={"column"}
+        sx={{ paddingLeft: "200px", paddingRight: "60px" }}
+      >
+        <Button variant="contained" onClick={props.switchToEditModeHandler}>
+          Edit profile
+        </Button>
+      </Grid>
     </Grid>
   );
 };
