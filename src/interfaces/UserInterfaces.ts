@@ -42,6 +42,17 @@ export interface SpecifiedUser {
   notes: string[];
 }
 
+export interface SpecifiedUserToUpdate {
+  firstName?: string;
+  lastName?: string;
+  displayName?: string;
+
+  socialInfo?: SocialInfo;
+  phone?: string;
+
+  roles?: number[];
+}
+
 export interface Filters {
   statusFilters: number[];
   roleFilters: number[];
