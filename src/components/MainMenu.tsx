@@ -20,7 +20,6 @@ const MainMenu = () => {
   }, [userContext]);
 
   useEffect(() => {
-    console.log(userRoles);
     if (userRoles.length === 0) {
       setMenuItems(unverifiedMenuItems);
     } else if (userRoles.includes(250)) {

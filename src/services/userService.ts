@@ -29,7 +29,7 @@ const userService = {
       token: string;
       active: boolean;
     },
-    id: number
+    id: number | string | undefined
   ): Promise<User> => {
     let response: any;
     if (tokenStatus.active) {
@@ -74,23 +74,25 @@ const userService = {
       token: string;
       active: boolean;
     },
-    userData: any
+    userData: User
   ): Promise<User> => {
     let response: any;
     if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
+      const { lastName, firstName, displayName, roles, socialInfo, phone } =
+        userData;
       try {
         response = await axios.put(
           `${API_BASE_URL}/users/${userData.id}`,
           {
-            lastName: userData.lastName,
-            firstName: userData.firstName,
-            displayName: userData.displayName,
-            roles: userData.roles,
-            socialInfo: userData.socialInfo,
-            phone: userData.phone,
+            lastName,
+            firstName,
+            displayName,
+            roles,
+            socialInfo,
+            phone,
           },
           config
         );
