@@ -21,7 +21,7 @@ i18n
   .use(backend)
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
-  // .use(LanguageDetector)
+  .use(LanguageDetector)
   // pass the i18n instance to react-i18next.
   .use(initReactI18next)
   // init i18next
@@ -36,9 +36,6 @@ i18n
     ns: ["translation"],
     resources,
     defaultNS: "translation",
-    react: {
-      useSuspense: false,
-    },
   });
 
 export default i18n;
