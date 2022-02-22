@@ -134,14 +134,14 @@ const UsersFiltersDialog: React.FC<Props> = ({
           onChange={handleRoles}
           checked={selectedFilters.roleFilters.includes(70)}
           control={<Checkbox />}
-          label={t("UserRoles.Researcher")}
+          label={t("UserRoles.Reviewer")}
         ></FormControlLabel>
         <FormControlLabel
           value={10}
           checked={selectedFilters.roleFilters.includes(10)}
           onChange={handleRoles}
           control={<Checkbox />}
-          label={t("UserRoles.Reviewer")}
+          label={t("UserRoles.Researcher")}
         ></FormControlLabel>
       </CustomDialogSection>
 
