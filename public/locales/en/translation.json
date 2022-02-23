@@ -1,0 +1,25 @@
+{
+  "UserRoles": {
+    "Admin": "admin",
+    "Coordinator": "coordinator",
+    "Researcher": "researcher",
+    "Reviewer": "reviewer"
+  },
+  "UserStatus": {
+    "Active": "active",
+    "Pending": "pending"
+  },
+  "UsersFiltersDialog": {
+    "ChoosePeriod": "choose period",
+    "Filter": "filter",
+    "FilterByLastLogIn": "filter users by last login",
+    "FilterByRole": "filter users by role",
+    "FilterByStatus": "filter users by status",
+    "FilterUsers": "Filter users",
+    "HaveLoggedIn": "have logged in",
+    "Last3Months": "last 3 months",
+    "LastMonth": "last month",
+    "LastWeek": "last week",
+    "NeverLoggedIn": "never logged in"
+  }
+}

@@ -14,7 +14,6 @@ interface Props {}
 
 const App: React.FC<Props> = (props) => {
   const navigate = useNavigate();
-
   const userCtx = useContext(UserContext);
 
   useEffect(() => {

@@ -3,6 +3,8 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../store/AuthContext";
 import UserContext from "../store/UserContext";
+import LanguageSelector from "./LanguageSelector";
+
 import "./DashHeader.css";
 
 const DashHeader = () => {
@@ -37,6 +39,7 @@ const DashHeader = () => {
       </Link>
       <p>{userContext.displayName}</p>
       <p>{userContext.email}</p>
+      <LanguageSelector></LanguageSelector>
       <Icon
         sx={{ fontSize: 16 }}
         className="logout-icon"
