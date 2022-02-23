@@ -36,6 +36,9 @@ i18n
     ns: ["translation"],
     resources,
     defaultNS: "translation",
+    react: {
+      useSuspense: false,
+    },
   });
 
 export default i18n;
