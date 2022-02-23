@@ -1,4 +1,4 @@
-name: Manual Build & Deploy as Azure Static App - PRODUCTION 
+name: Build & Deploy as Azure Static App - PROD
 on:
   workflow_dispatch:
 
@@ -6,6 +6,7 @@ jobs:
   build_and_deploy_job:
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+    environment: production
     steps:
       - uses: actions/checkout@v2
         with:
@@ -14,7 +15,7 @@ jobs:
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_WHITE_MUD_059586E03 }}
+          azure_static_web_apps_api_token: ${{ secrets.PROD_AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
@@ -24,6 +25,6 @@ jobs:
           output_location: "build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
-          CI: true   # set CI to true due PROD
-          REACT_APP_API_BASE_URL: ${{ secrets.PROD_REACT_APP_API_BASE_URL }} # needs to be set 
-          REACT_APP_WEB_BASE_URL: ${{ secrets.PROD_REACT_APP_WEB_BASE_URL }} # needs to be set
+          CI: true # set CI to 'false' in PROD
+          REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }} # Set in 'production' environment: https://github.com/it-pebune/ani-research-web/settings/environments
+          REACT_APP_WEB_BASE_URL: ${{ secrets.REACT_APP_WEB_BASE_URL }} # Set in 'production' environment: https://github.com/it-pebune/ani-research-web/settings/environments
