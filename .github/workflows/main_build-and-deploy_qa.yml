@@ -1,4 +1,4 @@
-name: Build and Deploy as Azure Static App - QA
+name: QA - Build and Deploy as Azure Static App
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Build & Deploy as Azure Static App - PROD
+name: PROD - Build and Deploy as Azure Static App
 on:
   workflow_dispatch:
 
@@ -25,6 +25,6 @@ jobs:
           output_location: "build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
-          CI: true # set CI to 'false' in PROD
+          CI: false # set CI to 'false' in PROD
           REACT_APP_API_BASE_URL: ${{ secrets.REACT_APP_API_BASE_URL }} # Set in 'production' environment: https://github.com/it-pebune/ani-research-web/settings/environments
           REACT_APP_WEB_BASE_URL: ${{ secrets.REACT_APP_WEB_BASE_URL }} # Set in 'production' environment: https://github.com/it-pebune/ani-research-web/settings/environments
