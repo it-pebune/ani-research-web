@@ -1,4 +1,4 @@
-name: Manual Build & Deploy as Azure Static App - PROD 
+name: Manual Build & Deploy as Azure Static App - PRODUCTION 
 on:
   workflow_dispatch:
 
@@ -26,4 +26,4 @@ jobs:
         env: # Add environment variables here
           CI: true   # set CI to true due PROD
           REACT_APP_API_BASE_URL: ${{ secrets.PROD_REACT_APP_API_BASE_URL }} # needs to be set 
-          REACT_APP_WEB_BASE_URL: ${{ secrets.PROD_REACT_APP_WEB_BASE_URL }} # needs to be set  
+          REACT_APP_WEB_BASE_URL: ${{ secrets.PROD_REACT_APP_WEB_BASE_URL }} # needs to be set
