@@ -3,6 +3,8 @@ import { API_BASE_URL, WEB_BASE_URL } from "../resources/apiLinks";
 
 import { AuthUrl, SignUpResponse } from "../interfaces/AuthInterfaces";
 
+console.log(API_BASE_URL);
+
 const auth = {
   getAuthUrl: async (): Promise<AuthUrl> => {
     let response: any;

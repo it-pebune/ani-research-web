@@ -61,7 +61,11 @@ const CustomTableRow: React.FC<Props> = ({
       }}
     >
       {rowDefs.map((cellDef, index) => (
-        <TableCell key={`cell-${index}`} align={cellDef.align}>
+        <TableCell
+          id={`cell-${index}`}
+          key={`cell-${index}`}
+          align={cellDef.align}
+        >
           {cellDef.cellType === "avatar" &&
             cellDef.altField &&
             cellDef.field && (
@@ -109,7 +113,7 @@ const CustomTableRow: React.FC<Props> = ({
               {" "}
               <IconButton
                 aria-label="more"
-                id="long-button"
+                id={`long-button-${data.id}`}
                 aria-controls={open ? "long-menu" : undefined}
                 aria-expanded={open ? "true" : undefined}
                 aria-haspopup="true"
@@ -118,7 +122,7 @@ const CustomTableRow: React.FC<Props> = ({
                 <Icon>more_vert</Icon>
               </IconButton>
               <Menu
-                id="long-menu"
+                id={`long-menu-${data.id}`}
                 MenuListProps={{
                   "aria-labelledby": "long-button",
                 }}

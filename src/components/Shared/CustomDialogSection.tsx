@@ -5,12 +5,14 @@ interface Props {
   title: string;
   columnsGrid: string;
   children: JSX.Element[] | JSX.Element;
+  sx?: object;
 }
 
 const CustomDialogSection: React.FC<Props> = ({
   title,
   columnsGrid,
   children,
+  sx,
 }) => {
   return (
     <Box sx={{ color: "#6B636B" }}>
@@ -21,11 +23,12 @@ const CustomDialogSection: React.FC<Props> = ({
           textTransform: "uppercase",
           color: "#6B636B",
           my: "16px",
+          ...sx,
         }}
       >
         {title}
       </Typography>
-      <Box sx={{ display: "grid", gridTemplateColumns: columnsGrid }}>
+      <Box sx={{ ...{ display: "grid", gridTemplateColumns: columnsGrid } }}>
         {children}
       </Box>
     </Box>

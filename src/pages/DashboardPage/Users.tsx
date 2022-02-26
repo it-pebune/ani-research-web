@@ -20,6 +20,7 @@ import useTokenStatus from "../../utils/useTokenStatus";
 import { usersTableHeaderData } from "../../resources/tableHeaders/usersTableHeaderData";
 import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDefs";
 import AddRolesDialog from "../../components/UsersComponents/AddRolesDialog";
+import { userRoles } from "../../resources/userRoles";
 
 const Users = (props: any) => {
   const columnsGrid = "60px 200px 1fr 200px 150px 70px";
@@ -73,7 +74,50 @@ const Users = (props: any) => {
     }
   };
 
-  const handleRoles = (id: number, roles: number[]) => {};
+  const handleRoles = async (user: User, roles: number[]) => {
+    const updatedUser = {
+      ...user,
+      phone: user.phone ? user.phone : "",
+      socialInfo: user.socialInfo ? user.socialInfo : "{}",
+      roles,
+    };
+    const response = await userService.updateSpecifiedUser(
+      tokenStatus,
+      updatedUser
+    );
+    if (response) {
+      console.log(response);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === response.id ? { ...user, ...response } : user
+        )
+      );
+      setFilteredUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === response.id
+            ? {
+                ...user,
+                ...response,
+                roleId:
+                  response.roles && response.roles.length > 0
+                    ? Math.max(...response.roles)
+                    : 0,
+                role:
+                  response.roles &&
+                  response.roles.length > 0 &&
+                  userRoles.find(
+                    (role) => role.id === Math.max(...response.roles)
+                  )
+                    ? userRoles.find(
+                        (role) => role.id === Math.max(...response.roles)
+                      )?.name
+                    : "",
+              }
+            : user
+        )
+      );
+    }
+  };
 
   const handleSort = (direction: "asc" | "desc" | undefined, field: string) => {
     if (direction === "asc") {
@@ -97,7 +141,7 @@ const Users = (props: any) => {
       myFilters.roleFilters.length === 0 &&
       myFilters.lastDateFilter.period === ""
     ) {
-      setFilteredResult(filteredUsers);
+      setFilteredResult((prevUsers) => [...filteredUsers]);
     } else {
       let filteredResult = filteredUsers;
       if (myFilters.statusFilters.length === 1) {
@@ -135,7 +179,7 @@ const Users = (props: any) => {
           );
         }
       }
-      setFilteredResult(filteredResult);
+      setFilteredResult([...filteredResult]);
     }
   }, [filteredUsers, myFilters]);
 

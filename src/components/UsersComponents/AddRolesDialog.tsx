@@ -4,6 +4,7 @@ import CustomDialog from "../Shared/CustomDialog";
 import CustomDialogSection from "../Shared/CustomDialogSection";
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
+import { User } from "../../interfaces/UserInterfaces";
 
 interface Props {
   open: boolean;
@@ -14,16 +15,43 @@ interface Props {
 
 const AddRolesDialog: React.FC<Props> = ({ open, onClose, id, onRoles }) => {
   const [roles, setRoles] = useState<number[]>([]);
+  const [user, setUser] = useState<User>();
   const tokenStatus = useTokenStatus();
+
+  const currentUser = async () => {
+    let response = await userService.getSpecifiedUser(tokenStatus, id);
+    setUser(response);
+  };
 
   useEffect(() => {
     if (open) {
+      currentUser();
     }
   }, [open]);
 
-  const handleActions = () => {};
+  useEffect(() => {
+    if (user) {
+      setRoles(user.roles);
+    }
+  }, [user]);
 
-  const handleRoles = () => {};
+  const handleActions = () => {
+    onRoles(user, roles);
+    onClose();
+  };
+
+  const handleRoles = (e: any) => {
+    setRoles((prevValue: number[]) => {
+      if (e.target.checked) {
+        return [...prevValue, parseInt(e.target.value)];
+      } else {
+        return [
+          ...prevValue.filter((value) => value !== parseInt(e.target.value)),
+        ];
+      }
+    });
+  };
+
   return (
     <CustomDialog
       title="Modifica roluri urilizator"
@@ -33,8 +61,13 @@ const AddRolesDialog: React.FC<Props> = ({ open, onClose, id, onRoles }) => {
       onClose={onClose}
       onAction={handleActions}
     >
-      <CustomDialogSection title="selecteaza roluri" columnsGrid="1fr 1fr 1fr">
+      <CustomDialogSection
+        title="selecteaza roluri"
+        columnsGrid="1fr"
+        sx={{ padding: "0 100px" }}
+      >
         <FormControlLabel
+          sx={{ px: "100px" }}
           value={250}
           checked={roles.includes(250)}
           onChange={handleRoles}
@@ -42,6 +75,7 @@ const AddRolesDialog: React.FC<Props> = ({ open, onClose, id, onRoles }) => {
           label="admin"
         ></FormControlLabel>
         <FormControlLabel
+          sx={{ px: "100px" }}
           value={150}
           checked={roles.includes(150)}
           onChange={handleRoles}
@@ -49,6 +83,7 @@ const AddRolesDialog: React.FC<Props> = ({ open, onClose, id, onRoles }) => {
           label="coordinator"
         ></FormControlLabel>
         <FormControlLabel
+          sx={{ px: "100px" }}
           value={70}
           onChange={handleRoles}
           checked={roles.includes(70)}
@@ -56,6 +91,7 @@ const AddRolesDialog: React.FC<Props> = ({ open, onClose, id, onRoles }) => {
           label="reviewer"
         ></FormControlLabel>
         <FormControlLabel
+          sx={{ px: "100px" }}
           value={10}
           checked={roles.includes(10)}
           onChange={handleRoles}

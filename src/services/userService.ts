@@ -29,8 +29,8 @@ const userService = {
       token: string;
       active: boolean;
     },
-    id: number | undefined
-  ): Promise<SpecifiedUser> => {
+    id: number | string | undefined
+  ): Promise<User> => {
     let response: any;
     if (tokenStatus.active) {
       const config = {
@@ -81,10 +81,19 @@ const userService = {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
+      const { lastName, firstName, displayName, roles, socialInfo, phone } =
+        userData;
       try {
         response = await axios.put(
           `${API_BASE_URL}/users/${userData.id}`,
-          userData,
+          {
+            lastName,
+            firstName,
+            displayName,
+            roles,
+            socialInfo,
+            phone,
+          },
           config
         );
         const resData = await response.data;
