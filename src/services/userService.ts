@@ -74,7 +74,7 @@ const userService = {
     return response;
   },
 
-  updateSpecifiedUser: async (
+  updateSpecifiedUserData: async (
     tokenStatus: {
       token: string;
       active: boolean;
@@ -87,10 +87,56 @@ const userService = {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
+      const { lastName, firstName, displayName, roles, socialInfo, phone } =
+        userData;
       try {
         response = await axios.put(
           `${API_BASE_URL}/users/${id}`,
-          userData,
+          {
+            lastName,
+            firstName,
+            displayName,
+            roles,
+            socialInfo,
+            phone,
+          },
+          config
+        );
+        const resData = await response.data;
+        return resData;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
+
+  updateSpecifiedUser: async (
+    tokenStatus: {
+      token: string;
+      active: boolean;
+    },
+    userData: User
+  ): Promise<User> => {
+    let response: any;
+    if (tokenStatus.active) {
+      const config = {
+        headers: { Authorization: `Bearer ${tokenStatus.token}` },
+      };
+      const { lastName, firstName, displayName, roles, socialInfo, phone } =
+        userData;
+      try {
+        response = await axios.put(
+          `${API_BASE_URL}/users/${userData.id}`,
+          {
+            lastName,
+            firstName,
+            displayName,
+            roles,
+            socialInfo,
+            phone,
+          },
           config
         );
         const resData = await response.data;
