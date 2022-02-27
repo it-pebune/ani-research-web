@@ -47,7 +47,7 @@ export interface SpecifiedUserToUpdate {
   lastName?: string;
   displayName?: string;
 
-  socialInfo?: SocialInfo;
+  socialInfo?: string;
   phone?: string;
 
   roles?: number[];
