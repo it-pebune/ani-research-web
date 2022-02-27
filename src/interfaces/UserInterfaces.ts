@@ -13,6 +13,11 @@ export interface User {
   lastLogin: Date | undefined;
 }
 
+export interface SocialInfo {
+  facebook: string;
+  linkedIn: string;
+}
+
 export interface CurrentUser {
   id: number;
   displayName: string;
@@ -49,9 +54,4 @@ export interface Filters {
     logged: number | null;
     period?: number | null | string;
   };
-}
-
-export interface SocialInfo {
-  facebook: string;
-  linkedIn: string;
 }

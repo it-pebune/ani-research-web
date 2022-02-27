@@ -4,7 +4,7 @@ import CustomDialog from "../Shared/CustomDialog";
 import CustomDialogSection from "../Shared/CustomDialogSection";
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
-import { User } from "../../interfaces/UserInterfaces";
+import { SpecifiedUser } from "../../interfaces/UserInterfaces";
 
 interface Props {
   open: boolean;
@@ -15,7 +15,7 @@ interface Props {
 
 const AddRolesDialog: React.FC<Props> = ({ open, onClose, id, onRoles }) => {
   const [roles, setRoles] = useState<number[]>([]);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<SpecifiedUser>();
   const tokenStatus = useTokenStatus();
 
   const currentUser = async () => {

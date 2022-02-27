@@ -30,7 +30,7 @@ const userService = {
       active: boolean;
     },
     id: number | string | undefined
-  ): Promise<User> => {
+  ): Promise<SpecifiedUser> => {
     let response: any;
     if (tokenStatus.active) {
       const config = {
