@@ -59,7 +59,7 @@ const UserProfileEditForm = (props: UserProfileEditFormProps) => {
           socialInfo: JSON.stringify(socialInfoToUpdate),
           roles: props.roles,
         };
-        const response = await userService.updateSpecifiedUser(
+        const response = await userService.updateSpecifiedUserData(
           { ...tokenStatus },
           id!,
           usedDataToSend
@@ -115,7 +115,7 @@ const UserProfileEditForm = (props: UserProfileEditFormProps) => {
         </Grid>
         <Grid item>
           <FormInputText
-            name="displayNameEntered"
+            name="displayName"
             control={control}
             label="Display Name"
           />
@@ -134,18 +134,18 @@ const UserProfileEditForm = (props: UserProfileEditFormProps) => {
         sx={{ borderLeft: "2px #818386 ridge", paddingLeft: "60px" }}
       >
         <Grid item>
-          <FormInputText name="phoneEntered" control={control} label="Phone" />
+          <FormInputText name="phone" control={control} label="Phone" />
         </Grid>
         <Grid item>
           <FormInputText
-            name="facebookUrlEntered"
+            name="facebook"
             control={control}
             label="Facebook URL"
           />
         </Grid>
         <Grid item>
           <FormInputText
-            name="linkedinUrlEntered"
+            name="linkedIn"
             control={control}
             label="LinkedIn URL"
           />
