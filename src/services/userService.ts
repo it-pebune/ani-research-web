@@ -1,6 +1,10 @@
 import axios from "axios";
 import { API_BASE_URL } from "../resources/apiLinks";
-import { SpecifiedUser, User } from "../interfaces/UserInterfaces";
+import {
+  SpecifiedUser,
+  SpecifiedUserToUpdate,
+  User,
+} from "../interfaces/UserInterfaces";
 
 const userService = {
   getUsers: async (tokenStatus: {
@@ -41,6 +45,9 @@ const userService = {
       if (response.status !== 200) {
         throw new Error(response);
       }
+      if (response.data.socialInfo != null) {
+        response.data.socialInfo = await JSON.parse(response.data.socialInfo);
+      }
       return response.data;
     }
     return response;
@@ -72,7 +79,8 @@ const userService = {
       token: string;
       active: boolean;
     },
-    userData: User
+    id: number,
+    userData: SpecifiedUserToUpdate
   ): Promise<User> => {
     let response: any;
     if (tokenStatus.active) {
@@ -83,7 +91,7 @@ const userService = {
         userData;
       try {
         response = await axios.put(
-          `${API_BASE_URL}/users/${userData.id}`,
+          `${API_BASE_URL}/users/${id}`,
           {
             lastName,
             firstName,
