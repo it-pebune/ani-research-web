@@ -1,1 +1,25 @@
-../../../public/locales/ro/translation.json
+{
+  "UserRoles": {
+    "Admin": "admin",
+    "Coordinator": "coordonator",
+    "Researcher": "cercetător",
+    "Reviewer": "verificator"
+  },
+  "UserStatus": {
+    "Active": "activ",
+    "Pending": "în așteptare"
+  },
+  "UsersFiltersDialog": {
+    "ChoosePeriod": "alege perioada",
+    "Filter": "filtrează",
+    "FilterByLastLogIn": "filtrează utilizatori după ultima autentificare",
+    "FilterByRole": "filtrează utilizatori după rol",
+    "FilterByStatus": "filtrează utilizatori după status",
+    "FilterUsers": "Filtrează utilizatorii",
+    "HaveLoggedIn": "s-au logat",
+    "Last3Months": "ultimile 3 luni",
+    "LastMonth": "ultima lună",
+    "LastWeek": "ultima săptâmană",
+    "NeverLoggedIn": "nu s-au logat"
+  }
+}
