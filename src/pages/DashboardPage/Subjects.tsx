@@ -22,7 +22,7 @@ import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDef
 import AddRolesDialog from "../../components/UsersComponents/AddRolesDialog";
 import { userRoles } from "../../resources/userRoles";
 
-const Users = (props: any) => {
+const Subjects = (props: any) => {
   const columnsGrid = "60px 200px 1fr 200px 150px 70px";
   const [users, setUsers] = useState<User[]>([]);
   const [filteredResult, setFilteredResult] = useState<User[]>([]);
@@ -123,21 +123,13 @@ const Users = (props: any) => {
     if (direction === "asc") {
       setFilteredResult([
         ...filteredResult.sort((a, b) =>
-          a[field].toLowerCase() < b[field].toLowerCase()
-            ? -1
-            : a[field].toLowerCase() > b[field].toLowerCase()
-            ? 1
-            : 0
+          a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0
         ),
       ]);
     } else if (direction === "desc") {
       setFilteredResult([
         ...filteredResult.sort((a, b) =>
-          a[field].toLowerCase() < b[field].toLowerCase()
-            ? 1
-            : a[field].toLowerCase() > b[field].toLowerCase()
-            ? -1
-            : 0
+          a[field] < b[field] ? 1 : a[field] > b[field] ? -1 : 0
         ),
       ]);
     }
@@ -275,4 +267,4 @@ const Users = (props: any) => {
   );
 };
 
-export default Users;
+export default Subjects;
