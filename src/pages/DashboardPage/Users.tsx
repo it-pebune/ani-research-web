@@ -123,13 +123,21 @@ const Users = (props: any) => {
     if (direction === "asc") {
       setFilteredResult([
         ...filteredResult.sort((a, b) =>
-          a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0
+          a[field].toLowerCase() < b[field].toLowerCase()
+            ? -1
+            : a[field].toLowerCase() > b[field].toLowerCase()
+            ? 1
+            : 0
         ),
       ]);
     } else if (direction === "desc") {
       setFilteredResult([
         ...filteredResult.sort((a, b) =>
-          a[field] < b[field] ? 1 : a[field] > b[field] ? -1 : 0
+          a[field].toLowerCase() < b[field].toLowerCase()
+            ? 1
+            : a[field].toLowerCase() > b[field].toLowerCase()
+            ? -1
+            : 0
         ),
       ]);
     }
