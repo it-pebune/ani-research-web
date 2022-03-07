@@ -18,11 +18,13 @@ const App: React.FC<Props> = (props) => {
   const navigate = useNavigate();
   const userCtx = useContext(UserContext);
 
+  console.log(userCtx);
+
   useEffect(() => {
     if (userCtx.roles.length === 0) {
       navigate("/");
-    } else {
-      navigate("/users");
+    } else if (userCtx.roles.includes(70)) {
+      navigate("/subjects");
     }
   }, [userCtx]);
 
@@ -35,7 +37,7 @@ const App: React.FC<Props> = (props) => {
           sx={{
             flex: "1",
             boxSizing: "border-box",
-            height: "calc(100vh - 60px)",
+            height: "calc(100vh - 65px)",
           }}
         >
           <Routes>

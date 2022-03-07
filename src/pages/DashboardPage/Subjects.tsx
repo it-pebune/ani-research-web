@@ -7,31 +7,31 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import { useState, useEffect } from "react";
-import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
-import UsersFIltersOverview from "../../components/UsersComponents/UsersFIltersOverview";
+import SubjectsFIltersOverview from "../../components/SubjectsComponents.js/SubjectsFIltersOverview";
 import CustomTableRow from "../../components/Shared/CustomTableRow";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
-import { User, Filters } from "../../interfaces/UserInterfaces";
+import {
+  Subject,
+  SubjectFilters,
+  SubjectsResponse,
+} from "../../interfaces/SubjectInterfaces";
 
-import userService from "../../services/userService";
+import { subjectService } from "../../services/subjectService";
 import useTokenStatus from "../../utils/useTokenStatus";
 
-import { usersTableHeaderData } from "../../resources/tableHeaders/usersTableHeaderData";
-import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDefs";
-import AddRolesDialog from "../../components/UsersComponents/AddRolesDialog";
-import { userRoles } from "../../resources/userRoles";
+import { subjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
+import { subjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
+// import AddRolesDialog from "../../components/SubjectsComponents/AddRolesDialog";
+// import { subjectRoles } from "../../resources/subjectRoles";
 
 const Subjects = (props: any) => {
-  const columnsGrid = "60px 200px 1fr 200px 150px 70px";
-  const [users, setUsers] = useState<User[]>([]);
-  const [filteredResult, setFilteredResult] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-  const [myFilters, setFilters] = useState<Filters>({
-    statusFilters: [],
-    roleFilters: [],
-    lastDateFilter: { logged: null, period: "" },
-  });
+  const columnsGrid = "60px 1fr .5fr .5fr .5fr .7fr";
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [subjectResponse, setSubjectResponse] = useState<SubjectsResponse>();
+  const [filteredResult, setFilteredResult] = useState<Subject[]>([]);
+  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
+  const [myFilters, setFilters] = useState<SubjectFilters | undefined>();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [dialogOpened, setDialogOpened] = useState(false);
@@ -52,155 +52,89 @@ const Subjects = (props: any) => {
     setPage(0);
   };
 
-  const handleFilters = (filters: Filters) => {
+  const handleFilters = (filters: SubjectFilters) => {
     setDialogOpened(false);
     setFilters(filters);
     setPage(0);
   };
 
   const handleSearch = (string: string) => {
-    setFilteredUsers(
-      users.filter((user) =>
-        user.displayName.toLowerCase().includes(string.toLowerCase())
+    setFilteredSubjects(
+      subjects.filter((subject) =>
+        subject.name.toLowerCase().includes(string.toLowerCase())
       )
     );
     setPage(0);
   };
 
-  const handleUserAction = (action: string, id: string | number) => {
+  const handleSubjectAction = (action: string, id: string | number) => {
     if (action === "modify-roles") {
       setRolesDialogOpened(true);
       setSelectedId(id);
     }
   };
 
-  const handleRoles = async (user: User, roles: number[]) => {
-    const updatedUser = {
-      ...user,
-      phone: user.phone ? user.phone : "",
-      socialInfo: user.socialInfo ? user.socialInfo : "{}",
-      roles,
-    };
-    const response = await userService.updateSpecifiedUser(
-      tokenStatus,
-      updatedUser
-    );
-    if (response) {
-      console.log(response);
-      setUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.id === response.id ? { ...user, ...response } : user
-        )
-      );
-      setFilteredUsers((prevUsers) =>
-        prevUsers.map((user) =>
-          user.id === response.id
-            ? {
-                ...user,
-                ...response,
-                roleId:
-                  response.roles && response.roles.length > 0
-                    ? Math.max(...response.roles)
-                    : 0,
-                role:
-                  response.roles &&
-                  response.roles.length > 0 &&
-                  userRoles.find(
-                    (role) => role.id === Math.max(...response.roles)
-                  )
-                    ? userRoles.find(
-                        (role) => role.id === Math.max(...response.roles)
-                      )?.name
-                    : "",
-              }
-            : user
-        )
-      );
-    }
-  };
-
   const handleSort = (direction: "asc" | "desc" | undefined, field: string) => {
     if (direction === "asc") {
       setFilteredResult([
-        ...filteredResult.sort((a, b) =>
-          a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0
-        ),
+        ...filteredResult
+          .sort((a, b) =>
+            a[field].toLowerCase() < b[field].toLowerCase()
+              ? -1
+              : a[field].toLowerCase() > b[field].toLowerCase()
+              ? 1
+              : 0
+          )
+          .map((item, index) => ({ ...item, index: index + 1 })),
       ]);
     } else if (direction === "desc") {
       setFilteredResult([
-        ...filteredResult.sort((a, b) =>
-          a[field] < b[field] ? 1 : a[field] > b[field] ? -1 : 0
-        ),
+        ...filteredResult
+          .sort((a, b) =>
+            a[field].toLowerCase() < b[field].toLowerCase()
+              ? 1
+              : a[field].toLowerCase() > b[field].toLowerCase()
+              ? -1
+              : 0
+          )
+          .map((item, index) => ({ ...item, index: index + 1 })),
       ]);
     }
   };
 
   useEffect(() => {
-    if (
-      myFilters.statusFilters.length === 0 &&
-      myFilters.roleFilters.length === 0 &&
-      myFilters.lastDateFilter.period === ""
-    ) {
-      setFilteredResult((prevUsers) => [...filteredUsers]);
-    } else {
-      let filteredResult = filteredUsers;
-      if (myFilters.statusFilters.length === 1) {
-        filteredResult = myFilters.statusFilters.includes(1)
-          ? filteredResult.filter((user) => user.role)
-          : filteredResult.filter((user) => !user.role);
-      }
-      if (
-        (myFilters.statusFilters.length === 0 ||
-          myFilters.statusFilters.includes(1)) &&
-        myFilters.roleFilters.length > 0
-      ) {
-        filteredResult = filteredResult.filter((user) =>
-          myFilters.roleFilters.includes(user.roleId)
-        );
-      }
-      if (myFilters.lastDateFilter.period !== "") {
-        if (myFilters.lastDateFilter.logged === 0) {
-          filteredResult = filteredResult.filter((user) =>
-            moment(user.lastLogin).isBefore(
-              moment()
-                .subtract(myFilters.lastDateFilter.period, "d")
-                .format("YYYY-MM-DD"),
-              "day"
-            )
-          );
-        } else {
-          filteredResult = filteredResult.filter((user) =>
-            moment(user.lastLogin).isSameOrAfter(
-              moment()
-                .subtract(myFilters.lastDateFilter.period, "d")
-                .format("YYYY-MM-DD"),
-              "day"
-            )
-          );
-        }
-      }
-      setFilteredResult([...filteredResult]);
-    }
-  }, [filteredUsers, myFilters]);
+    setFilteredResult((prevUsers) =>
+      filteredSubjects.map((subject, index) => ({
+        ...subject,
+        district: subject.district ? subject.district : "",
+        index: index + 1,
+      }))
+    );
+  }, [filteredSubjects, myFilters]);
 
   useEffect(() => {
     if (tokenStatus.active) {
-      const usersResponse = async () => {
-        const response = await userService.getUsers({ ...tokenStatus });
-        setUsers(response);
-        setFilteredUsers(response);
+      const subjectsResponse = async () => {
+        const response = await subjectService.getSubjectsFromDataBase({
+          ...tokenStatus,
+        });
+
+        console.log(response);
+        // setSubjectResponse(response);
+        setSubjects(response);
+        setFilteredSubjects(response);
       };
-      usersResponse();
+      subjectsResponse();
     }
   }, []);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Box>
-        <UsersFIltersOverview
+        <SubjectsFIltersOverview
           filters={myFilters}
           onFiltersChanged={setFilters}
-        ></UsersFIltersOverview>
+        ></SubjectsFIltersOverview>
       </Box>
       <Box sx={{ p: "16px 16px 0 16px" }}>
         <SearchBarWithFiltersController
@@ -221,20 +155,20 @@ const Subjects = (props: any) => {
         >
           <CustomTableHeader
             columnsGrid={columnsGrid}
-            headerCells={usersTableHeaderData}
+            headerCells={subjectsTableHeaderData}
             onSorted={handleSort}
           ></CustomTableHeader>
           <TableBody style={{ flex: "1", overflow: "auto" }}>
             {filteredResult.length > 0 &&
               filteredResult
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((user, index) => (
+                .map((subject, index) => (
                   <CustomTableRow
-                    onAction={handleUserAction}
+                    onAction={handleSubjectAction}
                     columnsGrid={columnsGrid}
-                    rowDefs={usersTableRowDefs}
+                    rowDefs={subjectsTableRowDefs}
                     key={`table-row-${index}`}
-                    data={user}
+                    data={subject}
                   ></CustomTableRow>
                 ))}
           </TableBody>
@@ -251,18 +185,12 @@ const Subjects = (props: any) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <UsersFiltersDialog
+      {/* <SubjectsFiltersDialog
         open={dialogOpened}
         onClose={() => setDialogOpened(false)}
         onFilters={handleFilters}
         filters={myFilters}
-      ></UsersFiltersDialog>
-      <AddRolesDialog
-        open={rolesDialogOpened}
-        onClose={() => setRolesDialogOpened(false)}
-        id={selectedId}
-        onRoles={handleRoles}
-      ></AddRolesDialog>
+      ></SubjectsFiltersDialog> */}
     </Box>
   );
 };

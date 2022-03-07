@@ -27,7 +27,6 @@ const useTokenStatus = () => {
           try {
             response = await auth.refreshToken(authContext.refreshToken);
             const data = await response.data;
-            console.log(data);
             authContext.setToken(data.token.access);
             authContext.setTokenExpAt(
               new Date().getTime() + data.token.TokenExpAt * 1000
@@ -43,12 +42,12 @@ const useTokenStatus = () => {
           return response;
         }
       } else {
-        authContext.setToken("");
-        authContext.setRefreshToken("");
+        authContext.setToken(undefined);
+        authContext.setRefreshToken(undefined);
         authContext.setRefreshTokenExpAt(0);
         authContext.setTokenExpAt(0);
         setResult({
-          token: "",
+          token: undefined,
           active: false,
         });
       }

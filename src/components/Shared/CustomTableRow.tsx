@@ -13,9 +13,10 @@ import React from "react";
 import { User } from "../../interfaces/UserInterfaces";
 import { RowCell } from "../../interfaces/TableRowDefinitionInterface";
 import moment from "moment";
+import { Subject } from "../../interfaces/SubjectInterfaces";
 
 interface Props {
-  data: User;
+  data: User | Subject;
   columnsGrid: string;
   rowDefs: RowCell[];
   onAction: any;
