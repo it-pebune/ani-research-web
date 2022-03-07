@@ -1,0 +1,17 @@
+{
+  "routes": [
+    {
+      "route": "/*",
+      "methods": ["GET"]
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/images/*.{png,jpg,gif}", "/css/*"]
+  },
+  "globalHeaders": {
+    "x-frame-options": "deny",
+    "x-dns-prefetch-control": "off",
+    "cache-control": "no-cache, no-store, must-revalidate"
+  }
+}
