@@ -24,6 +24,8 @@ const MainMenu = () => {
       setMenuItems(unverifiedMenuItems);
     } else if (userRoles.includes(250)) {
       setMenuItems(adminMenuItems);
+    } else if (userRoles.includes(150)) {
+      setMenuItems(adminMenuItems);
     }
   }, [userRoles]);
 

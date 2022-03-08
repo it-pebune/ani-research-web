@@ -8,11 +8,13 @@ export const usersTableRowDefs: RowCell[] = [
   },
   {
     cellType: "text",
+    field: "",
     fields: [{ name: "displayName", weight: "bold" }, { name: "email" }],
     align: "justify",
   },
   {
     cellType: "text",
+    field: "",
     fields: [{ name: "role" }],
     align: "center",
   },
@@ -30,6 +32,7 @@ export const usersTableRowDefs: RowCell[] = [
   },
   {
     cellType: "dropdown-button",
+    field: "",
     menuItems: [
       { action: "modify-roles", text: "Modifica roluri" },
       { action: "blacklist", text: "Blacklist" },

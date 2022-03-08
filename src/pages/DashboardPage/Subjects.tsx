@@ -1,5 +1,7 @@
 import {
   Box,
+  Icon,
+  IconButton,
   Table,
   TableBody,
   TableContainer,
@@ -12,7 +14,7 @@ import CustomTableRow from "../../components/Shared/CustomTableRow";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
 import {
-  Subject,
+  SubjectFromDataBase,
   SubjectFilters,
   SubjectsResponse,
 } from "../../interfaces/SubjectInterfaces";
@@ -22,21 +24,26 @@ import useTokenStatus from "../../utils/useTokenStatus";
 
 import { subjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
 import { subjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
+import AddSubjectDialog from "../../components/SubjectsComponents.js/AddSubjectDialog";
 // import AddRolesDialog from "../../components/SubjectsComponents/AddRolesDialog";
 // import { subjectRoles } from "../../resources/subjectRoles";
 
 const Subjects = (props: any) => {
-  const columnsGrid = "60px 1fr .5fr .5fr .5fr .7fr";
-  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const columnsGrid = "100px .8fr .5fr .6fr .8fr .5fr .9fr 60px ";
+  const [subjects, setSubjects] = useState<SubjectFromDataBase[]>([]);
   const [subjectResponse, setSubjectResponse] = useState<SubjectsResponse>();
-  const [filteredResult, setFilteredResult] = useState<Subject[]>([]);
-  const [filteredSubjects, setFilteredSubjects] = useState<Subject[]>([]);
+  const [filteredResult, setFilteredResult] = useState<SubjectFromDataBase[]>(
+    []
+  );
+  const [filteredSubjects, setFilteredSubjects] = useState<
+    SubjectFromDataBase[]
+  >([]);
   const [myFilters, setFilters] = useState<SubjectFilters | undefined>();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [dialogOpened, setDialogOpened] = useState(false);
   const [selectedId, setSelectedId] = useState<number | string>();
-  const [rolesDialogOpened, setRolesDialogOpened] = useState(false);
+  const [addDialogOpened, setAddDialogOpened] = useState(false);
   const tokenStatus = useTokenStatus();
 
   const handleFiltersOpen = () => {
@@ -51,6 +58,16 @@ const Subjects = (props: any) => {
     setRowsPerPage(e.target.value);
     setPage(0);
   };
+
+  const handleAddSubject = () => {
+    setAddDialogOpened(true);
+  };
+
+  const handleCloseAddDialog = () => {
+    setAddDialogOpened(false);
+  };
+
+  const handleAddDialogAction = () => {};
 
   const handleFilters = (filters: SubjectFilters) => {
     setDialogOpened(false);
@@ -69,7 +86,7 @@ const Subjects = (props: any) => {
 
   const handleSubjectAction = (action: string, id: string | number) => {
     if (action === "modify-roles") {
-      setRolesDialogOpened(true);
+      // setRolesDialogOpened(true);
       setSelectedId(id);
     }
   };
@@ -136,11 +153,21 @@ const Subjects = (props: any) => {
           onFiltersChanged={setFilters}
         ></SubjectsFIltersOverview>
       </Box>
-      <Box sx={{ p: "16px 16px 0 16px" }}>
+      <Box
+        sx={{
+          p: "16px 16px 0 16px",
+          display: "grid",
+          gridTemplateColumns: "1fr 60px",
+          gap: "16px",
+        }}
+      >
         <SearchBarWithFiltersController
           onSearchChanged={handleSearch}
           onFiltersOpen={handleFiltersOpen}
         ></SearchBarWithFiltersController>
+        <IconButton onClick={handleAddSubject}>
+          <Icon color="primary">add</Icon>
+        </IconButton>
       </Box>
 
       <TableContainer
@@ -191,6 +218,12 @@ const Subjects = (props: any) => {
         onFilters={handleFilters}
         filters={myFilters}
       ></SubjectsFiltersDialog> */}
+
+      <AddSubjectDialog
+        open={addDialogOpened}
+        onClose={handleCloseAddDialog}
+        onAction={handleAddDialogAction}
+      ></AddSubjectDialog>
     </Box>
   );
 };

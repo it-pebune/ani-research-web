@@ -23,7 +23,9 @@ const App: React.FC<Props> = (props) => {
   useEffect(() => {
     if (userCtx.roles.length === 0) {
       navigate("/");
-    } else if (userCtx.roles.includes(70)) {
+    } else if (userCtx.roles.includes(250)) {
+      navigate("/users");
+    } else if (userCtx.roles.includes(150)) {
       navigate("/subjects");
     }
   }, [userCtx]);

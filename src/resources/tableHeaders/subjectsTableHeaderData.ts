@@ -2,8 +2,7 @@ import { HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 export const subjectsTableHeaderData: HeaderCell[] = [
   {
-    title: "#",
-    align: "center",
+    field: "",
   },
   {
     field: "name",
@@ -14,9 +13,71 @@ export const subjectsTableHeaderData: HeaderCell[] = [
     direction: "asc",
   },
   {
-    field: "chamber",
-    title: "CAMERA",
+    field: "city",
+    title: "ORAS",
     align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "county",
+    title: "JUDET",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "dob",
+    title: "DATA NASTERII",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "status",
+    title: "STATUS",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "assignedTo",
+    title: "ASIGNAT CATRE",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "",
+  },
+];
+
+export const scrappedSubjectsTableHeaderData: HeaderCell[] = [
+  {
+    field: "",
+    align: "center",
+    title: "#",
+  },
+  {
+    field: "name",
+    title: "NUME SI PRENUME",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "district",
+    title: "CIRCUMSCRIPTIE",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
   },
   {
     field: "party",
@@ -27,15 +88,14 @@ export const subjectsTableHeaderData: HeaderCell[] = [
     direction: "asc",
   },
   {
-    field: "district",
-    title: "JUDET",
+    field: "chamber",
+    title: "INSTITUTIE",
     align: "center",
     hasSortFunction: true,
     sortActive: true,
     direction: "asc",
   },
   {
-    title: "ACTIUNI",
-    align: "center",
+    field: "",
   },
 ];

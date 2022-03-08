@@ -1,5 +1,8 @@
 import axios from "axios";
-import { SubjectsResponse, Subject } from "../interfaces/SubjectInterfaces";
+import {
+  SubjectFromDataBase,
+  SubjectFromScrapperResult,
+} from "../interfaces/SubjectInterfaces";
 import { API_BASE_URL } from "../resources/apiLinks";
 
 export const subjectService = {
@@ -9,7 +12,7 @@ export const subjectService = {
     cham: number;
     mustRefresh: boolean;
     leg: number;
-  }): Promise<Subject[]> => {
+  }): Promise<SubjectFromScrapperResult> => {
     let response: any;
     if (reqData.active) {
       const config = {
@@ -34,7 +37,7 @@ export const subjectService = {
   getSubjectsFromDataBase: async (reqData: {
     token: string;
     active: boolean;
-  }): Promise<Subject[]> => {
+  }): Promise<SubjectFromDataBase[]> => {
     let response: any;
     if (reqData.active) {
       const config = {

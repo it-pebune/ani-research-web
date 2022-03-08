@@ -3,26 +3,42 @@ export interface SubjectFilters {
   party: string | undefined;
 }
 
-// export interface Subject {
-//   [key: string]: any;
-//   id: number;
-//   name: string;
-//   party: string;
-//   loc: string;
-//   cham: number;
-// }
+export interface SubjectFromDataBase {
+  [key: string]: any;
+  id: number;
+  assignedTo: number;
+  assignedToId: number;
+  city: string;
+  county: string;
+  countyId: number;
+  created: string;
+  deleted: number;
+  dob: string;
+  firstName: String;
+  lastName: string;
+  photoUrl: string;
+  sirutaId: number;
+  status: number;
+}
 
-export interface Subject {
+export interface SubjectFromScrapper {
   [key: string]: any;
   id: number;
   name: string;
   party: string;
-  location: string;
-  chamber: number;
+  district: string;
+  chamber: number | string;
+}
+
+export interface SubjectFromScrapperResult {
+  [key: string]: any;
+  legislature: number;
+  profileUrl: string;
+  results: SubjectFromScrapper[];
 }
 
 export interface SubjectsResponse {
   legislature: number;
   link: string;
-  results: Subject[];
+  results: SubjectFromScrapper[];
 }
