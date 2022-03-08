@@ -67,7 +67,19 @@ const Subjects = (props: any) => {
     setAddDialogOpened(false);
   };
 
-  const handleAddDialogAction = () => {};
+  const handleAddDialogAction = () => {
+    setAddDialogOpened(false);
+    if (tokenStatus.active) {
+      const subjectsResponse = async () => {
+        const response = await subjectService.getSubjectsFromDataBase({
+          ...tokenStatus,
+        });
+        setSubjects(response);
+        setFilteredSubjects(response);
+      };
+      subjectsResponse();
+    }
+  };
 
   const handleFilters = (filters: SubjectFilters) => {
     setDialogOpened(false);
@@ -92,6 +104,8 @@ const Subjects = (props: any) => {
   };
 
   const handleSort = (direction: "asc" | "desc" | undefined, field: string) => {
+    console.log(field);
+    console.log(filteredResult);
     if (direction === "asc") {
       setFilteredResult([
         ...filteredResult
@@ -135,9 +149,8 @@ const Subjects = (props: any) => {
         const response = await subjectService.getSubjectsFromDataBase({
           ...tokenStatus,
         });
-
         console.log(response);
-        // setSubjectResponse(response);
+
         setSubjects(response);
         setFilteredSubjects(response);
       };

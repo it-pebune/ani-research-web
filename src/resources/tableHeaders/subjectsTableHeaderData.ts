@@ -5,7 +5,7 @@ export const subjectsTableHeaderData: HeaderCell[] = [
     field: "",
   },
   {
-    field: "name",
+    field: "lastName",
     align: "justify",
     title: "NUME",
     hasSortFunction: true,

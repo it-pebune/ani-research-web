@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  SubjectDetailFromScrapper,
   SubjectFromDataBase,
   SubjectFromScrapperResult,
 } from "../interfaces/SubjectInterfaces";
@@ -34,6 +35,37 @@ export const subjectService = {
     }
     return response;
   },
+  getSubjectDetailFromScrapper: async (reqData: {
+    token: string;
+    active: boolean;
+    id: number;
+    cham: number | string;
+    legislature?: number;
+  }): Promise<SubjectDetailFromScrapper> => {
+    let response: any;
+    if (reqData.active) {
+      const config = {
+        headers: { Authorization: `Bearer ${reqData.token}` },
+        params: {
+          leg: reqData.legislature,
+          cham: reqData.cham,
+          id: reqData.id,
+        },
+      };
+      try {
+        response = await axios.get(
+          `${API_BASE_URL}/webscrap/mps/details`,
+          config
+        );
+        const data = await response.data;
+        return data;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
   getSubjectsFromDataBase: async (reqData: {
     token: string;
     active: boolean;
@@ -45,6 +77,46 @@ export const subjectService = {
       };
       try {
         response = await axios.get(`${API_BASE_URL}/subjects`, config);
+        const data = await response.data;
+        return data;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
+  addSubject: async (reqData: {
+    token: string;
+    active: boolean;
+    firstName?: string;
+    lastName?: string;
+    photoUrl?: string;
+    dob?: string;
+    sirutaId?: number | null;
+  }): Promise<any> => {
+    let response: any;
+    if (reqData.active) {
+      const config = {
+        headers: { Authorization: `Bearer ${reqData.token}` },
+      };
+      const payload = JSON.parse(
+        JSON.stringify({
+          firstName: reqData.firstName,
+          lastName: reqData.lastName,
+          photoUrl: reqData.photoUrl,
+          dob: reqData.dob,
+          sirutaId: reqData.sirutaId && reqData.sirutaId,
+        })
+      );
+      console.log(payload);
+
+      try {
+        response = await axios.post(
+          `${API_BASE_URL}/subjects`,
+          payload,
+          config
+        );
         const data = await response.data;
         return data;
       } catch (error) {

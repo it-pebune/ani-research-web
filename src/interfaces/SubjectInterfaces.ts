@@ -42,3 +42,17 @@ export interface SubjectsResponse {
   link: string;
   results: SubjectFromScrapper[];
 }
+
+export interface SubjectDetailFromScrapper {
+  name: string;
+  photo: string;
+  dateOfBirth: string;
+}
+
+export interface SubjectData {
+  firstName: string;
+  lastName: string;
+  photoUrl: string;
+  dob: string;
+  sirutaId?: number | null;
+}

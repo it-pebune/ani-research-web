@@ -3,8 +3,7 @@ import { RowCell } from "../../interfaces/TableRowDefinitionInterface";
 export const subjectsTableRowDefs: RowCell[] = [
   {
     cellType: "image",
-    field: "",
-    fields: [{ name: "photoUrl" }],
+    field: "photoUrl",
     align: "center",
   },
   {
@@ -89,7 +88,7 @@ export const scrappedSubjectsTableRowDefs: RowCell[] = [
   {
     cellType: "text",
     field: "",
-    fields: [{ name: "chamber" }],
+    fields: [{ name: "chamberName" }],
     align: "center",
   },
   {
@@ -97,7 +96,7 @@ export const scrappedSubjectsTableRowDefs: RowCell[] = [
     field: "",
     icon: "visibility",
     action: "view-subject",
-    fields: [{ name: "chamber" }],
+    fields: [{ name: "chamber" }, { name: "id" }],
     align: "center",
   },
 ];

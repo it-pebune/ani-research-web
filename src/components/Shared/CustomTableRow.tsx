@@ -38,9 +38,9 @@ const CustomTableRow: React.FC<Props> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleAction = (action: string | undefined) => {
+  const handleAction = (action: string | undefined, data?: any | undefined) => {
     setAnchorEl(null);
-    onAction(action, data.id);
+    onAction(action, data);
   };
 
   const handleClose = () => {
@@ -78,6 +78,12 @@ const CustomTableRow: React.FC<Props> = ({
                 src={data[cellDef.field]}
               ></Avatar>
             )}
+          {cellDef.cellType === "image" && cellDef.field && (
+            <img
+              style={{ height: "50px", width: "auto", margin: "0 auto" }}
+              src={data[cellDef.field]}
+            />
+          )}
           {cellDef.cellType === "text" && cellDef.fields && cellDef.inline && (
             <Typography sx={{ fontWeight: cellDef.fields[0].weight }}>
               {cellDef.fields.map((field) => `${data[field.name]} `)}
@@ -99,7 +105,14 @@ const CustomTableRow: React.FC<Props> = ({
           {cellDef.cellType === "icon-action" && (
             <IconButton
               color="warning"
-              onClick={() => handleAction(cellDef.action)}
+              onClick={() =>
+                handleAction(
+                  cellDef.action,
+                  cellDef.fields?.map((field) => ({
+                    [field.name]: data[field.name],
+                  }))
+                )
+              }
             >
               <Icon>{cellDef.icon}</Icon>
             </IconButton>
