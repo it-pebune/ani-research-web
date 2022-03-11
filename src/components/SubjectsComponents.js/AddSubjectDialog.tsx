@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -19,13 +20,13 @@ import {
   Typography,
   Autocomplete,
 } from "@mui/material";
-import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import "moment/locale/ro";
 
 import {
   SubjectData,
+  SubjectFromDataBase,
   SubjectFromScrapper,
   SubjectFromScrapperResult,
 } from "../../interfaces/SubjectInterfaces";
@@ -44,18 +45,19 @@ interface Props {
   open: boolean;
   onClose: any;
   onAction: any;
+  definedSubjects: SubjectFromDataBase[];
 }
 
 moment().locale("ro");
 
 const AddSubjectDialog: React.FC<Props> = ({
-  children,
+  definedSubjects,
   open,
   onClose,
   onAction,
 }) => {
   const columnsGrid = "60px 1fr 1fr 1fr 1fr 70px";
-  const [scrappedSubjects, setScrapperdSubjects] = useState<
+  const [scrappedSubjects, setScrappedSubjects] = useState<
     SubjectFromScrapper[]
   >([]);
   const [scrapperResult, setScrapperResult] =
@@ -128,8 +130,6 @@ const AddSubjectDialog: React.FC<Props> = ({
   const handleScrappedSubjectAction = (action: string, data: any) => {
     if (action === "view-subject") {
       setSubjectDialogOpened(true);
-      console.log(data);
-      console.log(scrappedSubjects[0]);
       setSubjectToAdd(
         scrappedSubjects.find(
           (subject) =>
@@ -198,6 +198,10 @@ const AddSubjectDialog: React.FC<Props> = ({
   }, [subjectToAdd]);
 
   useEffect(() => {
+    // if (scrappedSubjects) {
+    //   console.log(scrappedSubjects[0].name.split(" ").slice(1).join(" "));
+    //   console.log(scrappedSubjects[0].name.split(" ").shift());
+    // }
     setFilteredSubjects(scrappedSubjects);
   }, [scrappedSubjects]);
 
@@ -211,8 +215,9 @@ const AddSubjectDialog: React.FC<Props> = ({
           mustRefresh: false,
           leg: 2020,
         });
+
         setScrapperResult(response);
-        setScrapperdSubjects(
+        setScrappedSubjects(
           response?.results.map((item) => ({
             ...item,
             district: item.district ? item.district : "",

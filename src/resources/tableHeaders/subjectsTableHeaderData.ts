@@ -13,6 +13,14 @@ export const subjectsTableHeaderData: HeaderCell[] = [
     direction: "asc",
   },
   {
+    field: "dob",
+    title: "DATA NASTERII",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
     field: "city",
     title: "ORAS",
     align: "center",
@@ -23,14 +31,6 @@ export const subjectsTableHeaderData: HeaderCell[] = [
   {
     field: "county",
     title: "JUDET",
-    align: "center",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "dob",
-    title: "DATA NASTERII",
     align: "center",
     hasSortFunction: true,
     sortActive: true,

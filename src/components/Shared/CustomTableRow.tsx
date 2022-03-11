@@ -8,6 +8,7 @@ import {
   Typography,
   MenuItem,
   Menu,
+  Button,
 } from "@mui/material";
 import React, { useEffect } from "react";
 import { User } from "../../interfaces/UserInterfaces";
@@ -117,6 +118,23 @@ const CustomTableRow: React.FC<Props> = ({
               <Icon>{cellDef.icon}</Icon>
             </IconButton>
           )}
+          {cellDef.cellType === "action-button" && (
+            <Button
+              color="primary"
+              variant="contained"
+              sx={{ width: "200px", margin: "0 auto" }}
+              onClick={() =>
+                handleAction(
+                  cellDef.action,
+                  cellDef.fields?.map((field) => ({
+                    [field.name]: data[field.name],
+                  }))
+                )
+              }
+            >
+              {cellDef.text}
+            </Button>
+          )}
           {cellDef.cellType === "index" && cellDef.field && (
             <Typography>{data[cellDef.field]}</Typography>
           )}
@@ -200,7 +218,7 @@ const CustomTableRow: React.FC<Props> = ({
                 {cellDef.menuItems.map((item) => (
                   <MenuItem
                     key={item.action}
-                    onClick={() => handleAction(item.action)}
+                    onClick={() => handleAction(item.action, data.id)}
                   >
                     {item.text}
                   </MenuItem>

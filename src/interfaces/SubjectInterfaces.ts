@@ -6,7 +6,7 @@ export interface SubjectFilters {
 export interface SubjectFromDataBase {
   [key: string]: any;
   id: number;
-  assignedTo: number;
+  assignedTo: string;
   assignedToId: number;
   city: string;
   county: string;

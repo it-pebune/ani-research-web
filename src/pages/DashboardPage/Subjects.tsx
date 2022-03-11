@@ -25,11 +25,12 @@ import useTokenStatus from "../../utils/useTokenStatus";
 import { subjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
 import { subjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
 import AddSubjectDialog from "../../components/SubjectsComponents.js/AddSubjectDialog";
+import AssignDialog from "../../components/SubjectsComponents.js/AssignDialog";
 // import AddRolesDialog from "../../components/SubjectsComponents/AddRolesDialog";
 // import { subjectRoles } from "../../resources/subjectRoles";
 
 const Subjects = (props: any) => {
-  const columnsGrid = "100px .8fr .5fr .6fr .8fr .5fr .9fr 60px ";
+  const columnsGrid = "100px .8fr .7fr .6fr .8fr .5fr .9fr 60px ";
   const [subjects, setSubjects] = useState<SubjectFromDataBase[]>([]);
   const [subjectResponse, setSubjectResponse] = useState<SubjectsResponse>();
   const [filteredResult, setFilteredResult] = useState<SubjectFromDataBase[]>(
@@ -41,13 +42,14 @@ const Subjects = (props: any) => {
   const [myFilters, setFilters] = useState<SubjectFilters | undefined>();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
-  const [dialogOpened, setDialogOpened] = useState(false);
+  const [assignDialogOpened, setAssignDialogOpened] = useState(false);
   const [selectedId, setSelectedId] = useState<number | string>();
+  const [selectedSubject, setSelectedSubject] = useState<SubjectFromDataBase>();
   const [addDialogOpened, setAddDialogOpened] = useState(false);
   const tokenStatus = useTokenStatus();
 
   const handleFiltersOpen = () => {
-    setDialogOpened(true);
+    // setDialogOpened(true);
   };
 
   const handleChangePage = (e: any, newPage: number) => {
@@ -67,6 +69,10 @@ const Subjects = (props: any) => {
     setAddDialogOpened(false);
   };
 
+  const handleCloseAssignDialog = () => {
+    setAssignDialogOpened(false);
+  };
+
   const handleAddDialogAction = () => {
     setAddDialogOpened(false);
     if (tokenStatus.active) {
@@ -74,15 +80,37 @@ const Subjects = (props: any) => {
         const response = await subjectService.getSubjectsFromDataBase({
           ...tokenStatus,
         });
-        setSubjects(response);
-        setFilteredSubjects(response);
+        setSubjects([...response]);
+        setFilteredSubjects([...response]);
       };
       subjectsResponse();
     }
   };
 
+  const handleAssingDialogAction = (
+    subjectId: number,
+    userId: number,
+    userName: string
+  ) => {
+    setSubjects((prevData) =>
+      prevData.map((item) => ({
+        ...item,
+        assignedToId: item.id === subjectId ? userId : item.assignedToId,
+        assignedTo: item.id === subjectId ? userName : item.assignedTo,
+      }))
+    );
+    setFilteredSubjects((prevData) =>
+      prevData.map((item) => ({
+        ...item,
+        assignedToId: item.id === subjectId ? userId : item.assignedToId,
+        assignedTo: item.id === subjectId ? userName : item.assignedTo,
+      }))
+    );
+    setAssignDialogOpened(false);
+  };
+
   const handleFilters = (filters: SubjectFilters) => {
-    setDialogOpened(false);
+    // setDialogOpened(false);
     setFilters(filters);
     setPage(0);
   };
@@ -96,16 +124,27 @@ const Subjects = (props: any) => {
     setPage(0);
   };
 
-  const handleSubjectAction = (action: string, id: string | number) => {
-    if (action === "modify-roles") {
-      // setRolesDialogOpened(true);
-      setSelectedId(id);
+  const handleSubjectAction = async (action: string, id: string | number) => {
+    if (action === "delete") {
+      const response = await subjectService.deleteSubject({
+        token: tokenStatus.token,
+        active: tokenStatus.active,
+        id: id as number,
+      });
+
+      if (response.id === id) {
+        setSubjects((prevData) => prevData.filter((item) => item.id !== id));
+        setFilteredSubjects((prevData) =>
+          prevData.filter((item) => item.id !== id)
+        );
+      }
+    } else if (action === "assign") {
+      setAssignDialogOpened(true);
+      setSelectedSubject(subjects.find((subject) => subject.id == id));
     }
   };
 
   const handleSort = (direction: "asc" | "desc" | undefined, field: string) => {
-    console.log(field);
-    console.log(filteredResult);
     if (direction === "asc") {
       setFilteredResult([
         ...filteredResult
@@ -134,6 +173,10 @@ const Subjects = (props: any) => {
   };
 
   useEffect(() => {
+    console.log(filteredSubjects);
+  }, [filteredSubjects]);
+
+  useEffect(() => {
     setFilteredResult((prevUsers) =>
       filteredSubjects.map((subject, index) => ({
         ...subject,
@@ -149,10 +192,9 @@ const Subjects = (props: any) => {
         const response = await subjectService.getSubjectsFromDataBase({
           ...tokenStatus,
         });
-        console.log(response);
 
-        setSubjects(response);
-        setFilteredSubjects(response);
+        setSubjects(response.filter((item) => item.deleted === 0));
+        setFilteredSubjects(response.filter((item) => item.deleted === 0));
       };
       subjectsResponse();
     }
@@ -225,18 +267,20 @@ const Subjects = (props: any) => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      {/* <SubjectsFiltersDialog
-        open={dialogOpened}
-        onClose={() => setDialogOpened(false)}
-        onFilters={handleFilters}
-        filters={myFilters}
-      ></SubjectsFiltersDialog> */}
 
       <AddSubjectDialog
         open={addDialogOpened}
         onClose={handleCloseAddDialog}
         onAction={handleAddDialogAction}
+        definedSubjects={subjects}
       ></AddSubjectDialog>
+
+      <AssignDialog
+        open={assignDialogOpened}
+        subject={selectedSubject}
+        onClose={handleCloseAssignDialog}
+        onAction={handleAssingDialogAction}
+      ></AssignDialog>
     </Box>
   );
 };

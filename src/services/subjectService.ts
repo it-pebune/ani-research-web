@@ -35,6 +35,30 @@ export const subjectService = {
     }
     return response;
   },
+  deleteSubject: async (reqData: {
+    token: string;
+    active: boolean;
+    id: number;
+  }): Promise<any> => {
+    let response: any;
+    if (reqData.active) {
+      const config = {
+        headers: { Authorization: `Bearer ${reqData.token}` },
+      };
+      try {
+        response = await axios.delete(
+          `${API_BASE_URL}/subjects/${reqData.id}`,
+          config
+        );
+        const data = await response.data;
+        return data;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
   getSubjectDetailFromScrapper: async (reqData: {
     token: string;
     active: boolean;
@@ -115,6 +139,34 @@ export const subjectService = {
         response = await axios.post(
           `${API_BASE_URL}/subjects`,
           payload,
+          config
+        );
+        const data = await response.data;
+        return data;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
+  assignSubject: async (reqData: {
+    token: string;
+    active: boolean;
+    subjectId: number | undefined;
+    userId: number;
+    status: number | undefined;
+  }): Promise<any> => {
+    let response: any;
+    if (reqData.active) {
+      const config = {
+        headers: { Authorization: `Bearer ${reqData.token}` },
+      };
+
+      try {
+        response = await axios.put(
+          `${API_BASE_URL}/subjects/${reqData.subjectId}/assign`,
+          { userId: reqData.userId, status: reqData.status },
           config
         );
         const data = await response.data;

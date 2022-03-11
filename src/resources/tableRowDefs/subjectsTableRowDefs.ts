@@ -14,7 +14,13 @@ export const subjectsTableRowDefs: RowCell[] = [
       { name: "lastName", weight: "bold" },
       { name: "firstName", weight: "bold" },
     ],
-    align: "justify",
+    align: "left",
+  },
+  {
+    cellType: "date",
+    dateFormat: "DD.MM.YYYY",
+    field: "dob",
+    align: "center",
   },
   {
     cellType: "text",
@@ -28,12 +34,7 @@ export const subjectsTableRowDefs: RowCell[] = [
     fields: [{ name: "county" }],
     align: "center",
   },
-  {
-    cellType: "date",
-    dateFormat: "DD.MM.YYYY",
-    field: "dob",
-    align: "center",
-  },
+
   {
     cellType: "status-chip",
     field: "status",

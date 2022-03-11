@@ -40,3 +40,31 @@ export const usersTableRowDefs: RowCell[] = [
     ],
   },
 ];
+
+export const researcherTableRowDefs: RowCell[] = [
+  {
+    cellType: "avatar",
+    altField: "displayName",
+    field: "profileImageUrl",
+  },
+  {
+    cellType: "text",
+    field: "",
+    fields: [{ name: "displayName", weight: "bold" }],
+    align: "justify",
+  },
+  {
+    cellType: "text",
+    field: "",
+    fields: [{ name: "email" }],
+    align: "center",
+  },
+  {
+    cellType: "action-button",
+    field: "",
+    text: "Asigneaza",
+    action: "view-subject",
+    fields: [{ name: "id" }, { name: "displayName" }],
+    align: "center",
+  },
+];

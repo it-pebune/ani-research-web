@@ -22,6 +22,7 @@ export interface RowCell {
   inline?: boolean;
   icon?: string;
   action?: string | undefined;
+  text?: string;
   states?: SubjectState[];
   fields?: TextField[];
   dateFormat?: string | undefined;
