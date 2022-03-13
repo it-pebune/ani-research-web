@@ -8,14 +8,19 @@ import {
   Typography,
   MenuItem,
   Menu,
+  Button,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { User } from "../../interfaces/UserInterfaces";
 import { RowCell } from "../../interfaces/TableRowDefinitionInterface";
 import moment from "moment";
+import {
+  SubjectFromDataBase,
+  SubjectFromScrapper,
+} from "../../interfaces/SubjectInterfaces";
 
 interface Props {
-  data: User;
+  data: User | SubjectFromDataBase | SubjectFromScrapper;
   columnsGrid: string;
   rowDefs: RowCell[];
   onAction: any;
@@ -34,9 +39,9 @@ const CustomTableRow: React.FC<Props> = ({
     setAnchorEl(event.currentTarget);
   };
 
-  const handleAction = (action: string) => {
+  const handleAction = (action: string | undefined, data?: any | undefined) => {
     setAnchorEl(null);
-    onAction(action, data.id);
+    onAction(action, data);
   };
 
   const handleClose = () => {
@@ -74,8 +79,20 @@ const CustomTableRow: React.FC<Props> = ({
                 src={data[cellDef.field]}
               ></Avatar>
             )}
+          {cellDef.cellType === "image" && cellDef.field && (
+            <img
+              style={{ height: "50px", width: "auto", margin: "0 auto" }}
+              src={data[cellDef.field]}
+            />
+          )}
+          {cellDef.cellType === "text" && cellDef.fields && cellDef.inline && (
+            <Typography sx={{ fontWeight: cellDef.fields[0].weight }}>
+              {cellDef.fields.map((field) => `${data[field.name]} `)}
+            </Typography>
+          )}
           {cellDef.cellType === "text" &&
             cellDef.fields &&
+            !cellDef.inline &&
             cellDef.fields.map((field) => (
               <Typography key={field.name} sx={{ fontWeight: field.weight }}>
                 {data[field.name]}
@@ -85,6 +102,66 @@ const CustomTableRow: React.FC<Props> = ({
             <Typography>
               {moment(data[cellDef.field]).format(cellDef.dateFormat)}
             </Typography>
+          )}
+          {cellDef.cellType === "icon-action" && (
+            <IconButton
+              color="warning"
+              onClick={() =>
+                handleAction(
+                  cellDef.action,
+                  cellDef.fields?.map((field) => ({
+                    [field.name]: data[field.name],
+                  }))
+                )
+              }
+            >
+              <Icon>{cellDef.icon}</Icon>
+            </IconButton>
+          )}
+          {cellDef.cellType === "action-button" && (
+            <Button
+              color="primary"
+              variant="contained"
+              sx={{ width: "200px", margin: "0 auto" }}
+              onClick={() =>
+                handleAction(
+                  cellDef.action,
+                  cellDef.fields?.map((field) => ({
+                    [field.name]: data[field.name],
+                  }))
+                )
+              }
+            >
+              {cellDef.text}
+            </Button>
+          )}
+          {cellDef.cellType === "index" && cellDef.field && (
+            <Typography>{data[cellDef.field]}</Typography>
+          )}
+          {cellDef.cellType === "status-chip" && cellDef.field && (
+            <>
+              {data[cellDef.field] !== undefined && cellDef.states && (
+                <>
+                  <Chip
+                    label={
+                      cellDef.states.find(
+                        (state) => data[cellDef.field] === state.value
+                      )?.text
+                    }
+                    sx={{
+                      color: cellDef.states.find(
+                        (state) => data[cellDef.field] === state.value
+                      )?.color,
+                      borderColor: cellDef.states.find(
+                        (state) => data[cellDef.field] === state.value
+                      )?.color,
+                      width: "120px",
+                    }}
+                    variant="outlined"
+                  />
+                </>
+              )}
+            </>
           )}
           {cellDef.cellType === "conditional-chip" && cellDef.field && (
             <>
@@ -141,7 +218,7 @@ const CustomTableRow: React.FC<Props> = ({
                 {cellDef.menuItems.map((item) => (
                   <MenuItem
                     key={item.action}
-                    onClick={() => handleAction(item.action)}
+                    onClick={() => handleAction(item.action, data.id)}
                   >
                     {item.text}
                   </MenuItem>

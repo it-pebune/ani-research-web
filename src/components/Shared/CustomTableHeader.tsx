@@ -26,11 +26,11 @@ const CustomTableHeader: React.FC<Props> = ({
     field: string | undefined
   ) => {
     setHeaderData((prevState: HeaderCell[]) => {
-      onSorted(direction, field);
       return prevState.map((cell) =>
         cell.field === field ? { ...cell, direction } : cell
       );
     });
+    onSorted(direction, field);
   };
 
   return (

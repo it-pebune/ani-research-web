@@ -18,6 +18,11 @@ export const adminMenuItems = [
     link: "/users",
   },
   {
+    icon: "people",
+    text: "Subiecti",
+    link: "/subjects",
+  },
+  {
     icon: "privacy_tip",
     text: "Modifica termeni si conditii",
     link: "/modify-terms",

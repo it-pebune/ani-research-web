@@ -180,6 +180,28 @@ const userService = {
     }
     return response;
   },
+  getUsersByRole: async (
+    token: string,
+    active: boolean,
+    role: number
+  ): Promise<User[]> => {
+    let response: any;
+    if (active) {
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { role },
+      };
+      try {
+        response = await axios.get(`${API_BASE_URL}/users/role`, config);
+        const resData = await response.data;
+        return resData;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
 
   updateUserNotes: async (
     tokenStatus: {

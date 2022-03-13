@@ -13,8 +13,8 @@ interface AuthContextI {
 }
 
 const AuthContext = createContext<AuthContextI>({
-  token: "",
-  refreshToken: "",
+  token: undefined,
+  refreshToken: undefined,
   tokenExpAt: 0,
   refreshTokenExpAt: 0,
   setToken: (token: string) => {},

@@ -1,4 +1,4 @@
-import { Avatar, Icon } from "@mui/material";
+import { Avatar, Box, Icon, Typography } from "@mui/material";
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../store/AuthContext";
@@ -30,15 +30,24 @@ const DashHeader = () => {
   };
 
   return (
-    <div className="header-wrapper">
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: "24px",
+        justifyContent: "flex-end",
+        p: " 10px 24px",
+        background: "#ededed",
+      }}
+    >
       <Link to={"/profile"}>
         <Avatar
           alt={userContext.displayName}
           src={userContext.profileImageUrl}
         />
       </Link>
-      <p>{userContext.displayName}</p>
-      <p>{userContext.email}</p>
+      <Typography>{userContext.displayName}</Typography>
+      <Typography>{userContext.email}</Typography>
       <LanguageSelector></LanguageSelector>
       <Icon
         sx={{ fontSize: 16 }}
@@ -47,7 +56,7 @@ const DashHeader = () => {
       >
         logout
       </Icon>
-    </div>
+    </Box>
   );
 };
 

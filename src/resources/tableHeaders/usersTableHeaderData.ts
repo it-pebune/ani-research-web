@@ -32,3 +32,25 @@ export const usersTableHeaderData: HeaderCell[] = [
     field: "",
   },
 ];
+
+export const researchersTableHeaderData: HeaderCell[] = [
+  {
+    field: "",
+  },
+  {
+    field: "displayName",
+    align: "justify",
+    title: "NUME",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "email",
+    align: "center",
+    title: "EMAIL",
+  },
+  {
+    field: "",
+  },
+];
