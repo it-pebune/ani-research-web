@@ -20,10 +20,12 @@ export interface SocialInfo {
 
 export interface CurrentUser {
   id: number;
-  displayName: string;
-  email: string;
   firstName: string;
   lastName: string;
+  displayName: string;
+  email: string;
+  socialInfo: string;
+  phone: string;
   profileImageUrl: string;
   roles: number[];
 }

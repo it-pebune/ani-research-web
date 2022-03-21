@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_BASE_URL } from "../resources/apiLinks";
 import {
+  CurrentUser,
   SpecifiedUser,
   SpecifiedUserToUpdate,
   User,
@@ -33,7 +34,7 @@ const userService = {
       token: string;
       active: boolean;
     },
-    id: number | undefined
+    id: string | number | undefined
   ): Promise<SpecifiedUser> => {
     let response: any;
     if (tokenStatus.active) {
@@ -56,7 +57,7 @@ const userService = {
   getCurrentUser: async (tokenStatus: {
     token: string;
     active: boolean;
-  }): Promise<User> => {
+  }): Promise<CurrentUser> => {
     let response: any;
     if (tokenStatus.active) {
       const config = {

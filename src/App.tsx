@@ -9,7 +9,7 @@ import NotVerified from "./pages/NotVerified";
 import { Box } from "@mui/material";
 
 import Users from "./pages/DashboardPage/Users";
-import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
+import UserProfilePage from "./pages/UserProfilePage/CurrentUserProfilePage";
 import Subjects from "./pages/DashboardPage/Subjects";
 
 interface Props {}

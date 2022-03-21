@@ -1,12 +1,10 @@
-import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
-import { useContext } from "react";
+import { Avatar, Box, Button, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
 import {
   SocialInfo,
   SpecifiedUserToUpdate,
 } from "../../interfaces/UserInterfaces";
 import userService from "../../services/userService";
-import UserContext from "../../store/UserContext";
 import useTokenStatus from "../../utils/useTokenStatus";
 import FormInputText from "../Shared/FormComponents/FormInputText";
 
@@ -20,30 +18,37 @@ interface IFormInput {
 }
 
 interface UserProfileEditFormProps {
+  id: number;
   firstName: string;
   lastName: string;
   displayName: string;
   profileImageUrl: string;
-  socialInfo: SocialInfo;
+  socialInfo: string;
   phone: string;
   roles: number[];
   switchToEditModeHandler: any;
 }
 
-const UserProfileEditForm = (props: UserProfileEditFormProps) => {
+const CurrentUserProfileHeaderEditContent = (
+  props: UserProfileEditFormProps
+) => {
+  const socialInfo = JSON.parse(props.socialInfo);
+
   const methods = useForm<IFormInput>({
     defaultValues: {
       firstName: props.firstName,
       lastName: props.lastName,
       displayName: props.displayName,
       phone: props.phone,
-      facebook: (props.socialInfo && props.socialInfo.facebook) ?? "",
-      linkedIn: (props.socialInfo && props.socialInfo.linkedIn) ?? "",
+      facebook: socialInfo && socialInfo.facebook ? socialInfo.facebook : "",
+      linkedIn: socialInfo && socialInfo.linkedIn ? socialInfo.linkedIn : "",
     },
   });
+
   const { handleSubmit, control } = methods;
-  const { id } = useContext(UserContext);
+
   const tokenStatus = useTokenStatus();
+
   const onSubmit = (userData: IFormInput) => {
     if (tokenStatus.active) {
       const usersResponse = async () => {
@@ -54,14 +59,14 @@ const UserProfileEditForm = (props: UserProfileEditFormProps) => {
         const usedDataToSend: SpecifiedUserToUpdate = {
           firstName: userData.firstName,
           lastName: userData.lastName,
-          displayName: userData.displayName ?? "",
-          phone: userData.phone ?? "",
+          displayName: userData.displayName,
+          phone: userData.phone,
           socialInfo: JSON.stringify(socialInfoToUpdate),
           roles: props.roles,
         };
         const response = await userService.updateSpecifiedUserData(
           { ...tokenStatus },
-          id!,
+          props.id,
           usedDataToSend
         );
       };
@@ -176,4 +181,4 @@ const UserProfileEditForm = (props: UserProfileEditFormProps) => {
   );
 };
 
-export default UserProfileEditForm;
+export default CurrentUserProfileHeaderEditContent;

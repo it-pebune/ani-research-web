@@ -28,17 +28,21 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface UserProfileDisplayProps {
-  email: string | undefined;
-  displayName: string | undefined;
-  profileImageUrl: string | undefined;
-  socialInfo: SocialInfo | undefined;
-  phone: string | undefined;
-  roles: number[] | undefined;
+  email: string;
+  displayName: string;
+  profileImageUrl: string;
+  socialInfo: string;
+  phone: string;
+  roles: number[];
   switchToEditModeHandler: any;
 }
 
-const UserProfileDisplay = (props: UserProfileDisplayProps) => {
+const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
   const classes = useStyles();
+
+  const socialInfo: SocialInfo = props.socialInfo
+    ? JSON.parse(props.socialInfo)
+    : { facebook: "", linkedIn: "" };
 
   return (
     <Grid container direction={"row"} sx={{ padding: "30px 0px" }}>
@@ -71,17 +75,18 @@ const UserProfileDisplay = (props: UserProfileDisplayProps) => {
             props.roles.map((roleId) => userRoleConvertor(roleId))}
         </CustomTypographySecondary>
         <Grid item container direction={"row"} sx={{ marginTop: "10px" }}>
-          {props.socialInfo && (
+          {socialInfo && socialInfo.facebook && (
             <FacebookIcon
               fontSize="large"
               className={classes.socialMediaIcon}
-              href={props.socialInfo.facebook}
+              href={socialInfo.facebook}
             />
           )}
-          {props.socialInfo && (
+          {socialInfo && socialInfo.linkedIn && (
             <LinkedInIcon
               fontSize="large"
               className={classes.socialMediaIcon}
+              href={socialInfo.linkedIn}
             />
           )}
         </Grid>
@@ -115,12 +120,14 @@ const UserProfileDisplay = (props: UserProfileDisplayProps) => {
         direction={"column"}
         sx={{ paddingLeft: "200px", paddingRight: "60px" }}
       >
-        <Button variant="contained" onClick={props.switchToEditModeHandler}>
-          Edit profile
-        </Button>
+        {
+          <Button variant="contained" onClick={props.switchToEditModeHandler}>
+            Edit profile
+          </Button>
+        }
       </Grid>
     </Grid>
   );
 };
 
-export default UserProfileDisplay;
+export default CurrentUserProfileHeaderContent;
