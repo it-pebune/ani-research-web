@@ -1,4 +1,12 @@
-import { Avatar, Box, Button, Grid, Paper, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Grid,
+  Link,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { makeStyles, styled } from "@mui/styles";
 import { Theme } from "@mui/system";
 
@@ -75,19 +83,21 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
             props.roles.map((roleId) => userRoleConvertor(roleId))}
         </CustomTypographySecondary>
         <Grid item container direction={"row"} sx={{ marginTop: "10px" }}>
-          {socialInfo && socialInfo.facebook && (
-            <FacebookIcon
-              fontSize="large"
-              className={classes.socialMediaIcon}
-              href={socialInfo.facebook}
-            />
+          {socialInfo?.facebook && (
+            <Link href={socialInfo.facebook} target="_blank">
+              <FacebookIcon
+                fontSize="large"
+                className={classes.socialMediaIcon}
+              />
+            </Link>
           )}
-          {socialInfo && socialInfo.linkedIn && (
-            <LinkedInIcon
-              fontSize="large"
-              className={classes.socialMediaIcon}
-              href={socialInfo.linkedIn}
-            />
+          {socialInfo?.linkedIn && (
+            <Link href={socialInfo.linkedIn} target="_blank">
+              <LinkedInIcon
+                fontSize="large"
+                className={classes.socialMediaIcon}
+              />
+            </Link>
           )}
         </Grid>
       </Grid>
@@ -118,13 +128,17 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
         lg={3}
         container
         direction={"column"}
-        sx={{ paddingLeft: "200px", paddingRight: "60px" }}
+        justifyContent={"center"}
+        sx={{ paddingLeft: "150px", paddingRight: "60px" }}
       >
-        {
-          <Button variant="contained" onClick={props.switchToEditModeHandler}>
-            Edit profile
-          </Button>
-        }
+        <Button
+          variant="contained"
+          size="large"
+          fullWidth
+          onClick={props.switchToEditModeHandler}
+        >
+          <Typography>Edit profile</Typography>
+        </Button>
       </Grid>
     </Grid>
   );

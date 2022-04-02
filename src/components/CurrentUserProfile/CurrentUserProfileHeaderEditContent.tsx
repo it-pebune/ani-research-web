@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Grid } from "@mui/material";
+import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import {
   CurrentUser,
@@ -148,7 +148,7 @@ const CurrentUserProfileHeaderEditContent = (
         item
         xs={12}
         md={6}
-        lg={4}
+        lg={3}
         container
         spacing={1}
         direction={"column"}
@@ -181,16 +181,27 @@ const CurrentUserProfileHeaderEditContent = (
         spacing={2}
         direction={"column"}
         justifyContent={"center"}
-        alignItems={"baseline"}
+        alignItems={"center"}
       >
         <Grid item>
-          <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-            Save
+          <Button
+            variant="contained"
+            size="large"
+            fullWidth
+            onClick={handleSubmit(onSubmit)}
+          >
+            <Typography>Save</Typography>
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="contained" onClick={props.switchToEditModeHandler}>
-            Discard
+          <Button
+            variant="contained"
+            color="error"
+            size="large"
+            fullWidth
+            onClick={props.switchToEditModeHandler}
+          >
+            <Typography>Discard</Typography>
           </Button>
         </Grid>
       </Grid>
