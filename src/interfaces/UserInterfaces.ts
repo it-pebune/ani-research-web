@@ -53,11 +53,8 @@ export interface SpecifiedUserToUpdate {
   firstName?: string;
   lastName?: string;
   displayName?: string;
-
-  socialInfo?: string;
   phone?: string;
-
-  roles?: number[];
+  socialInfo?: string;
 }
 
 export interface Filters {

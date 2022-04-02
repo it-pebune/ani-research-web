@@ -1,15 +1,17 @@
 import { Box, CircularProgress } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
 import UserProfileNotFound from "../../components/CurrentUserProfile/UserProfileNotFound";
 import CurrentUserProfileHeader from "../../components/CurrentUserProfile/CurrentUserProfileHeader";
 import CurrentUserProfileHeaderContent from "../../components/CurrentUserProfile/CurrentUserProfileHeaderContent";
 import CurrentUserProfileHeaderEditContent from "../../components/CurrentUserProfile/CurrentUserProfileHeaderEditContent";
-import { CurrentUser, User } from "../../interfaces/UserInterfaces";
+import { CurrentUser } from "../../interfaces/UserInterfaces";
+import UserContext from "../../store/UserContext";
 
 const CurrentUserProfilePage = () => {
-  const tokenStatus = useTokenStatus();
+  const tokenStatus = useTokenStatus(),
+    userContext = useContext(UserContext);
 
   const [currentUserData, setCurrentUserData] = useState<CurrentUser>();
   const [pageIsLoading, setPageIsLoading] = useState<boolean>(true);
@@ -18,6 +20,11 @@ const CurrentUserProfilePage = () => {
 
   const switchToEditModeHandler = () => {
     setEditMode((previousState) => !previousState);
+  };
+  const updateCurrentUser = (user: CurrentUser): void => {
+    setCurrentUserData(user);
+
+    userContext.setUser(user);
   };
 
   useEffect(() => {
@@ -60,15 +67,14 @@ const CurrentUserProfilePage = () => {
         )}
         {editMode && currentUserData && (
           <CurrentUserProfileHeaderEditContent
-            id={currentUserData.id}
             firstName={currentUserData.firstName}
             lastName={currentUserData.lastName}
             displayName={currentUserData.displayName}
-            profileImageUrl={currentUserData.profileImageUrl}
-            socialInfo={currentUserData.socialInfo}
             phone={currentUserData.phone}
-            roles={currentUserData.roles}
+            socialInfo={currentUserData.socialInfo}
+            profileImageUrl={currentUserData.profileImageUrl}
             switchToEditModeHandler={switchToEditModeHandler}
+            updateCurrentUser={updateCurrentUser}
           />
         )}
       </CurrentUserProfileHeader>

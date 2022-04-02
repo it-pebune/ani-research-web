@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, Grid } from "@mui/material";
 import { useForm } from "react-hook-form";
 import {
+  CurrentUser,
   SocialInfo,
   SpecifiedUserToUpdate,
 } from "../../interfaces/UserInterfaces";
@@ -18,15 +19,14 @@ interface IFormInput {
 }
 
 interface UserProfileEditFormProps {
-  id: number;
   firstName: string;
   lastName: string;
   displayName: string;
-  profileImageUrl: string;
-  socialInfo: string;
   phone: string;
-  roles: number[];
+  socialInfo: string;
+  profileImageUrl: string;
   switchToEditModeHandler: any;
+  updateCurrentUser: (user: CurrentUser) => void;
 }
 
 const CurrentUserProfileHeaderEditContent = (
@@ -49,29 +49,36 @@ const CurrentUserProfileHeaderEditContent = (
 
   const tokenStatus = useTokenStatus();
 
-  const onSubmit = (userData: IFormInput) => {
+  const onSubmit = async (userData: IFormInput) => {
     if (tokenStatus.active) {
       const usersResponse = async () => {
         const socialInfoToUpdate: SocialInfo = {
-          facebook: userData.facebook ?? null,
-          linkedIn: userData.linkedIn ?? null,
-        };
-        const usedDataToSend: SpecifiedUserToUpdate = {
-          firstName: userData.firstName,
-          lastName: userData.lastName,
-          displayName: userData.displayName,
-          phone: userData.phone,
-          socialInfo: JSON.stringify(socialInfoToUpdate),
-          roles: props.roles,
-        };
-        const response = await userService.updateSpecifiedUserData(
-          { ...tokenStatus },
-          props.id,
-          usedDataToSend
-        );
+            facebook: userData.facebook ?? null,
+            linkedIn: userData.linkedIn ?? null,
+          },
+          usedDataToSend: SpecifiedUserToUpdate = {
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            displayName: userData.displayName,
+            phone: userData.phone,
+            socialInfo: JSON.stringify(socialInfoToUpdate),
+          };
+
+        try {
+          const updatedUser = await userService.updateSpecifiedUserData(
+            { ...tokenStatus },
+            usedDataToSend
+          );
+
+          props.updateCurrentUser(updatedUser);
+        } catch (e: any) {
+          console.log(e.response);
+        }
       };
-      usersResponse();
+
+      await usersResponse();
     }
+
     props.switchToEditModeHandler();
   };
 
