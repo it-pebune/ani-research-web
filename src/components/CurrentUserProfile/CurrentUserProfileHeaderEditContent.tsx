@@ -8,6 +8,7 @@ import {
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
 import FormInputText from "../Shared/FormComponents/FormInputText";
+import { ApiErrors } from "../../enums/ErrorsEnums";
 
 interface IFormInput {
   firstName: string;
@@ -45,41 +46,50 @@ const CurrentUserProfileHeaderEditContent = (
     },
   });
 
-  const { handleSubmit, control } = methods;
+  const { handleSubmit, control, setError } = methods;
 
   const tokenStatus = useTokenStatus();
 
   const onSubmit = async (userData: IFormInput) => {
     if (tokenStatus.active) {
-      const usersResponse = async () => {
-        const socialInfoToUpdate: SocialInfo = {
-            facebook: userData.facebook ?? null,
-            linkedIn: userData.linkedIn ?? null,
-          },
-          usedDataToSend: SpecifiedUserToUpdate = {
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            displayName: userData.displayName,
-            phone: userData.phone,
-            socialInfo: JSON.stringify(socialInfoToUpdate),
-          };
+      const socialInfoToUpdate: SocialInfo = {
+          facebook: userData.facebook ?? null,
+          linkedIn: userData.linkedIn ?? null,
+        },
+        usedDataToSend: SpecifiedUserToUpdate = {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          displayName: userData.displayName,
+          phone: userData.phone,
+          socialInfo: JSON.stringify(socialInfoToUpdate),
+        };
 
-        try {
-          const updatedUser = await userService.updateSpecifiedUserData(
-            { ...tokenStatus },
-            usedDataToSend
-          );
+      try {
+        const updatedUser = await userService.updateSpecifiedUserData(
+          { ...tokenStatus },
+          usedDataToSend
+        );
 
-          props.updateCurrentUser(updatedUser);
-        } catch (e: any) {
-          console.log(e.response);
-        }
-      };
+        props.updateCurrentUser(updatedUser);
+        props.switchToEditModeHandler();
+      } catch (e: any) {
+        onSubmitError(e);
+      }
+    } else {
+      props.switchToEditModeHandler();
+    }
+  };
 
-      await usersResponse();
+  const onSubmitError = (error: any): void => {
+    console.log(error);
+
+    if (ApiErrors.VALIDATION !== error?.response?.data?.code) {
+      return;
     }
 
-    props.switchToEditModeHandler();
+    for (const validationError of error.response.data.details) {
+      setError(validationError.context.key, validationError);
+    }
   };
 
   return (
