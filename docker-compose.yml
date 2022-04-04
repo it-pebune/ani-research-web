@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+  node:
+    image: node:16.13.0
+    user: node
+    working_dir: /var/www/ani-research-web
+    command: tail -F anything
+    volumes: ["./:/var/www/ani-research-web"]
+    ports: ["7000:7000"]
+    env_file: [.env.local]
