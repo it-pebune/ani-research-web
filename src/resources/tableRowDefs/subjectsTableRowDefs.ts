@@ -92,12 +92,12 @@ export const assignedSubjectsTableRowDefs: RowCell[] = [
     align: "center",
   },
   {
-    cellType: "action-button",
+    cellType: "dropdown-button",
     field: "",
-    text: "Documente",
-    action: "view-documents",
-    fields: [{ name: "id" }, { name: "displayName" }],
-    align: "center",
+    menuItems: [
+      { action: "to-documents", text: "Documente" },
+      { action: "to-download", text: "Incarcare" },
+    ],
   },
 ];
 

@@ -33,4 +33,38 @@ export const documentService = {
     }
     return response;
   },
+  addNewDocument: async (reqData: {
+    token: string;
+    active: boolean;
+    subjectId: number | undefined;
+    type: number;
+    status: number;
+    name: string;
+    downloadUrl: string;
+  }): Promise<any> => {
+    let response: any;
+    if (reqData.active) {
+      const payload = JSON.parse(
+        JSON.stringify({
+          subjectId: reqData.subjectId,
+          type: reqData.type,
+          status: reqData.status,
+          name: reqData.name,
+          downloadUrl: reqData.downloadUrl,
+        })
+      );
+      const config = {
+        headers: { Authorization: `Bearer ${reqData.token}` },
+      };
+      try {
+        response = await axios.post(`${API_BASE_URL}/docs`, payload, config);
+        const data = await response.data;
+        return data;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
 };

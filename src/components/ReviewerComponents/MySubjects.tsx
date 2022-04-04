@@ -24,7 +24,7 @@ type Props = {
 };
 
 const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
-  const columnsGrid = "100px .8fr .7fr .6fr 250px";
+  const columnsGrid = "100px .8fr .7fr .6fr 60px";
 
   const [filteredResult, setFilteredResult] = useState<SubjectFromDataBase[]>(
     []
@@ -34,7 +34,7 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
   >([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
-  const [selectedSubject, setSelectedSubject] = useState<SubjectFromDataBase>();
+  const [selectedSubject, setSelectedSubject] = useState<number>();
   const [myFilters, setFilters] = useState<SubjectFilters | undefined>();
   const tokenStatus = useTokenStatus();
 
@@ -54,22 +54,10 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
   };
 
   const handleSubjectAction = async (action: string, data: any) => {
-    if (action === "delete") {
-      // const response = await subjectService.deleteSubject({
-      //   token: tokenStatus.token,
-      //   active: tokenStatus.active,
-      //   id: id as number,
-      // });
-      // if (response.id === id) {
-      //   setSubjects((prevData) => prevData.filter((item) => item.id !== id));
-      //   setFilteredSubjects((prevData) =>
-      //     prevData.filter((item) => item.id !== id)
-      //   );
-      // }
-    } else if (action === "view-documents") {
-      // setAssignDialogOpened(true);
-      console.log(subjects.find((subject) => subject.id === data[0].id));
-      onSubjectSelected(subjects.find((subject) => subject.id === data[0].id));
+    setSelectedSubject(data);
+    if (action === "to-documents") {
+    } else if (action === "to-download") {
+      onSubjectSelected(subjects.find((subject) => subject.id === data));
     }
   };
 
@@ -116,6 +104,7 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
 
   useEffect(() => {
     if (selectedSubject) {
+      console.log(selectedSubject);
     }
   }, [selectedSubject]);
 

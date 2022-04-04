@@ -45,10 +45,10 @@ export const scrappedDocumentsTableRowDefs: RowCell[] = [
   {
     cellType: "icon-action",
     field: "",
-    icon: "download",
+    icon: "visibility",
     action: "download-document",
     color: "primary",
-    fields: [{ name: "chamber" }, { name: "id" }],
+    fields: [{ name: "filename" }, { name: "uid" }],
     align: "center",
   },
 ];
