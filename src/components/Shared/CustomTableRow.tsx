@@ -19,8 +19,14 @@ import {
   SubjectFromScrapper,
 } from "../../interfaces/SubjectInterfaces";
 
+import { DocumentsFromScrapperResult } from "../../interfaces/DocumentInterfaces";
+
 interface Props {
-  data: User | SubjectFromDataBase | SubjectFromScrapper;
+  data:
+    | User
+    | SubjectFromDataBase
+    | SubjectFromScrapper
+    | DocumentsFromScrapperResult;
   columnsGrid: string;
   rowDefs: RowCell[];
   onAction: any;
@@ -105,7 +111,7 @@ const CustomTableRow: React.FC<Props> = ({
           )}
           {cellDef.cellType === "icon-action" && (
             <IconButton
-              color="warning"
+              color={cellDef.color ? cellDef.color : "warning"}
               onClick={() =>
                 handleAction(
                   cellDef.action,

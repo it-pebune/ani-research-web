@@ -62,6 +62,45 @@ export const subjectsTableRowDefs: RowCell[] = [
   },
 ];
 
+export const assignedSubjectsTableRowDefs: RowCell[] = [
+  {
+    cellType: "image",
+    field: "photoUrl",
+    align: "center",
+  },
+  {
+    cellType: "text",
+    inline: true,
+    field: "",
+    fields: [
+      { name: "lastName", weight: "bold" },
+      { name: "firstName", weight: "bold" },
+    ],
+    align: "left",
+  },
+
+  {
+    cellType: "text",
+    field: "status",
+    fields: [{ name: "status" }],
+    align: "center",
+  },
+  {
+    cellType: "text",
+    field: "status",
+    fields: [{ name: "status" }],
+    align: "center",
+  },
+  {
+    cellType: "action-button",
+    field: "",
+    text: "Documente",
+    action: "view-documents",
+    fields: [{ name: "id" }, { name: "displayName" }],
+    align: "center",
+  },
+];
+
 export const scrappedSubjectsTableRowDefs: RowCell[] = [
   {
     cellType: "index",
