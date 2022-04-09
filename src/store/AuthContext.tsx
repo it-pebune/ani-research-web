@@ -10,6 +10,7 @@ interface AuthContextI {
   setRefreshToken: any;
   setTokenExpAt: any;
   setRefreshTokenExpAt: any;
+  hasValidToken: any;
 }
 
 const AuthContext = createContext<AuthContextI>({
@@ -18,9 +19,10 @@ const AuthContext = createContext<AuthContextI>({
   tokenExpAt: 0,
   refreshTokenExpAt: 0,
   setToken: (token: string) => {},
-  setRefreshToken: (refershToken: string) => {},
+  setRefreshToken: (refreshToken: string) => {},
   setTokenExpAt: (tokenExpAt: number) => {},
   setRefreshTokenExpAt: (tokenExpAt: number) => {},
+  hasValidToken: () => {},
 });
 
 export function AuthContextProvider(props: any) {
@@ -46,6 +48,9 @@ export function AuthContextProvider(props: any) {
     setRefreshTokenExpAt(value);
   };
 
+  const hasValidTokenHandler = () =>
+    token && (refreshTokenExpAt as number) > Date.now();
+
   const context: AuthContextI = {
     token,
     refreshToken,
@@ -55,6 +60,7 @@ export function AuthContextProvider(props: any) {
     setRefreshToken: setRefreshTokenHandler,
     setTokenExpAt: setTokenExpiresAtHandler,
     setRefreshTokenExpAt: setRefreshTokenExpAtHandler,
+    hasValidToken: hasValidTokenHandler,
   };
 
   return (
