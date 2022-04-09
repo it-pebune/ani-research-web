@@ -25,6 +25,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
       const getAuthUrl = async () => {
         const response = await auth.getAuthUrl();
         setAuthUrl(response.authUrl);
+        navigate("/");
       };
       getAuthUrl();
     }
