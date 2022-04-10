@@ -21,10 +21,11 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const googleState = params.get("state");
 
   useEffect(() => {
-    if (!authContext.token && !googleState) {
+    if (!authContext.hasValidToken() && !googleState) {
       const getAuthUrl = async () => {
         const response = await auth.getAuthUrl();
         setAuthUrl(response.authUrl);
+        navigate("/");
       };
       getAuthUrl();
     }
@@ -61,9 +62,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
 
   return (
     <>
-      {!authContext.token ||
-      (authContext.refreshTokenExpAt &&
-        new Date().getTime() > authContext.refreshTokenExpAt) ? (
+      {!authContext.hasValidToken() ? (
         <Routes>
           <Route path="/terms" element={<Terms></Terms>}></Route>
           <Route path="/gdpr" element={<Gdpr></Gdpr>}></Route>
