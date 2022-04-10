@@ -24,13 +24,15 @@ const useTokenStatus = () => {
           });
         } else {
           let response: any;
+
           try {
-            response = await auth.refreshToken(authContext.refreshToken);
-            const data = await response.data;
-            authContext.setToken(data.token.access);
+            const response = await auth.refreshToken(authContext.refreshToken);
+
+            authContext.setToken(response.access);
             authContext.setTokenExpAt(
-              new Date().getTime() + data.token.TokenExpAt * 1000
+              Date.now() + response.accessExpiresIn * 1000
             );
+
             setResult({
               token: authContext.token,
               active: true,
@@ -39,6 +41,7 @@ const useTokenStatus = () => {
             response = error;
             console.log(error);
           }
+
           return response;
         }
       } else {
