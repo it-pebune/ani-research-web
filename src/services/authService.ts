@@ -1,7 +1,11 @@
 import axios from "axios";
 import { API_BASE_URL, WEB_BASE_URL } from "../resources/apiLinks";
 
-import { AuthUrl, SignUpResponse } from "../interfaces/AuthInterfaces";
+import {
+  AuthUrl,
+  RefreshTokenResponse,
+  SignUpResponse,
+} from "../interfaces/AuthInterfaces";
 
 console.log(API_BASE_URL);
 
@@ -34,18 +38,20 @@ const auth = {
     }
     return response;
   },
-  refreshToken: async (refreshToken: string): Promise<any> => {
+  refreshToken: async (refreshToken: string): Promise<RefreshTokenResponse> => {
     let response: any;
+
     try {
-      response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
-        token: refreshToken,
+      response = await axios.get(`${API_BASE_URL}/auth/refresh`, {
+        params: { token: refreshToken },
       });
-      const data = await response.data;
-      return data;
+
+      return await response.data;
     } catch (error) {
       response = error;
       console.log(error);
     }
+
     return response;
   },
   signOutUser: async (tokenStatus: {

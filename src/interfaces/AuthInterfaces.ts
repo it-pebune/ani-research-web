@@ -17,13 +17,10 @@ export interface SignUpResponse {
   };
 }
 
-export interface AuthState {
-  token: string | null;
-  refreshToken: string | null;
-  tokenExpAt: number | null;
-  refreshTokenExpAt: number | null;
-  setToken(token: string | null): void;
-  setTokenExpAt(tokenExpAt: number | null): void;
+export interface RefreshTokenResponse {
+  access: string;
+  accessExpiresIn: number;
+  refreshExpiresIn: number;
 }
 
 export interface AuthUrl {
