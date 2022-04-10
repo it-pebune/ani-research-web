@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
@@ -8,6 +8,7 @@ import CurrentUserProfileHeaderContent from "../../components/CurrentUserProfile
 import CurrentUserProfileHeaderEditContent from "../../components/CurrentUserProfile/CurrentUserProfileHeaderEditContent";
 import { CurrentUser } from "../../interfaces/UserInterfaces";
 import UserContext from "../../store/UserContext";
+import Loader from "../../components/Shared/Loader";
 
 const CurrentUserProfilePage = () => {
   const tokenStatus = useTokenStatus(),
@@ -36,7 +37,8 @@ const CurrentUserProfilePage = () => {
         setCurrentUserData(response);
         setPageIsLoading(false);
       };
-      usersResponse().catch((error) => {
+
+      usersResponse().catch(() => {
         setPageIsLoading(false);
         setFetchDataError(true);
       });
@@ -46,14 +48,10 @@ const CurrentUserProfilePage = () => {
   return (
     <Box sx={{ padding: "100px 90px" }}>
       <CurrentUserProfileHeader elevation={0}>
-        {pageIsLoading && (
-          <Box
-            sx={{ display: "flex", justifyContent: "center", paddingTop: 20 }}
-          >
-            <CircularProgress />
-          </Box>
-        )}
+        {pageIsLoading && <Loader />}
+
         {fetchDataError && <UserProfileNotFound />}
+
         {!editMode && currentUserData && (
           <CurrentUserProfileHeaderContent
             email={currentUserData.email}
@@ -65,6 +63,7 @@ const CurrentUserProfilePage = () => {
             switchToEditModeHandler={switchToEditModeHandler}
           />
         )}
+
         {editMode && currentUserData && (
           <CurrentUserProfileHeaderEditContent
             firstName={currentUserData.firstName}
