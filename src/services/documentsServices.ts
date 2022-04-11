@@ -1,5 +1,8 @@
 import axios from "axios";
-import { DocumentsFromScrapper } from "../interfaces/DocumentInterfaces";
+import {
+  DocumentFromDataBase,
+  DocumentsFromScrapper,
+} from "../interfaces/DocumentInterfaces";
 import {
   SubjectDetailFromScrapper,
   SubjectFromDataBase,
@@ -37,9 +40,11 @@ export const documentService = {
     token: string;
     active: boolean;
     subjectId: number | undefined;
-    type: number;
+    type?: number;
+    jobId?: number;
     status: number;
     name: string;
+    date?: string;
     downloadUrl: string;
   }): Promise<any> => {
     let response: any;
@@ -49,7 +54,9 @@ export const documentService = {
           subjectId: reqData.subjectId,
           type: reqData.type,
           status: reqData.status,
+          jobId: reqData.jobId,
           name: reqData.name,
+          date: reqData.date,
           downloadUrl: reqData.downloadUrl,
         })
       );
@@ -58,6 +65,30 @@ export const documentService = {
       };
       try {
         response = await axios.post(`${API_BASE_URL}/docs`, payload, config);
+        const data = await response.data;
+        return data;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
+  getDocumentsFromDataBase: async (reqData: {
+    token: string;
+    active: boolean;
+    subjectId: number;
+  }): Promise<DocumentFromDataBase> => {
+    let response: any;
+    if (reqData.active) {
+      const config = {
+        headers: { Authorization: `Bearer ${reqData.token}` },
+        params: {
+          subjectId: reqData.subjectId,
+        },
+      };
+      try {
+        response = await axios.get(`${API_BASE_URL}/docs`, config);
         const data = await response.data;
         return data;
       } catch (error) {

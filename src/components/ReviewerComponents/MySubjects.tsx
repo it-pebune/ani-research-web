@@ -55,10 +55,10 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
 
   const handleSubjectAction = async (action: string, data: any) => {
     setSelectedSubject(data);
-    if (action === "to-documents") {
-    } else if (action === "to-download") {
-      onSubjectSelected(subjects.find((subject) => subject.id === data));
-    }
+    onSubjectSelected(
+      subjects.find((subject) => subject.id === data),
+      action
+    );
   };
 
   const handleSort = (direction: "asc" | "desc" | undefined, field: string) => {

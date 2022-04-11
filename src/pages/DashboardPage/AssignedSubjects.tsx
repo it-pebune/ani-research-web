@@ -1,7 +1,7 @@
 import { Box, Dialog } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import DocumenstFromScrapperDialog from "../../components/ReviewerComponents/DocumenstFromScrapperDialog";
-
+import DocumentsListDialog from "../../components/ReviewerComponents/DocumentsListDialog";
 import MySubjects from "../../components/ReviewerComponents/MySubjects";
 import ReviewerTabs from "../../components/ReviewerComponents/ReviewerTabs";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
@@ -14,6 +14,7 @@ const AssignedSubjects = () => {
   const [selectedSubject, setSelectedSubject] = useState<SubjectFromDataBase>();
   const [documentsFromScrapperOpen, setDocumentsFromScrapperOpen] =
     useState(false);
+  const [documentsListOpen, setDocumentsListOpen] = useState(false);
   const tokenStatus = useTokenStatus();
   const userContext = useContext(UserContext);
 
@@ -21,16 +22,28 @@ const AssignedSubjects = () => {
     // console.log(subjects);
   }, [subjects]);
 
-  const handleSelectedSubject = (subject: SubjectFromDataBase) => {
-    console.log(subject);
-    setDocumentsFromScrapperOpen(true);
+  const handleSelectedSubject = (
+    subject: SubjectFromDataBase,
+    action: string
+  ) => {
     setSelectedSubject((prevData) => ({ ...prevData, ...subject }));
+    if (action === "to-documents") {
+      setDocumentsListOpen(true);
+    } else if (action === "to-download") {
+      setDocumentsFromScrapperOpen(true);
+    }
   };
 
   const handleDocumentAction = () => {};
 
+  const handleDocumentFromListAction = () => {};
+
   const handleDocumentsFromScrapperClose = () => {
     setDocumentsFromScrapperOpen(false);
+  };
+
+  const handleDocumentsListClose = () => {
+    setDocumentsListOpen(false);
   };
 
   useEffect(() => {
@@ -68,6 +81,13 @@ const AssignedSubjects = () => {
         onClose={handleDocumentsFromScrapperClose}
         onAction={handleDocumentAction}
       ></DocumenstFromScrapperDialog>
+
+      <DocumentsListDialog
+        open={documentsListOpen}
+        subject={selectedSubject}
+        onClose={handleDocumentsListClose}
+        onAction={handleDocumentFromListAction}
+      ></DocumentsListDialog>
     </Box>
   );
 };

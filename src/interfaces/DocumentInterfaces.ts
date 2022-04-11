@@ -15,3 +15,15 @@ export interface DocumentsFromScrapper {
   downloadUrl: string;
   results: DocumentsFromScrapperResult[];
 }
+
+export interface DocumentFromDataBase {
+  id: number;
+  name: string;
+  md5: string;
+  downloadedUrl: string;
+  originalPath: string;
+  created: string;
+  createdByName: string;
+  updated: string;
+  updatedByName: string;
+}

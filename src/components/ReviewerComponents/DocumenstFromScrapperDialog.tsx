@@ -25,6 +25,11 @@ import { DocumentsFromScrapperResult } from "../../interfaces/DocumentInterfaces
 import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
 import { Box } from "@mui/system";
 import PdfPreviewComponent from "../Shared/PdfPreviewComponent";
+import { jobService } from "../../services/jobsService";
+import { Job, JobResponse } from "../../interfaces/JobInterfaces";
+import { jobsTableHeaderData } from "../../resources/tableHeaders/jobsTableHeaderData";
+import { jobsTableRowDefs } from "../../resources/tableRowDefs/jobsTableRowDefs";
+import moment from "moment";
 
 interface Props {
   subject?: SubjectFromDataBase;
@@ -41,16 +46,20 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
 }) => {
   const tokenStatus = useTokenStatus();
   const columnsGrid = "60px 1fr 1fr 1fr 1fr 1fr 1fr 70px";
+  const jobsColumnsGrid = "60px 1fr 1fr 1fr 1fr 70px";
   const [documents, setDocuments] = useState<DocumentsFromScrapperResult[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
+  const [jobsListOpened, setJobsListOpened] = useState(false);
   const [previewOpened, setPreviewOpened] = useState(false);
   const [fileName, setFileName] = useState("");
   const [uid, setUid] = useState("");
   const [dataUrl, setDataUrl] = useState("");
   const [institutions, setInstitutions] = useState([]);
+  const [subjectJobs, setSubjectJobs] = useState<Job[]>([]);
   const [selectedInstitution, setSelectedInstitution] = useState("");
-
+  const [docType, setDocType] = useState<number>();
+  const [docDate, setDocDate] = useState<string>();
   const [filteredDocuments, setFilteredDocuments] = useState<
     DocumentsFromScrapperResult[]
   >([]);
@@ -66,14 +75,20 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
 
   const handleSearch = () => {};
 
+  const handleJobsSearch = () => {};
+
   const handleFiltersOpen = () => {};
 
+  const handleJobsFiltersOpen = () => {};
+
   const handleScrappedDocumentAction = (action: string, data: any) => {
-    console.log(action, data);
+    console.log(action, data[3].date);
     if (action === "download-document") {
       setFileName(data[0].filename);
       setUid(data[1].uid);
-      setPreviewOpened(true);
+      setDocType(data[2].type === "I" ? 2 : data[2].type === "A" ? 1 : 2);
+      setDocDate(moment(data[3].date, "DD.MM.YYYY").format("YYYY-MM-DD"));
+      setJobsListOpened(true);
     }
   };
 
@@ -81,15 +96,25 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
     setPreviewOpened(false);
   };
 
-  const handlePdfSubmit = async () => {
+  const handleCloseJobsList = () => {
+    setJobsListOpened(false);
+  };
+
+  const handlePdfSubmit = async (action: string, data: any) => {
+    console.log(data);
+    console.log(docDate);
+    console.log(dataUrl);
+    console.log(subject);
     const response = await documentService.addNewDocument({
       token: tokenStatus.token as string,
       active: tokenStatus.active,
       subjectId: subject?.id,
       status: 0,
-      type: 0,
-      name: "O declaratie din data ",
-      downloadUrl: dataUrl,
+      jobId: data[0].id,
+      type: docType,
+      name: fileName,
+      downloadUrl: dataUrl.replace(":filename", fileName).replace(":uid", uid),
+      date: docDate,
     });
 
     console.log(response);
@@ -98,7 +123,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
   const handleInstitution = async (e: object, value: string | null) => {};
 
   useEffect(() => {
-    if (tokenStatus.active && subject) {
+    if (tokenStatus.active && subject && open) {
       const documentsResponse = async () => {
         const response = await documentService.getDocumentsFromScrapper({
           token: tokenStatus.token,
@@ -106,14 +131,22 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
           firstName: subject.firstName,
           lastName: subject.lastName,
         });
-        console.log(response);
         setDataUrl(response.downloadUrl);
         setDocuments(response.results);
         setFilteredDocuments(response.results);
       };
+      const subjectJobsResponse = async () => {
+        const response = await jobService.getSubjectsJobs({
+          token: tokenStatus.token,
+          active: tokenStatus.active,
+          subjectId: subject.id,
+        });
+        setSubjectJobs(response);
+      };
       documentsResponse();
+      subjectJobsResponse();
     }
-  }, [subject]);
+  }, [subject, open]);
 
   return (
     <Dialog
@@ -218,6 +251,96 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
       <Dialog
         PaperProps={{
           sx: {
+            width: "70%",
+            maxWidth: "70%",
+            height: "70%",
+          },
+        }}
+        onClose={() => setJobsListOpened(false)}
+        open={jobsListOpened}
+      >
+        <DialogTitle
+          sx={{
+            color: "#6B636B",
+            fontSize: "17px",
+            borderBottom: "1px solid #bdbdbd",
+          }}
+        >
+          <Icon sx={{ fontSize: "16px", marginRight: "16px" }}>add</Icon>
+          Functia corespondenta documentului
+          <IconButton
+            sx={{ position: "absolute", right: "8px", top: "8px" }}
+            onClick={onClose}
+          >
+            <Icon>close</Icon>
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              p: "16px 0",
+              display: "grid",
+              gridTemplateColumns: "1fr 50px",
+            }}
+          >
+            <SearchBarWithFiltersController
+              onSearchChanged={handleJobsSearch}
+              onFiltersOpen={handleJobsFiltersOpen}
+            ></SearchBarWithFiltersController>
+            <IconButton>
+              <Icon color="primary">add</Icon>
+            </IconButton>
+          </Box>
+          <TableContainer
+            style={{
+              flex: "1",
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              alignContent: "flex-start",
+            }}
+          >
+            <Table
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+              }}
+            >
+              <CustomTableHeader
+                columnsGrid={jobsColumnsGrid}
+                headerCells={jobsTableHeaderData}
+                onSorted={handleScrappedSort}
+              ></CustomTableHeader>
+              <TableBody style={{ flex: "1", overflow: "auto" }}>
+                {subjectJobs.length > 0 &&
+                  subjectJobs
+                    .map((job, index) => ({
+                      ...job,
+                      index: index + 1,
+                      dateStart: moment(job.dateStart).format("YYYY"),
+                    }))
+                    .map((job, index) => (
+                      <CustomTableRow
+                        onAction={handlePdfSubmit}
+                        columnsGrid={jobsColumnsGrid}
+                        rowDefs={jobsTableRowDefs}
+                        key={`table-row-${index}`}
+                        data={job}
+                      ></CustomTableRow>
+                    ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </DialogContent>
+        <DialogActions sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}>
+          <Button onClick={handleCloseJobsList}>Inchide fereastra</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        PaperProps={{
+          sx: {
             width: "80%",
             maxWidth: "80%",
             height: "90%",
@@ -234,7 +357,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
           }}
         >
           <Icon sx={{ fontSize: "16px", marginRight: "16px" }}>add</Icon>
-          Previzualizare document
+          Institutia corespondenta documentului
           <IconButton
             sx={{ position: "absolute", right: "8px", top: "8px" }}
             onClick={onClose}
@@ -251,51 +374,60 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
               gap: "14px",
             }}
           >
-            <Autocomplete
-              options={institutions}
-              value={selectedInstitution}
-              getOptionLabel={(option) => option}
-              onChange={(e: object, value: any | null) =>
-                handleInstitution(e, value)
-              }
-              renderOption={(props: any, option: any) => (
-                <Box component="li" {...props}>
-                  {option}
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Alege institutia"
-                  inputProps={{
-                    ...params.inputProps,
-                  }}
-                />
-              )}
-            ></Autocomplete>
-
-            <Autocomplete
-              options={institutions}
-              value={selectedInstitution}
-              getOptionLabel={(option) => option}
-              onChange={(e: object, value: any | null) =>
-                handleInstitution(e, value)
-              }
-              renderOption={(props: any, option: any) => (
-                <Box component="li" {...props}>
-                  {option}
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Alege functia"
-                  inputProps={{
-                    ...params.inputProps,
-                  }}
-                />
-              )}
-            ></Autocomplete>
+            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 50px" }}>
+              <Autocomplete
+                options={institutions}
+                value={selectedInstitution}
+                getOptionLabel={(option) => option}
+                onChange={(e: object, value: any | null) =>
+                  handleInstitution(e, value)
+                }
+                renderOption={(props: any, option: any) => (
+                  <Box component="li" {...props}>
+                    {option}
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Alege institutia"
+                    inputProps={{
+                      ...params.inputProps,
+                    }}
+                  />
+                )}
+              ></Autocomplete>
+              <IconButton color="primary">
+                <Icon>add</Icon>
+              </IconButton>
+            </Box>
+            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 50px" }}>
+              <Autocomplete
+                options={institutions}
+                value={selectedInstitution}
+                getOptionLabel={(option) => option}
+                onChange={(e: object, value: any | null) =>
+                  handleInstitution(e, value)
+                }
+                renderOption={(props: any, option: any) => (
+                  <Box component="li" {...props}>
+                    {option}
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Alege functia"
+                    inputProps={{
+                      ...params.inputProps,
+                    }}
+                  />
+                )}
+              ></Autocomplete>
+              <IconButton color="primary">
+                <Icon>add</Icon>
+              </IconButton>
+            </Box>
             <Autocomplete
               options={institutions}
               value={selectedInstitution}
@@ -350,9 +482,9 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
             </>
           )}
         </DialogContent>
-        <DialogActions sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}>
-          <Button onClick={handlePdfSubmit}>Incarca PDF</Button>
-        </DialogActions>
+        <DialogActions
+          sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}
+        ></DialogActions>
       </Dialog>
     </Dialog>
   );

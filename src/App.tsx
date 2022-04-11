@@ -12,6 +12,7 @@ import Users from "./pages/DashboardPage/Users";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import Subjects from "./pages/DashboardPage/Subjects";
 import AssignedSubjects from "./pages/DashboardPage/AssignedSubjects";
+import ReviewPdf from "./pages/DashboardPage/ReviewPdf";
 
 interface Props {}
 
@@ -51,6 +52,7 @@ const App: React.FC<Props> = (props) => {
               path="/assigned-subjects"
               element={<AssignedSubjects />}
             ></Route>
+            <Route path="/review-pdf" element={<ReviewPdf />}></Route>
             <Route path="/terms" element={<Terms />}></Route>
             <Route path="/gdpr" element={<Gdpr />}></Route>
             <Route path="/profile" element={<UserProfilePage />}></Route>

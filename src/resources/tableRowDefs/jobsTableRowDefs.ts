@@ -1,6 +1,6 @@
 import { RowCell } from "../../interfaces/TableRowDefinitionInterface";
 
-export const scrappedDocumentsTableRowDefs: RowCell[] = [
+export const jobsTableRowDefs: RowCell[] = [
   {
     cellType: "index",
     field: "index",
@@ -21,39 +21,21 @@ export const scrappedDocumentsTableRowDefs: RowCell[] = [
   {
     cellType: "text",
     field: "",
-    fields: [{ name: "function" }],
+    fields: [{ name: "uat" }],
     align: "center",
   },
   {
     cellType: "text",
     field: "",
-    fields: [{ name: "locality" }],
-    align: "center",
-  },
-  {
-    cellType: "text",
-    field: "",
-    fields: [{ name: "type" }],
-    align: "center",
-  },
-  {
-    cellType: "text",
-    field: "",
-    fields: [{ name: "date" }],
+    fields: [{ name: "dateStart" }],
     align: "center",
   },
   {
     cellType: "icon-action",
     field: "",
-    icon: "visibility",
-    action: "download-document",
-    color: "primary",
-    fields: [
-      { name: "filename" },
-      { name: "uid" },
-      { name: "type" },
-      { name: "date" },
-    ],
+    icon: "download",
+    action: "view-subject",
+    fields: [{ name: "id" }],
     align: "center",
   },
 ];
