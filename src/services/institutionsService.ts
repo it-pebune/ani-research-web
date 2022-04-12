@@ -10,7 +10,7 @@ export const institutionService = {
   getInstitutions: async (tokenStatus: {
     token: string;
     active: boolean;
-  }): Promise<InstitutionResponse[]> => {
+  }): Promise<Institution[]> => {
     let response: any;
     if (tokenStatus.active) {
       const config = {

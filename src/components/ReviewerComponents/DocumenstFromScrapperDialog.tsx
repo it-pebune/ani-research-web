@@ -30,6 +30,13 @@ import { Job, JobResponse } from "../../interfaces/JobInterfaces";
 import { jobsTableHeaderData } from "../../resources/tableHeaders/jobsTableHeaderData";
 import { jobsTableRowDefs } from "../../resources/tableRowDefs/jobsTableRowDefs";
 import moment from "moment";
+import { institutionService } from "../../services/institutionsService";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+
+import {
+  Institution,
+  InstitutionResponse,
+} from "../../interfaces/IntitutionInterfaces";
 
 interface Props {
   subject?: SubjectFromDataBase;
@@ -51,13 +58,23 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [jobsListOpened, setJobsListOpened] = useState(false);
-  const [previewOpened, setPreviewOpened] = useState(false);
+  const [addJobOpened, setAddJobOpened] = useState(false);
   const [fileName, setFileName] = useState("");
   const [uid, setUid] = useState("");
   const [dataUrl, setDataUrl] = useState("");
-  const [institutions, setInstitutions] = useState([]);
+  const [institutions, setInstitutions] = useState<string[]>([]);
+  const [institutionsResponse, setInstitutionsResponse] =
+    useState<Institution[]>();
   const [subjectJobs, setSubjectJobs] = useState<Job[]>([]);
-  const [selectedInstitution, setSelectedInstitution] = useState("");
+  const [selectedInstitution, setSelectedInstitution] = useState<string>("");
+  const [selectedInstitutionId, setSelectedInstitutionId] = useState<
+    number | undefined
+  >();
+  const [dateStart, setDateStart] = useState<object | null>();
+  const [dateEnd, setDateEnd] = useState<object | null>();
+  const [sirutaId, setSirutaId] = useState<number>();
+
+  const [functionName, setFunctionName] = useState<string>("");
   const [docType, setDocType] = useState<number>();
   const [docDate, setDocDate] = useState<string>();
   const [filteredDocuments, setFilteredDocuments] = useState<
@@ -92,12 +109,48 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
     }
   };
 
+  const handleGenerateJob = async () => {
+    const newJobReq = {
+      subjectId: subject?.id as number,
+      institutionId: selectedInstitutionId as number,
+      sirutaId: sirutaId as number,
+      name: functionName as string,
+      dateStart: dateStart ? moment(dateStart).format("YYYY-MM-DD") : undefined,
+      dateEnd: dateEnd ? moment(dateEnd).format("YYYY-MM-DD") : undefined,
+    };
+
+    if (newJobReq.name && newJobReq.institutionId && newJobReq.dateStart) {
+      const response = await jobService.addJob({
+        token: tokenStatus.token,
+        active: tokenStatus.active,
+        ...newJobReq,
+      });
+      if (response) {
+        const jobsResponse = await jobService.getSubjectsJobs({
+          token: tokenStatus.token,
+          active: tokenStatus.active,
+          subjectId: subject?.id as number,
+        });
+        setSubjectJobs(jobsResponse);
+        setAddJobOpened(false);
+      }
+    }
+  };
+
   const onPreviewClose = () => {
-    setPreviewOpened(false);
+    setAddJobOpened(false);
   };
 
   const handleCloseJobsList = () => {
     setJobsListOpened(false);
+  };
+
+  const handleDateStart = (date: object | null) => {
+    setDateStart(date);
+  };
+
+  const handleDateEnd = (date: object | null) => {
+    setDateEnd(date);
   };
 
   const handlePdfSubmit = async (action: string, data: any) => {
@@ -120,7 +173,22 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
     console.log(response);
   };
 
-  const handleInstitution = async (e: object, value: string | null) => {};
+  const handleInstitution = (e: object, value: string) => {
+    setSelectedInstitution(value);
+    setSelectedInstitutionId(
+      institutionsResponse?.find((institution) => institution.name === value)
+        ?.id
+    );
+    setFunctionName(value === "Camera Deputatilor" ? "DEPUTAT" : "SENATOR");
+    setSirutaId(
+      institutionsResponse?.find((institution) => institution.name === value)
+        ?.sirutaId
+    );
+  };
+
+  const handleFunctionName = (e: object, value: string) => {
+    setFunctionName(value);
+  };
 
   useEffect(() => {
     if (tokenStatus.active && subject && open) {
@@ -135,6 +203,14 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
         setDocuments(response.results);
         setFilteredDocuments(response.results);
       };
+      const institutionsResponse = async () => {
+        const response = await institutionService.getInstitutions({
+          token: tokenStatus.token,
+          active: tokenStatus.active,
+        });
+        setInstitutionsResponse(response);
+        setInstitutions(response.map((institution) => institution.name));
+      };
       const subjectJobsResponse = async () => {
         const response = await jobService.getSubjectsJobs({
           token: tokenStatus.token,
@@ -145,6 +221,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
       };
       documentsResponse();
       subjectJobsResponse();
+      institutionsResponse();
     }
   }, [subject, open]);
 
@@ -280,6 +357,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
             sx={{
               p: "16px 0",
               display: "grid",
+              gap: "24px",
               gridTemplateColumns: "1fr 50px",
             }}
           >
@@ -287,7 +365,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
               onSearchChanged={handleJobsSearch}
               onFiltersOpen={handleJobsFiltersOpen}
             ></SearchBarWithFiltersController>
-            <IconButton>
+            <IconButton onClick={() => setAddJobOpened(true)}>
               <Icon color="primary">add</Icon>
             </IconButton>
           </Box>
@@ -341,13 +419,13 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
       <Dialog
         PaperProps={{
           sx: {
-            width: "80%",
-            maxWidth: "80%",
-            height: "90%",
+            width: "50%",
+            maxWidth: "50%",
+            height: "70%",
           },
         }}
         onClose={onPreviewClose}
-        open={previewOpened}
+        open={addJobOpened}
       >
         <DialogTitle
           sx={{
@@ -370,18 +448,25 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
             sx={{
               display: "grid",
               p: "14px",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "14px",
+              gridTemplateColumns: "1fr",
+              "& .MuiAutocomplete-root": {
+                py: "8px",
+              },
             }}
           >
-            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 50px" }}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "1fr 50px",
+              }}
+            >
               <Autocomplete
                 options={institutions}
-                value={selectedInstitution}
                 getOptionLabel={(option) => option}
                 onChange={(e: object, value: any | null) =>
                   handleInstitution(e, value)
                 }
+                isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props: any, option: any) => (
                   <Box component="li" {...props}>
                     {option}
@@ -401,39 +486,13 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
                 <Icon>add</Icon>
               </IconButton>
             </Box>
-            <Box sx={{ display: "grid", gridTemplateColumns: "1fr 50px" }}>
-              <Autocomplete
-                options={institutions}
-                value={selectedInstitution}
-                getOptionLabel={(option) => option}
-                onChange={(e: object, value: any | null) =>
-                  handleInstitution(e, value)
-                }
-                renderOption={(props: any, option: any) => (
-                  <Box component="li" {...props}>
-                    {option}
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Alege functia"
-                    inputProps={{
-                      ...params.inputProps,
-                    }}
-                  />
-                )}
-              ></Autocomplete>
-              <IconButton color="primary">
-                <Icon>add</Icon>
-              </IconButton>
-            </Box>
             <Autocomplete
-              options={institutions}
-              value={selectedInstitution}
+              options={["DEPUTAT", "SENATOR", ""]}
+              value={functionName}
+              isOptionEqualToValue={(option, value) => option === value}
               getOptionLabel={(option) => option}
               onChange={(e: object, value: any | null) =>
-                handleInstitution(e, value)
+                handleFunctionName(e, value)
               }
               renderOption={(props: any, option: any) => (
                 <Box component="li" {...props}>
@@ -443,29 +502,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Alege judetul"
-                  inputProps={{
-                    ...params.inputProps,
-                  }}
-                />
-              )}
-            ></Autocomplete>
-            <Autocomplete
-              options={institutions}
-              value={selectedInstitution}
-              getOptionLabel={(option) => option}
-              onChange={(e: object, value: any | null) =>
-                handleInstitution(e, value)
-              }
-              renderOption={(props: any, option: any) => (
-                <Box component="li" {...props}>
-                  {option}
-                </Box>
-              )}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Alege localitatea"
+                  label="Alege functia"
                   inputProps={{
                     ...params.inputProps,
                   }}
@@ -473,18 +510,35 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
               )}
             ></Autocomplete>
           </Box>
-          {fileName !== "" && uid !== "" && (
-            <>
-              {/* ceva
-              <PdfPreviewComponent
-                path={`http://declaratii.integritate.eu/DownloadServlet?fileName=10774627_353217_019.pdf&uniqueIdentifier=NTNTARTLNE_10774627`}
-              ></PdfPreviewComponent> */}
-            </>
-          )}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "24px",
+            }}
+          >
+            <DesktopDatePicker
+              label="Data inceput"
+              mask="__ __ ____"
+              inputFormat="DD MM YYYY"
+              value={dateStart}
+              onChange={handleDateStart}
+              renderInput={(params) => <TextField {...params} />}
+            />
+
+            <DesktopDatePicker
+              label="Data sfarsit"
+              mask="__ __ ____"
+              inputFormat="DD MM YYYY"
+              value={dateEnd}
+              onChange={handleDateEnd}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </Box>
         </DialogContent>
-        <DialogActions
-          sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}
-        ></DialogActions>
+        <DialogActions sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}>
+          <Button onClick={handleGenerateJob}>Genereaza functia</Button>
+        </DialogActions>
       </Dialog>
     </Dialog>
   );

@@ -9,25 +9,25 @@ import {
 export const interestsOrder = [
   {
     name: "Asociat actionar",
-    corespondent: "asociat",
+    corespondent: "company_shares",
     cells: companyTableData,
     grid: "1fr 1fr 1fr 1fr",
   },
   {
     name: "Membru consiliu de administratie",
-    corespondent: "company_comm",
+    corespondent: "man_companies",
     cells: boardTableData,
     grid: "1fr 1fr 1fr ",
   },
   {
-    name: "Membru in asociatii profeionale si/sau sindicale",
-    corespondent: "management_comm",
+    name: "Membru in asociatii profesionale si/sau sindicale",
+    corespondent: "asociations",
     cells: sindicateTableData,
     grid: "1fr ",
   },
   {
     name: "Membru in organe de conducere ale partidelor politice",
-    corespondent: "management_party",
+    corespondent: "party",
     cells: partyTableData,
     grid: "1fr",
   },

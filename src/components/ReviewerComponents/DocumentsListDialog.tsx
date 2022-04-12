@@ -19,9 +19,12 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { documentService } from "../../services/documentsServices";
 import useTokenStatus from "../../utils/useTokenStatus";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
-import { scrappedDocumentsTableHeaderData } from "../../resources/tableHeaders/documentsTableHeaderData";
-import { scrappedDocumentsTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
-import { DocumentsFromScrapperResult } from "../../interfaces/DocumentInterfaces";
+import { documentsFromDataBaseTableHeader } from "../../resources/tableHeaders/documentsTableHeaderData";
+import {
+  documentsFromDataBaseTableRowDefs,
+  scrappedDocumentsTableRowDefs,
+} from "../../resources/tableRowDefs/documentsTableRowDefs";
+import { DocumentFromDataBase } from "../../interfaces/DocumentInterfaces";
 import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
 import { Box } from "@mui/system";
 import PdfPreviewComponent from "../Shared/PdfPreviewComponent";
@@ -30,6 +33,7 @@ import { Job, JobResponse } from "../../interfaces/JobInterfaces";
 import { jobsTableHeaderData } from "../../resources/tableHeaders/jobsTableHeaderData";
 import { jobsTableRowDefs } from "../../resources/tableRowDefs/jobsTableRowDefs";
 import moment from "moment";
+import { useNavigate } from "react-router";
 
 interface Props {
   subject?: SubjectFromDataBase;
@@ -47,7 +51,7 @@ const DocumentsListDialog: React.FC<Props> = ({
   const tokenStatus = useTokenStatus();
   const columnsGrid = "60px 1fr 1fr 1fr 1fr 1fr 1fr 70px";
   const jobsColumnsGrid = "60px 1fr 1fr 1fr 1fr 70px";
-  const [documents, setDocuments] = useState<DocumentsFromScrapperResult[]>([]);
+  const [documents, setDocuments] = useState<DocumentFromDataBase[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [jobsListOpened, setJobsListOpened] = useState(false);
@@ -61,13 +65,15 @@ const DocumentsListDialog: React.FC<Props> = ({
   const [docType, setDocType] = useState<number>();
   const [docDate, setDocDate] = useState<string>();
   const [filteredDocuments, setFilteredDocuments] = useState<
-    DocumentsFromScrapperResult[]
+    DocumentFromDataBase[]
   >([]);
   const handleScrappedSort = () => {};
   const handleChangeRowsPerPage = (e: any) => {
     setRowsPerPage(e.target.value);
     setPage(0);
   };
+
+  const navigate = useNavigate();
 
   const handleChangePage = (e: any, newPage: number) => {
     setPage(newPage);
@@ -81,14 +87,17 @@ const DocumentsListDialog: React.FC<Props> = ({
 
   const handleJobsFiltersOpen = () => {};
 
-  const handleScrappedDocumentAction = (action: string, data: any) => {
-    console.log(action, data[3].date);
-    if (action === "download-document") {
-      setFileName(data[0].filename);
-      setUid(data[1].uid);
-      setDocType(data[2].type === "I" ? 2 : data[2].type === "A" ? 1 : 2);
-      setDocDate(moment(data[3].date, "DD.MM.YYYY").format("YYYY-MM-DD"));
-      setJobsListOpened(true);
+  const handleDocumentAction = (action: string, data: any) => {
+    console.log(action, data);
+    if (action === "review-document") {
+      navigate(`/review-pdf/${data[0].id}`);
+    } else if (action === "delete-document") {
+      setDocuments((prevData) =>
+        prevData.filter((item) => item.id !== data[0].id)
+      );
+      setFilteredDocuments((prevData) =>
+        prevData.filter((item) => item.id !== data[0].id)
+      );
     }
   };
 
@@ -129,6 +138,8 @@ const DocumentsListDialog: React.FC<Props> = ({
           subjectId: subject?.id,
         });
         console.log(response);
+        setDocuments(response);
+        setFilteredDocuments(response);
       };
 
       documentsResponse();
@@ -195,23 +206,33 @@ const DocumentsListDialog: React.FC<Props> = ({
           >
             <CustomTableHeader
               columnsGrid={columnsGrid}
-              headerCells={scrappedDocumentsTableHeaderData}
+              headerCells={documentsFromDataBaseTableHeader}
               onSorted={handleScrappedSort}
             ></CustomTableHeader>
             <TableBody style={{ flex: "1", overflow: "auto" }}>
               {filteredDocuments.length > 0 &&
                 filteredDocuments
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((subject, index) => ({
-                    ...subject,
+                  .map((document, index) => ({
+                    ...document,
                     index: index + 1,
-                    chamberName: subject.chamber === 1 ? "Senator" : "Deputat",
+                    dateEnd: document.dateEnd
+                      ? moment(document.dateEnd).format("YYYY")
+                      : "",
+                    dateStart: document.dateStart
+                      ? moment(document.dateStart).format("YYYY")
+                      : "",
+                    type:
+                      document.type === 1
+                        ? "Declaratie avere"
+                        : "Declaratie interese",
+                    date: moment(document.date).format("DD MMMM YYYY"),
                   }))
                   .map((document, index) => (
                     <CustomTableRow
-                      onAction={handleScrappedDocumentAction}
+                      onAction={handleDocumentAction}
                       columnsGrid={columnsGrid}
-                      rowDefs={scrappedDocumentsTableRowDefs}
+                      rowDefs={documentsFromDataBaseTableRowDefs}
                       key={`table-row-${index}`}
                       data={document}
                     ></CustomTableRow>

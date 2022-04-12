@@ -1,3 +1,6 @@
+import { InstitutionResponse } from "./IntitutionInterfaces";
+import { Job, JobResponse } from "./JobInterfaces";
+
 export interface DocumentsFromScrapperResult {
   [key: string]: any;
   name: string;
@@ -17,6 +20,7 @@ export interface DocumentsFromScrapper {
 }
 
 export interface DocumentFromDataBase {
+  [key: string]: any;
   id: number;
   name: string;
   md5: string;
@@ -26,4 +30,7 @@ export interface DocumentFromDataBase {
   createdByName: string;
   updated: string;
   updatedByName: string;
+  institution?: string;
+  dateStart?: string;
+  dateEnd?: string;
 }

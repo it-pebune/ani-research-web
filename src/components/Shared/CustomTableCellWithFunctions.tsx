@@ -123,9 +123,6 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (data.field === "company") {
-      console.log(data.value);
-    }
     if (data.active) {
       if (textField.current) {
         textField.current.selectionStart = selectionStart;

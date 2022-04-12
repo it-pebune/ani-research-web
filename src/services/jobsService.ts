@@ -26,11 +26,11 @@ export const jobService = {
     }
     return response;
   },
-  getSpecifiedInstitution: async (reqData: {
+  getSpecifiedJob: async (reqData: {
     token: string;
     active: boolean;
     id: number;
-  }): Promise<JobResponse> => {
+  }): Promise<Job> => {
     let response: any;
     if (reqData.active) {
       const config = {
@@ -50,16 +50,16 @@ export const jobService = {
     }
     return response;
   },
-  addInstitution: async (reqData: {
+  addJob: async (reqData: {
     token: string;
     active: boolean;
-    subjectId: string;
-    institutionId: string;
-    sirutaId: string;
+    subjectId?: number | undefined;
+    institutionId: number;
+    sirutaId: number;
     name: string;
-    dateStart: string;
-    dateEnd: string;
-    info: number;
+    dateStart: string | undefined;
+    dateEnd?: string | undefined;
+    info?: string;
   }): Promise<any> => {
     let response: any;
     if (reqData.active) {
@@ -88,7 +88,7 @@ export const jobService = {
       );
 
       try {
-        response = await axios.post(`${API_BASE_URL}/insts`, payload, config);
+        response = await axios.post(`${API_BASE_URL}/jobs`, payload, config);
         const data = await response.data;
         return data;
       } catch (error) {

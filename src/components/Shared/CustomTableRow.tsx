@@ -19,7 +19,10 @@ import {
   SubjectFromScrapper,
 } from "../../interfaces/SubjectInterfaces";
 import { Job } from "../../interfaces/JobInterfaces";
-import { DocumentsFromScrapperResult } from "../../interfaces/DocumentInterfaces";
+import {
+  DocumentFromDataBase,
+  DocumentsFromScrapperResult,
+} from "../../interfaces/DocumentInterfaces";
 
 interface Props {
   data:
@@ -27,7 +30,9 @@ interface Props {
     | SubjectFromDataBase
     | SubjectFromScrapper
     | DocumentsFromScrapperResult
-    | Job;
+    | Job
+    | DocumentFromDataBase;
+
   columnsGrid: string;
   rowDefs: RowCell[];
   onAction: any;
