@@ -16,7 +16,13 @@ export const rolesToMenuItems: Record<number, MenuItem[]> = {
       link: "/subjects",
     },
   ],
-  [UserRoles.RESEARCHER]: [],
+  [UserRoles.RESEARCHER]: [
+    {
+      icon: "recent_actors",
+      text: "Subiectii asignati",
+      link: "/assigned-subjects",
+    },
+  ],
 };
 
 export const defaultMenuItems: MenuItem[] = [
@@ -29,38 +35,5 @@ export const defaultMenuItems: MenuItem[] = [
     icon: "vpn_lock",
     text: "Politica GDPR",
     link: "/gdpr",
-  },
-];
-
-export const allMenuItems = [
-  {
-    icon: "people",
-    text: "Utilizatori",
-    link: "/users",
-  },
-  {
-    icon: "people",
-    text: "Subiecti",
-    link: "/subjects",
-  },
-  {
-    icon: "recent_actors",
-    text: "Subiectii asignati",
-    link: "/assigned-subjects",
-  },
-  {
-    icon: "grading",
-    text: "Analizeaza PDF",
-    link: "/review-pdf",
-  },
-  {
-    icon: "privacy_tip",
-    text: "Modifica termeni si conditii",
-    link: "/modify-terms",
-  },
-  {
-    icon: "vpn_lock",
-    text: "Modifica politica GDPR",
-    link: "/modify-gdpr",
   },
 ];
