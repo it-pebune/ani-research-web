@@ -23,6 +23,16 @@ export interface RowCell {
   icon?: string;
   action?: string | undefined;
   text?: string;
+  color?:
+    | "inherit"
+    | "default"
+    | "warning"
+    | "primary"
+    | "secondary"
+    | "error"
+    | "info"
+    | "success"
+    | undefined;
   states?: SubjectState[];
   fields?: TextField[];
   dateFormat?: string | undefined;

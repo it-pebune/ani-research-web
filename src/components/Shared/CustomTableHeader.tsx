@@ -11,7 +11,7 @@ import { HeaderCell } from "../../interfaces/TableHeaderInterface";
 interface Props {
   headerCells: HeaderCell[];
   columnsGrid: string;
-  onSorted: any;
+  onSorted?: any;
 }
 
 const CustomTableHeader: React.FC<Props> = ({

@@ -18,12 +18,26 @@ import {
   SubjectFromDataBase,
   SubjectFromScrapper,
 } from "../../interfaces/SubjectInterfaces";
+import { Job } from "../../interfaces/JobInterfaces";
+import {
+  DocumentFromDataBase,
+  DocumentsFromScrapperResult,
+} from "../../interfaces/DocumentInterfaces";
 
 interface Props {
-  data: User | SubjectFromDataBase | SubjectFromScrapper;
+  data:
+    | User
+    | SubjectFromDataBase
+    | SubjectFromScrapper
+    | DocumentsFromScrapperResult
+    | Job
+    | DocumentFromDataBase;
+
   columnsGrid: string;
   rowDefs: RowCell[];
   onAction: any;
+  highlighted?: boolean;
+  disabled?: boolean;
 }
 
 const CustomTableRow: React.FC<Props> = ({
@@ -31,10 +45,11 @@ const CustomTableRow: React.FC<Props> = ({
   rowDefs,
   onAction,
   columnsGrid,
+  highlighted,
+  disabled,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-
   const handleDropDown = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
@@ -63,6 +78,11 @@ const CustomTableRow: React.FC<Props> = ({
           alignContent: "center",
           fontFamily: "'Montserrat',  sans-serif",
         },
+        ...(highlighted && {
+          "& .MuiTableCell-root": {
+            color: "blue",
+          },
+        }),
       }}
     >
       {rowDefs.map((cellDef, index) => (
@@ -105,7 +125,14 @@ const CustomTableRow: React.FC<Props> = ({
           )}
           {cellDef.cellType === "icon-action" && (
             <IconButton
-              color="warning"
+              color={
+                cellDef.color
+                  ? highlighted
+                    ? "error"
+                    : cellDef.color
+                  : "warning"
+              }
+              disabled={disabled}
               onClick={() =>
                 handleAction(
                   cellDef.action,
