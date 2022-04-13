@@ -447,7 +447,10 @@ const ReviewPdf: React.FC<Props> = () => {
         const newTableDataArray: FieldData[] = tableDataArray.map(
           (item, index) => ({
             ...item,
-            value: newValuesArray[index],
+            value:
+              newValuesArray[index] !== "undefined"
+                ? newValuesArray[index]
+                : "",
             hovered: false,
             active: false,
           })
@@ -496,7 +499,7 @@ const ReviewPdf: React.FC<Props> = () => {
         []
       );
       const tableDataValues = tableDataArray
-        ? tableDataArray.map((item) => item.value)
+        ? tableDataArray.map((item) => (item.value ? item.value : ""))
         : [];
       const positionInArray =
         tableDataValues.length - (tableStructureLength * rowIndex + cellIndex);
@@ -519,7 +522,7 @@ const ReviewPdf: React.FC<Props> = () => {
         const newTableDataArray: FieldData[] = tableDataArray.map(
           (item, index) => ({
             ...item,
-            value: newValuesArray[index],
+            value: newValuesArray[index] ? newValuesArray[index] : "",
             hovered: false,
             active: false,
           })
@@ -589,7 +592,10 @@ const ReviewPdf: React.FC<Props> = () => {
         const newTableDataArray: FieldData[] = tableDataArray.map(
           (item, index) => ({
             ...item,
-            value: newValuesArray[index],
+            value:
+              newValuesArray[index] !== "undefined"
+                ? newValuesArray[index]
+                : "",
             hovered: false,
             active: false,
           })
@@ -676,7 +682,10 @@ const ReviewPdf: React.FC<Props> = () => {
         const newTableDataArray: FieldData[] = tableDataArray.map(
           (item, index) => ({
             ...item,
-            value: newValuesArray[index],
+            value:
+              newValuesArray[index] !== "undefined"
+                ? newValuesArray[index]
+                : "",
             hovered: false,
             active: false,
           })
@@ -756,22 +765,22 @@ const ReviewPdf: React.FC<Props> = () => {
       return variable;
     };
 
-    const structuredData = (obj: DataI) =>
-      Object.keys(obj).map((key) => {
+    const structuredData = (obj: DataI) => {
+      return Object.keys(obj).map((key) => {
         if (Array.isArray(obj[key])) {
           return {
             table: key,
             data: newRowData(obj[key]),
           };
-        } else return;
+        }
       });
+    };
     const myData = structuredData(data);
     setLoadedData(myData.filter((data) => data) as FormatedTableI[]);
-    console.log(data);
   }, [data]);
 
   useEffect(() => {
-    console.log(tableArray);
+    // console.log(tableArray);
   }, [tableArray]);
 
   useEffect(() => {
