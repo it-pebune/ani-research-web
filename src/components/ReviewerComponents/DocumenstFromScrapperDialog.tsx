@@ -55,6 +55,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
   const columnsGrid = "60px 1fr 1fr 1fr 1fr 1fr 1fr 70px";
   const jobsColumnsGrid = "60px 1fr 1fr 1fr 1fr 70px";
   const [documents, setDocuments] = useState<DocumentsFromScrapperResult[]>([]);
+  const [downloadedDocuments, setDownloadedDocuments] = useState<string[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [jobsListOpened, setJobsListOpened] = useState(false);
@@ -98,6 +99,18 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
 
   const handleJobsFiltersOpen = () => {};
 
+  const onCloseHandler = () => {
+    setDocuments([]);
+    setFilteredDocuments([]);
+    onClose();
+  };
+
+  const toLoadedDocsListHandler = () => {
+    setDocuments([]);
+    setFilteredDocuments([]);
+    onAction();
+  };
+
   const handleScrappedDocumentAction = (action: string, data: any) => {
     console.log(action, data[3].date);
     if (action === "download-document") {
@@ -137,7 +150,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
     }
   };
 
-  const onPreviewClose = () => {
+  const onJobClose = () => {
     setAddJobOpened(false);
   };
 
@@ -154,10 +167,6 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
   };
 
   const handlePdfSubmit = async (action: string, data: any) => {
-    console.log(data);
-    console.log(docDate);
-    console.log(dataUrl);
-    console.log(subject);
     const response = await documentService.addNewDocument({
       token: tokenStatus.token as string,
       active: tokenStatus.active,
@@ -169,8 +178,11 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
       downloadUrl: dataUrl.replace(":filename", fileName).replace(":uid", uid),
       date: docDate,
     });
-
-    console.log(response);
+    handleSetAsExistent(fileName);
+    setJobsListOpened(false);
+    if (response) {
+      console.log(response);
+    }
   };
 
   const handleInstitution = (e: object, value: string) => {
@@ -190,6 +202,15 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
     setFunctionName(value);
   };
 
+  const handleSetAsExistent = (fileName: string) => {
+    setFilteredDocuments((prevData) =>
+      prevData.map((document) => ({
+        ...document,
+        existent: document.filename === fileName ? true : document.existent,
+      }))
+    );
+  };
+
   useEffect(() => {
     if (tokenStatus.active && subject && open) {
       const documentsResponse = async () => {
@@ -199,9 +220,23 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
           firstName: subject.firstName,
           lastName: subject.lastName,
         });
+        const downloadedResponse =
+          await documentService.getDocumentsFromDataBase({
+            token: tokenStatus.token,
+            active: tokenStatus.active,
+            subjectId: subject?.id,
+          });
+        setFilteredDocuments(
+          response.results.map((document) => ({
+            ...document,
+            existent: downloadedResponse
+              .map((item) => item.name)
+              .includes(document.filename),
+          }))
+        );
+        setDownloadedDocuments(downloadedResponse.map((item) => item.name));
         setDataUrl(response.downloadUrl);
-        setDocuments(response.results);
-        setFilteredDocuments(response.results);
+        setDocuments([...response.results]);
       };
       const institutionsResponse = async () => {
         const response = await institutionService.getInstitutions({
@@ -211,6 +246,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
         setInstitutionsResponse(response);
         setInstitutions(response.map((institution) => institution.name));
       };
+
       const subjectJobsResponse = async () => {
         const response = await jobService.getSubjectsJobs({
           token: tokenStatus.token,
@@ -223,7 +259,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
       subjectJobsResponse();
       institutionsResponse();
     }
-  }, [subject, open]);
+  }, [open]);
 
   return (
     <Dialog
@@ -234,7 +270,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
           height: "90%",
         },
       }}
-      onClose={onClose}
+      onClose={onCloseHandler}
       open={open}
     >
       <DialogTitle
@@ -248,7 +284,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
         Descarca document din lista
         <IconButton
           sx={{ position: "absolute", right: "8px", top: "8px" }}
-          onClick={onClose}
+          onClick={onCloseHandler}
         >
           <Icon>close</Icon>
         </IconButton>
@@ -299,6 +335,8 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
                   }))
                   .map((document, index) => (
                     <CustomTableRow
+                      highlighted={document.existent}
+                      disabled={document.existent}
                       onAction={handleScrappedDocumentAction}
                       columnsGrid={columnsGrid}
                       rowDefs={scrappedDocumentsTableRowDefs}
@@ -322,7 +360,12 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
         />
       </DialogContent>
       <DialogActions sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}>
-        <Button onClick={() => onAction()}>Inapoi la lista principala</Button>
+        <Button variant="contained" onClick={toLoadedDocsListHandler}>
+          Lista documente incarcate
+        </Button>
+        <Button variant="contained" onClick={onCloseHandler}>
+          Inapoi la lista principala
+        </Button>
       </DialogActions>
 
       <Dialog
@@ -333,7 +376,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
             height: "70%",
           },
         }}
-        onClose={() => setJobsListOpened(false)}
+        onClose={handleCloseJobsList}
         open={jobsListOpened}
       >
         <DialogTitle
@@ -347,7 +390,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
           Functia corespondenta documentului
           <IconButton
             sx={{ position: "absolute", right: "8px", top: "8px" }}
-            onClick={onClose}
+            onClick={handleCloseJobsList}
           >
             <Icon>close</Icon>
           </IconButton>
@@ -412,7 +455,9 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
           </TableContainer>
         </DialogContent>
         <DialogActions sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}>
-          <Button onClick={handleCloseJobsList}>Inchide fereastra</Button>
+          <Button variant="contained" onClick={handleCloseJobsList}>
+            Inchide fereastra
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -424,7 +469,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
             height: "70%",
           },
         }}
-        onClose={onPreviewClose}
+        onClose={onJobClose}
         open={addJobOpened}
       >
         <DialogTitle
@@ -438,7 +483,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
           Institutia corespondenta documentului
           <IconButton
             sx={{ position: "absolute", right: "8px", top: "8px" }}
-            onClick={onClose}
+            onClick={onJobClose}
           >
             <Icon>close</Icon>
           </IconButton>

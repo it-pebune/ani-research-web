@@ -24,7 +24,7 @@ type Props = {
 };
 
 const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
-  const columnsGrid = "100px .8fr .7fr .6fr 60px";
+  const columnsGrid = "100px .5fr .5fr .3fr .3fr 60px";
 
   const [filteredResult, setFilteredResult] = useState<SubjectFromDataBase[]>(
     []
@@ -109,6 +109,7 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
   }, [selectedSubject]);
 
   useEffect(() => {
+    console.log(subjects);
     if (subjects.length > 0) {
       setFilteredResult(subjects);
     }

@@ -10,7 +10,7 @@ export const scrappedDocumentsTableRowDefs: RowCell[] = [
     cellType: "text",
     field: "",
     fields: [{ name: "name" }],
-    align: "justify",
+    align: "left",
   },
   {
     cellType: "text",

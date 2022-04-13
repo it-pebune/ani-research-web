@@ -34,7 +34,10 @@ const AssignedSubjects = () => {
     }
   };
 
-  const handleDocumentAction = () => {};
+  const handleDocumentAction = () => {
+    setDocumentsFromScrapperOpen(false);
+    setDocumentsListOpen(true);
+  };
 
   const handleDocumentFromListAction = () => {};
 
