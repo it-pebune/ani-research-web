@@ -1,63 +1,6 @@
 import { HeaderCell } from "../../interfaces/TableHeaderInterface";
 
-export const subjectsTableHeaderData: HeaderCell[] = [
-  {
-    field: "",
-  },
-  {
-    field: "lastName",
-    align: "justify",
-    title: "NUME",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "dob",
-    title: "DATA NASTERII",
-    align: "center",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "city",
-    title: "ORAS",
-    align: "center",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "county",
-    title: "JUDET",
-    align: "center",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "status",
-    title: "STATUS",
-    align: "center",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "assignedTo",
-    title: "ASIGNAT CATRE",
-    align: "center",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "",
-  },
-];
-
-export const scrappedSubjectsTableHeaderData: HeaderCell[] = [
+export const scrappedDocumentsTableHeaderData: HeaderCell[] = [
   {
     field: "",
     align: "center",
@@ -72,24 +15,40 @@ export const scrappedSubjectsTableHeaderData: HeaderCell[] = [
     direction: "asc",
   },
   {
-    field: "district",
-    title: "CIRCUMSCRIPTIE",
-    align: "center",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "party",
-    title: "PARTID",
-    align: "center",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "chamber",
+    field: "institution",
     title: "INSTITUTIE",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "function",
+    title: "FUNCTIE",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "locality",
+    title: "LOCALITATE",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "type",
+    title: "TIP DOCUMENT",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "date",
+    title: "DATA",
     align: "center",
     hasSortFunction: true,
     sortActive: true,
@@ -100,31 +59,48 @@ export const scrappedSubjectsTableHeaderData: HeaderCell[] = [
   },
 ];
 
-export const assignedSubjectsTableHeaderData: HeaderCell[] = [
+export const documentsFromDataBaseTableHeader: HeaderCell[] = [
   {
     field: "",
     align: "center",
     title: "#",
   },
   {
-    field: "lastName",
-    align: "justify",
-    title: "NUME",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
-  },
-  {
-    field: "status",
-    title: "DOCUMENTE INCARCATE",
+    field: "type",
+    title: "TIPUL DOCUMENTULUI",
     align: "center",
     hasSortFunction: true,
     sortActive: true,
     direction: "asc",
   },
   {
-    field: "status",
-    title: "DOCUMENTE PRELUCRATE",
+    field: "job",
+    title: "FUNCTIA",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "institution",
+    title: "INSTITUTIA",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "dateStart",
+    title: "PERIOADA",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+
+  {
+    field: "date",
+    title: "DATA DOCUMENT",
     align: "center",
     hasSortFunction: true,
     sortActive: true,

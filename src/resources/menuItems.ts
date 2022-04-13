@@ -23,6 +23,16 @@ export const adminMenuItems = [
     link: "/subjects",
   },
   {
+    icon: "recent_actors",
+    text: "Subiectii asignati",
+    link: "/assigned-subjects",
+  },
+  {
+    icon: "grading",
+    text: "Analizeaza PDF",
+    link: "/review-pdf",
+  },
+  {
     icon: "privacy_tip",
     text: "Modifica termeni si conditii",
     link: "/modify-terms",
