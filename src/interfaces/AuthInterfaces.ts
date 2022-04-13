@@ -9,7 +9,7 @@ export interface SignUpResponse {
     id: number;
     firstName: string;
     lastName: string;
-    roles: string[];
+    roles: number[];
     displayName: string;
     email: string;
     sessionId: string;
