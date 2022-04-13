@@ -1,32 +1,33 @@
 import { useContext, useEffect, useState } from "react";
 import "./MainMenu.css";
-
-import { unverifiedMenuItems, adminMenuItems } from "../resources/menuItems";
-import { MenuItem } from "../interfaces/MenuItemInterface";
-import { CurrentUser } from "../interfaces/UserInterfaces";
-
 import UserContext from "../store/UserContext";
+import { UserRoles } from "../enums/UsersEnums";
+import { MenuItem } from "../interfaces/MenuItemInterface";
+import { rolesToMenuItems, defaultMenuItems } from "../resources/menuItems";
 import { Link } from "react-router-dom";
 import { Icon } from "@mui/material";
 
 const MainMenu = () => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [userRoles, setUserRoles] = useState<number[]>([]);
-
   const userContext = useContext(UserContext);
+  const [userRoles, setUserRoles] = useState<UserRoles[]>([]);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
   useEffect(() => {
     setUserRoles(userContext.roles);
   }, [userContext]);
 
   useEffect(() => {
-    if (userRoles.length === 0) {
-      setMenuItems(unverifiedMenuItems);
-    } else if (userRoles.includes(250)) {
-      setMenuItems(adminMenuItems);
-    } else if (userRoles.includes(150)) {
-      setMenuItems(adminMenuItems);
+    const menuItems: MenuItem[] = [];
+
+    for (const userRole of userRoles) {
+      if (rolesToMenuItems.hasOwnProperty(userRole)) {
+        menuItems.push(...rolesToMenuItems[userRole]);
+      }
     }
+
+    menuItems.push(...defaultMenuItems);
+
+    setMenuItems(menuItems);
   }, [userRoles]);
 
   return (
