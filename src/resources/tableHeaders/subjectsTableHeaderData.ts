@@ -115,6 +115,14 @@ export const assignedSubjectsTableHeaderData: HeaderCell[] = [
     direction: "asc",
   },
   {
+    field: "city",
+    title: "ORAS",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
     field: "status",
     title: "DOCUMENTE INCARCATE",
     align: "center",

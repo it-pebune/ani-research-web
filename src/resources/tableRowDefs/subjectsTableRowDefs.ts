@@ -78,11 +78,16 @@ export const assignedSubjectsTableRowDefs: RowCell[] = [
     ],
     align: "left",
   },
-
   {
     cellType: "text",
-    field: "status",
-    fields: [{ name: "status" }],
+    field: "city",
+    fields: [{ name: "city" }],
+    align: "center",
+  },
+  {
+    cellType: "text",
+    field: "docCount",
+    fields: [{ name: "ocrokCount" }],
     align: "center",
   },
   {

@@ -12,6 +12,7 @@ export interface DocumentsFromScrapperResult {
   type: number;
   link: string;
   uid: string;
+  existent?: boolean;
 }
 
 export interface DocumentsFromScrapper {

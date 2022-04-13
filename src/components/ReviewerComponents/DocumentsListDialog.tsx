@@ -130,6 +130,7 @@ const DocumentsListDialog: React.FC<Props> = ({
   const handleInstitution = async (e: object, value: string | null) => {};
 
   useEffect(() => {
+    console.log(open);
     if (tokenStatus.active && subject && open) {
       const documentsResponse = async () => {
         const response = await documentService.getDocumentsFromDataBase({
@@ -253,7 +254,9 @@ const DocumentsListDialog: React.FC<Props> = ({
         />
       </DialogContent>
       <DialogActions sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}>
-        <Button onClick={() => onAction()}>Inapoi la lista principala</Button>
+        <Button variant="contained" onClick={() => onClose()}>
+          Inapoi la lista principala
+        </Button>
       </DialogActions>
     </Dialog>
   );
