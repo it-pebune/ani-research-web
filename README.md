@@ -6,6 +6,11 @@
   <h3 align="center">
     ANI-Research-Web
     <small>by IT-PeBune</small>
+  </h3>
+
+   <!-- <p align="center">
+      <a href="#"><strong>Explore the API documentation »</strong></a>
+    </p> -->
 </p>
 
 ## Table Of Contents
