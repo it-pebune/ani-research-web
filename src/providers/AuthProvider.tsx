@@ -8,6 +8,7 @@ import Gdpr from "../pages/Gdpr";
 import AuthContext from "../store/AuthContext";
 import UserContext from "../store/UserContext";
 import Loader from "../components/Shared/Loader";
+import { UserRoles } from "../enums/UsersEnums";
 
 const AuthProvider: React.FC = ({ children }) => {
   const navigate = useNavigate();
@@ -18,6 +19,24 @@ const AuthProvider: React.FC = ({ children }) => {
   const [appData, setAppData] = useState<SignUpResponse | undefined>();
   const params = new URLSearchParams(document.location.search);
   const googleState = params.get("state");
+
+  const getLandingPageAfterLogin = (response: SignUpResponse): string => {
+    const roles: number[] = response.user.roles;
+
+    switch (true) {
+      case roles.includes(UserRoles.RESEARCHER):
+        return "/assigned-subjects";
+
+      case roles.includes(UserRoles.COORDINATOR):
+        return "/subjects";
+
+      case roles.includes(UserRoles.ADMIN):
+        return "/users";
+
+      default:
+        return "/";
+    }
+  };
 
   useEffect(() => {
     if (!authContext.hasValidToken() && !googleState) {
@@ -46,7 +65,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
         if (response) {
           setAppData(response);
-          navigate("/");
+          navigate(getLandingPageAfterLogin(response));
         }
       };
 
