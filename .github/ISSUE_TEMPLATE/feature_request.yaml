@@ -1,0 +1,23 @@
+name: Feature Request
+description: File a new feature request
+title: "[FEATURE]: "
+labels: ["feature"]
+body:
+  - type: textarea
+    attributes:
+      label: One Paragraph Description of the Feature
+      description: Describe the feature in one short paragraph
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the Feature
+      description: Describe the feature
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Additional Information
+      description: Anything that you may want to add
+    validations:
+      required: false
