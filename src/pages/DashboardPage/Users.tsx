@@ -67,10 +67,20 @@ const Users = (props: any) => {
     setPage(0);
   };
 
-  const handleUserAction = (action: string, id: string | number) => {
+  const handleUserAction = async (action: string, id: string | number) => {
     if (action === "modify-roles") {
       setRolesDialogOpened(true);
       setSelectedId(id);
+    }
+    if (action === "delete") {
+      const user = filteredUsers.find((user) => user.id === id);
+      setFilteredUsers((prevState) =>
+        prevState.filter((user) => user.id !== id)
+      );
+
+      if (tokenStatus.active) {
+        await userService.deleteSpecifiedUser(tokenStatus, user);
+      }
     }
   };
 
@@ -86,7 +96,6 @@ const Users = (props: any) => {
       updatedUser
     );
     if (response) {
-      console.log(response);
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user.id === response.id ? { ...user, ...response } : user
