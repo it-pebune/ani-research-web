@@ -174,9 +174,9 @@ const Subjects = (props: any) => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(filteredSubjects);
-  // }, [filteredSubjects]);
+  useEffect(() => {
+    console.log(filteredSubjects);
+  }, [filteredSubjects]);
 
   useEffect(() => {
     setFilteredResult((prevUsers) =>
