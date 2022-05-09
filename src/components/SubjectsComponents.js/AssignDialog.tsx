@@ -62,11 +62,11 @@ const AssignDialog: React.FC<Props> = ({
   };
 
   const handleSearch = (string: string) => {
-    // setFilteredSubjects(
-    //   scrappedSubjects.filter((subject) =>
-    //     subject.name.toLowerCase().includes(string.toLowerCase())
-    //   )
-    // );
+    setFilteredResult(
+      researchers.filter((user) =>
+        user.displayName.toLowerCase().includes(string.toLowerCase())
+      )
+    );
     setPage(0);
   };
 
@@ -110,7 +110,6 @@ const AssignDialog: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    console.log(tokenStatus);
     if (tokenStatus.active) {
       const getSubjectsResponse = async () => {
         const response = await userService.getUsersByRole(
