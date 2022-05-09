@@ -37,7 +37,7 @@ export const usersTableRowDefs: RowCell[] = [
       { action: "modify-roles", text: "Modifica roluri" },
       { action: "blacklist", text: "Blacklist" },
       { action: "delete", text: "Sterge" },
-      { action: "view", text: "Vezi" },
+      { action: "view", text: "Vizualizeaza" },
     ],
   },
 ];

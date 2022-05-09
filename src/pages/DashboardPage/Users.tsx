@@ -21,6 +21,7 @@ import { usersTableHeaderData } from "../../resources/tableHeaders/usersTableHea
 import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDefs";
 import AddRolesDialog from "../../components/UsersComponents/AddRolesDialog";
 import { userRoles } from "../../resources/userRoles";
+import { ViewUserDialog } from "../../components/UsersComponents/ViewUserDialog";
 
 const Users = (props: any) => {
   const columnsGrid = "60px 200px 1fr 200px 150px 70px";
@@ -37,6 +38,7 @@ const Users = (props: any) => {
   const [dialogOpened, setDialogOpened] = useState(false);
   const [selectedId, setSelectedId] = useState<number | string>();
   const [rolesDialogOpened, setRolesDialogOpened] = useState(false);
+  const [viewUserDialogOpened, setViewUserDialogOpened] = useState(false);
   const tokenStatus = useTokenStatus();
 
   const handleFiltersOpen = () => {
@@ -70,8 +72,11 @@ const Users = (props: any) => {
   const handleUserAction = (action: string, id: string | number) => {
     if (action === "modify-roles") {
       setRolesDialogOpened(true);
-      setSelectedId(id);
+    } else if (action === "view") {
+      setViewUserDialogOpened(true);
     }
+
+    setSelectedId(id);
   };
 
   const handleRoles = async (user: User, roles: number[]) => {
@@ -264,13 +269,18 @@ const Users = (props: any) => {
         onClose={() => setDialogOpened(false)}
         onFilters={handleFilters}
         filters={myFilters}
-      ></UsersFiltersDialog>
+      />
       <AddRolesDialog
         open={rolesDialogOpened}
         onClose={() => setRolesDialogOpened(false)}
         id={selectedId}
         onRoles={handleRoles}
-      ></AddRolesDialog>
+      />
+      <ViewUserDialog
+        id={selectedId}
+        open={viewUserDialogOpened}
+        onClose={() => setViewUserDialogOpened(false)}
+      />
     </Box>
   );
 };

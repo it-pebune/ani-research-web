@@ -6,6 +6,7 @@ interface Props {
   title: string;
   actionText: string;
   icon: string;
+  justifyContent?: string;
   children: JSX.Element[] | JSX.Element;
   open: boolean;
   onClose: any;
@@ -16,6 +17,7 @@ const CustomDialog: React.FC<Props> = ({
   children,
   title,
   icon,
+  justifyContent,
   actionText,
   open,
   onClose,
@@ -41,7 +43,7 @@ const CustomDialog: React.FC<Props> = ({
           display: "flex",
           flexDirection: "column",
           height: "450px",
-          justifyContent: "space-around",
+          justifyContent: justifyContent ?? "space-around",
         }}
       >
         {children}
