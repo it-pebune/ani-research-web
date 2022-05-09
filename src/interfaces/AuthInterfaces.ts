@@ -9,7 +9,7 @@ export interface SignUpResponse {
     id: number;
     firstName: string;
     lastName: string;
-    roles: string[];
+    roles: number[];
     displayName: string;
     email: string;
     sessionId: string;
@@ -17,13 +17,10 @@ export interface SignUpResponse {
   };
 }
 
-export interface AuthState {
-  token: string | null;
-  refreshToken: string | null;
-  tokenExpAt: number | null;
-  refreshTokenExpAt: number | null;
-  setToken(token: string | null): void;
-  setTokenExpAt(tokenExpAt: number | null): void;
+export interface RefreshTokenResponse {
+  access: string;
+  accessExpiresIn: number;
+  refreshExpiresIn: number;
 }
 
 export interface AuthUrl {

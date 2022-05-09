@@ -20,10 +20,12 @@ export interface SocialInfo {
 
 export interface CurrentUser {
   id: number;
-  displayName: string;
-  email: string;
   firstName: string;
   lastName: string;
+  displayName: string;
+  email: string;
+  socialInfo: string;
+  phone: string;
   profileImageUrl: string;
   roles: number[];
 }
@@ -45,6 +47,14 @@ export interface SpecifiedUser {
   settings: object;
 
   notes: string[];
+}
+
+export interface SpecifiedUserToUpdate {
+  firstName?: string;
+  lastName?: string;
+  displayName?: string;
+  phone?: string;
+  socialInfo?: string;
 }
 
 export interface Filters {

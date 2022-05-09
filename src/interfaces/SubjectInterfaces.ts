@@ -14,7 +14,7 @@ export interface SubjectFromDataBase {
   created: string;
   deleted: number;
   dob: string;
-  firstName: String;
+  firstName: string;
   lastName: string;
   photoUrl: string;
   sirutaId: number;

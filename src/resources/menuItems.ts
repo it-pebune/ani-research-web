@@ -1,4 +1,31 @@
-export const unverifiedMenuItems = [
+import { MenuItem } from "../interfaces/MenuItemInterface";
+import { UserRoles } from "../enums/UsersEnums";
+
+export const rolesToMenuItems: Record<number, MenuItem[]> = {
+  [UserRoles.ADMIN]: [
+    {
+      icon: "people",
+      text: "Utilizatori",
+      link: "/users",
+    },
+  ],
+  [UserRoles.COORDINATOR]: [
+    {
+      icon: "people",
+      text: "Subiecti",
+      link: "/subjects",
+    },
+  ],
+  [UserRoles.RESEARCHER]: [
+    {
+      icon: "recent_actors",
+      text: "Subiectii asignati",
+      link: "/assigned-subjects",
+    },
+  ],
+};
+
+export const defaultMenuItems: MenuItem[] = [
   {
     icon: "privacy_tip",
     text: "Termeni si conditii",
@@ -8,28 +35,5 @@ export const unverifiedMenuItems = [
     icon: "vpn_lock",
     text: "Politica GDPR",
     link: "/gdpr",
-  },
-];
-
-export const adminMenuItems = [
-  {
-    icon: "people",
-    text: "Utilizatori",
-    link: "/users",
-  },
-  {
-    icon: "people",
-    text: "Subiecti",
-    link: "/subjects",
-  },
-  {
-    icon: "privacy_tip",
-    text: "Modifica termeni si conditii",
-    link: "/modify-terms",
-  },
-  {
-    icon: "vpn_lock",
-    text: "Modifica politica GDPR",
-    link: "/modify-gdpr",
   },
 ];

@@ -99,3 +99,46 @@ export const scrappedSubjectsTableHeaderData: HeaderCell[] = [
     field: "",
   },
 ];
+
+export const assignedSubjectsTableHeaderData: HeaderCell[] = [
+  {
+    field: "",
+    align: "center",
+    title: "#",
+  },
+  {
+    field: "lastName",
+    align: "justify",
+    title: "NUME",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "city",
+    title: "ORAS",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "status",
+    title: "DOCUMENTE INCARCATE",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "status",
+    title: "DOCUMENTE PRELUCRATE",
+    align: "center",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: "asc",
+  },
+  {
+    field: "",
+  },
+];

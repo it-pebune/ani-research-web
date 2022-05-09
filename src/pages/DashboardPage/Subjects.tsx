@@ -117,8 +117,10 @@ const Subjects = (props: any) => {
 
   const handleSearch = (string: string) => {
     setFilteredSubjects(
-      subjects.filter((subject) =>
-        subject.name.toLowerCase().includes(string.toLowerCase())
+      subjects.filter(
+        (subject) =>
+          subject.firstName.toLowerCase().includes(string.toLowerCase()) ||
+          subject.lastName.toLowerCase().includes(string.toLowerCase())
       )
     );
     setPage(0);

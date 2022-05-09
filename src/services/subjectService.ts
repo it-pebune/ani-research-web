@@ -133,7 +133,6 @@ export const subjectService = {
           sirutaId: reqData.sirutaId && reqData.sirutaId,
         })
       );
-      console.log(payload);
 
       try {
         response = await axios.post(

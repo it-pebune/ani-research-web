@@ -1,6 +1,11 @@
 import axios from "axios";
 import { API_BASE_URL } from "../resources/apiLinks";
-import { SpecifiedUser, User } from "../interfaces/UserInterfaces";
+import {
+  CurrentUser,
+  SpecifiedUser,
+  SpecifiedUserToUpdate,
+  User,
+} from "../interfaces/UserInterfaces";
 
 const userService = {
   getUsers: async (tokenStatus: {
@@ -29,21 +34,22 @@ const userService = {
       token: string;
       active: boolean;
     },
-    id: number | string | undefined
+    id: string | number | undefined
   ): Promise<SpecifiedUser> => {
     let response: any;
     if (tokenStatus.active) {
       const config = {
         headers: { Authorization: `Bearer ${tokenStatus.token}` },
       };
-      try {
-        response = await axios.get(`${API_BASE_URL}/users/${id}`, config);
-        const resData = await response.data;
-        return resData;
-      } catch (error) {
-        response = error;
-        console.log(error);
+      response = await axios.get(`${API_BASE_URL}/users/${id}`, config);
+
+      if (response.status !== 200) {
+        throw new Error(response);
       }
+      if (response.data.socialInfo != null) {
+        response.data.socialInfo = await JSON.parse(response.data.socialInfo);
+      }
+      return response.data;
     }
     return response;
   },
@@ -51,7 +57,7 @@ const userService = {
   getCurrentUser: async (tokenStatus: {
     token: string;
     active: boolean;
-  }): Promise<User> => {
+  }): Promise<CurrentUser> => {
     let response: any;
     if (tokenStatus.active) {
       const config = {
@@ -67,6 +73,28 @@ const userService = {
       }
     }
     return response;
+  },
+
+  updateSpecifiedUserData: async (
+    tokenStatus: { token: string; active: boolean },
+    userData: SpecifiedUserToUpdate
+  ): Promise<CurrentUser> => {
+    if (!tokenStatus.active) {
+      throw new Error("Active token required for updating user.");
+    }
+
+    const config = {
+        headers: { Authorization: `Bearer ${tokenStatus.token}` },
+      },
+      { lastName, firstName, displayName, phone, socialInfo } = userData;
+
+    return (
+      await axios.put(
+        `${API_BASE_URL}/users`,
+        { lastName, firstName, displayName, phone, socialInfo },
+        config
+      )
+    ).data;
   },
 
   updateSpecifiedUser: async (
@@ -135,7 +163,7 @@ const userService = {
       token: string;
       active: boolean;
     },
-    id: number
+    user?: User
   ): Promise<User> => {
     let response: any;
     if (tokenStatus.active) {
@@ -144,7 +172,10 @@ const userService = {
       };
       try {
         response = await axios.put(
-          `${API_BASE_URL}/users/${id}/delete`,
+          `${API_BASE_URL}/users/${user?.id}/delete`,
+          {
+            status: user?.status,
+          },
           config
         );
         const resData = await response.data;
