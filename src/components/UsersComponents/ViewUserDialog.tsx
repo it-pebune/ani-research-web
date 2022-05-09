@@ -7,6 +7,7 @@ import { Avatar, Box, Grid, Link, Typography } from "@mui/material";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import { makeStyles, styled } from "@mui/styles";
+import CustomDialogSection from "../Shared/CustomDialogSection";
 
 interface Props {
   id: number | string | undefined;
@@ -47,7 +48,7 @@ export const ViewUserDialog: React.FC<Props> = ({ id, open, onClose }) => {
       justifyContent="space-between"
       open={open}
       onClose={onClose}
-      onAction={() => {}}
+      onAction={onClose}
     >
       <Grid container direction="column" sx={{ margin: "40px 0" }}>
         <Grid container direction="row" justifyContent="space-around">
@@ -102,7 +103,13 @@ export const ViewUserDialog: React.FC<Props> = ({ id, open, onClose }) => {
           </Grid>
         </Grid>
 
-        <Grid></Grid>
+        <CustomDialogSection
+          title="note"
+          columnsGrid="1fr"
+          sx={{ padding: "20px 40px" }}
+        >
+          <Typography>{user?.notes}</Typography>
+        </CustomDialogSection>
       </Grid>
     </CustomDialog>
   );
