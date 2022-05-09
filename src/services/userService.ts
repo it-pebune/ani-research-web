@@ -163,7 +163,7 @@ const userService = {
       token: string;
       active: boolean;
     },
-    id: number
+    user?: User
   ): Promise<User> => {
     let response: any;
     if (tokenStatus.active) {
@@ -172,7 +172,10 @@ const userService = {
       };
       try {
         response = await axios.put(
-          `${API_BASE_URL}/users/${id}/delete`,
+          `${API_BASE_URL}/users/${user?.id}/delete`,
+          {
+            status: user?.status,
+          },
           config
         );
         const resData = await response.data;
