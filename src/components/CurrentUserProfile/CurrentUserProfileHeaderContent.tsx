@@ -4,7 +4,9 @@ import {
   Button,
   Grid,
   Link,
+  ListItem,
   Paper,
+  Stack,
   Typography,
 } from "@mui/material";
 import { makeStyles, styled } from "@mui/styles";
@@ -78,10 +80,16 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
         <CustomTypographyPrimary sx={{ fontSize: "40px !important" }}>
           {props.displayName}
         </CustomTypographyPrimary>
-        <CustomTypographySecondary sx={{ fontSize: "30px !important" }}>
+        <Stack>
           {props.roles &&
-            props.roles.map((roleId) => userRoleConvertor(roleId))}
-        </CustomTypographySecondary>
+            props.roles.map((roleId) => (
+              <ListItem key={roleId}>
+                <CustomTypographySecondary sx={{ fontSize: "30px !important" }}>
+                  {userRoleConvertor(roleId)}
+                </CustomTypographySecondary>
+              </ListItem>
+            ))}
+        </Stack>
         <Grid item container direction={"row"} sx={{ marginTop: "10px" }}>
           {socialInfo?.facebook && (
             <Link href={socialInfo.facebook} target="_blank">
