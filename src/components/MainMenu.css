@@ -28,3 +28,15 @@
   color: white;
   background: #3154bd;
 }
+
+.app-version {
+  position: fixed;
+  bottom: 0;
+  color: #eee;
+  font-weight: bold;
+}
+
+.app-version span {
+  font-weight: bold;
+  color: #fff;
+}
