@@ -5,6 +5,5 @@ git:
   commitMessage: "[ci]: bump ${version}"
 
 github:
-  release: true
-  autoGenerate: true
+  release: false
   skipChecks: true
