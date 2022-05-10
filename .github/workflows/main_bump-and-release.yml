@@ -1,9 +1,12 @@
-name: Release and Bump
+name: Bump and Release
 
 on:
   push:
     branches:
       - main
+
+env:
+  CI_GIT_TOKEN: ${{ secrets.CI_GIT_TOKEN }}
 
 jobs:
   release:
@@ -13,6 +16,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          token: ${{ env.CI_GIT_TOKEN }}
 
       - name: git config
         run: |
@@ -32,4 +36,4 @@ jobs:
       - name: run release-it
         run: yarn release ${{ env.RELEASE }} --ci
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ env.CI_GIT_TOKEN }}
