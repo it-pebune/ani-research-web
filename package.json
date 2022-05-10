@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "cross-env PORT=7000 REACT_APP_VERSION=$npm_package_version react-scripts start",
-    "build": "react-scripts REACT_APP_VERSION=$npm_package_version build",
+    "build": "REACT_APP_VERSION=$npm_package_version react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write .",
