@@ -1,0 +1,10 @@
+npm:
+  publish: false
+
+git:
+  commitMessage: "[ci]: bump ${version}"
+
+github:
+  release: true
+  autoGenerate: true
+  skipChecks: true
