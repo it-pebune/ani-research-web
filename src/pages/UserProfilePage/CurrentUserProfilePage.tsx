@@ -47,13 +47,13 @@ const CurrentUserProfilePage = () => {
 
   return (
     <Box sx={{ padding: "100px 90px" }}>
-      <CurrentUserProfileHeader elevation={0}>
+      <UserProfileHeader elevation={0}>
         {pageIsLoading && <Loader />}
 
         {fetchDataError && <UserProfileNotFound />}
 
         {!editMode && currentUserData && (
-          <CurrentUserProfileHeaderContent
+          <UserProfileHeaderContent
             email={currentUserData.email}
             displayName={currentUserData.displayName}
             profileImageUrl={currentUserData.profileImageUrl}
@@ -76,7 +76,7 @@ const CurrentUserProfilePage = () => {
             updateCurrentUser={updateCurrentUser}
           />
         )}
-      </CurrentUserProfileHeader>
+      </UserProfileHeader>
     </Box>
   );
 };
