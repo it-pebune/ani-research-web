@@ -2,7 +2,7 @@ npm:
   publish: false
 
 git:
-  commitMessage: "[ci]: bump ${version}"
+  commitMessage: "[ci]: bump ${version} [skip-release]"
 
 github:
   release: true
