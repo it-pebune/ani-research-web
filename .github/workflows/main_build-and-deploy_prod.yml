@@ -2,9 +2,14 @@ name: PROD - Build and Deploy as Azure Static App
 on:
   workflow_dispatch:
 
+env:
+  CI_GIT_TOKEN: ${{ secrets.CI_GIT_TOKEN }}
+
 jobs:
   release_and_bump:
     uses: ./.github/workflows/release_and_bump.yml
+    with:
+      token: ${{ env.CI_GIT_TOKEN }}
 
   build_and_deploy:
     needs: release_and_bump
