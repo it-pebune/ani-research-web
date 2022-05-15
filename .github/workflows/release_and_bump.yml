@@ -3,9 +3,6 @@ name: Release and Bump
 
 on:
   workflow_call:
-    secrets:
-      CI_GITHUB_TOKEN:
-        required: true
 
 jobs:
   release_and_bump:
