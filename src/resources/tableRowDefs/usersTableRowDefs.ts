@@ -5,12 +5,14 @@ export const usersTableRowDefs: RowCell[] = [
     cellType: "avatar",
     altField: "displayName",
     field: "profileImageUrl",
+    action: "view",
   },
   {
     cellType: "text",
     field: "",
     fields: [{ name: "displayName", weight: "bold" }, { name: "email" }],
     align: "justify",
+    action: "view",
   },
   {
     cellType: "text",

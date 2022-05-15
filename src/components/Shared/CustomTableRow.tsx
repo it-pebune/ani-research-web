@@ -90,6 +90,10 @@ const CustomTableRow: React.FC<Props> = ({
           id={`cell-${index}`}
           key={`cell-${index}`}
           align={cellDef.align}
+          onClick={() =>
+            cellDef.action && handleAction(cellDef.action, data.id)
+          }
+          sx={{ cursor: cellDef.action ? "pointer" : "initial" }}
         >
           {cellDef.cellType === "avatar" &&
             cellDef.altField &&
