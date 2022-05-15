@@ -15,6 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     steps:
+      # wait for git push from release-it
+      - name: Sleep for 10 seconds
+        run: sleep 10s
+        shell: bash
+
+      - uses: actions/checkout@v3
+
       - name: Build and Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
