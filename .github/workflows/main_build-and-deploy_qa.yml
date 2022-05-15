@@ -5,14 +5,11 @@ on:
     branches:
       - main
 
-env:
-  CI_GIT_TOKEN: ${{ secrets.CI_GIT_TOKEN }}
-
 jobs:
   release_and_bump:
     uses: ./.github/workflows/release_and_bump.yml
-    with:
-      token: ${{ env.CI_GIT_TOKEN }}
+    secrets:
+      CI_GITHUB_TOKEN: ${{ secrets.CI_GIT_TOKEN }}
 
   build_and_deploy:
     needs: release_and_bump
