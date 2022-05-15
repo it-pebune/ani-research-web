@@ -1,5 +1,5 @@
 # Reusable workflow
-name: Bump and Release
+name: Release and Bump
 
 on:
   workflow_call:
@@ -30,7 +30,7 @@ jobs:
         if: "contains(github.event.head_commit.message, '[minor]')"
         run: echo "RELEASE=minor" >> $GITHUB_ENV
 
-      - run: yarn build
+      - run: yarn install
 
       - name: run release-it
         run: yarn release ${{ env.RELEASE }} --ci
