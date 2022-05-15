@@ -12,7 +12,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[skip-release]')"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
         with:
           token: ${{ env.CI_GIT_TOKEN }}
 
