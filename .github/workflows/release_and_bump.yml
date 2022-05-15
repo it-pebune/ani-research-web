@@ -8,13 +8,13 @@ env:
   CI_GIT_TOKEN: ${{ secrets.CI_GIT_TOKEN }}
 
 jobs:
-  release:
+  release_and_bump:
     if: "!contains(github.event.head_commit.message, '[skip-release]')"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ env.CI_GIT_TOKEN }}
+          fetch-depth: 0
 
       - name: git config
         run: |
