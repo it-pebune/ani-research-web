@@ -8,10 +8,11 @@ import DashHeader from "./components/DashHeader";
 import NotVerified from "./pages/NotVerified";
 import { Box } from "@mui/material";
 import Users from "./pages/DashboardPage/Users";
-import UserProfilePage from "./pages/UserProfilePage/CurrentUserProfilePage";
+import CurrentUserProfilePage from "./pages/UserProfilePage/CurrentUserProfilePage";
 import Subjects from "./pages/DashboardPage/Subjects";
 import AssignedSubjects from "./pages/DashboardPage/AssignedSubjects";
 import ReviewPdf from "./pages/DashboardPage/ReviewPdf";
+import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 
 const App: React.FC = () => {
   return (
@@ -30,12 +31,13 @@ const App: React.FC = () => {
             <Routes>
               <Route path="/" element={<NotVerified />} />
               <Route path="/users" element={<Users />} />
+              <Route path="/users/:id" element={<UserProfilePage />} />
               <Route path="/subjects" element={<Subjects />} />
               <Route path="/assigned-subjects" element={<AssignedSubjects />} />
               <Route path="/review-pdf/:id" element={<ReviewPdf />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/gdpr" element={<Gdpr />} />
-              <Route path="/profile" element={<UserProfilePage />} />
+              <Route path="/profile" element={<CurrentUserProfilePage />} />
             </Routes>
           </Box>
         </Box>

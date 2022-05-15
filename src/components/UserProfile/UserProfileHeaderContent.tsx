@@ -38,7 +38,7 @@ interface UserProfileDisplayProps {
   socialInfo: SocialInfo | string;
   phone: string;
   roles: number[];
-  switchToEditModeHandler: any;
+  switchToEditModeHandler?: any;
   children?: JSX.Element | JSX.Element[];
 }
 
