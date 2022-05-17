@@ -1,11 +1,11 @@
-import React, { useState } from "react";
 import {
+  Icon,
+  TableCell,
   TableHead,
   TableRow,
-  TableCell,
   TableSortLabel,
-  Icon,
 } from "@mui/material";
+import React, { useState } from "react";
 import { HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 interface Props {

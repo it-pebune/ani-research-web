@@ -1,4 +1,3 @@
-import i18n from "../i18n";
 import {
   Avatar,
   FormControl,
@@ -7,6 +6,7 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { useState } from "react";
+import i18n from "../i18n";
 
 const LanguageSelector = () => {
   const [lng, setLng] = useState(i18n.language);

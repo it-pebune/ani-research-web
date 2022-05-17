@@ -1,6 +1,6 @@
+import { Button } from "@mui/material";
 import React from "react";
 import "./SignUpDialogues.css";
-import { Button } from "@mui/material";
 
 interface Props {}
 

@@ -1,11 +1,10 @@
 import axios from "axios";
-import { API_BASE_URL, WEB_BASE_URL } from "../resources/apiLinks";
-
 import {
   AuthUrl,
   RefreshTokenResponse,
   SignUpResponse,
 } from "../interfaces/AuthInterfaces";
+import { API_BASE_URL, WEB_BASE_URL } from "../resources/apiLinks";
 
 console.log(API_BASE_URL);
 

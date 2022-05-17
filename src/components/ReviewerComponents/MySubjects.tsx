@@ -10,13 +10,12 @@ import {
   SubjectFilters,
   SubjectFromDataBase,
 } from "../../interfaces/SubjectInterfaces";
+import { assignedSubjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
+import { assignedSubjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
+import useTokenStatus from "../../utils/useTokenStatus";
 import CustomTableHeader from "../Shared/CustomTableHeader";
 import CustomTableRow from "../Shared/CustomTableRow";
 import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
-import { assignedSubjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
-import { assignedSubjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
-import useTokenStatus from "../../utils/useTokenStatus";
-import { subjectService } from "../../services/subjectService";
 
 type Props = {
   subjects: SubjectFromDataBase[];

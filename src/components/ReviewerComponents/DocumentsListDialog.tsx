@@ -10,28 +10,19 @@ import {
   Table,
   TableBody,
   TablePagination,
-  Autocomplete,
-  TextField,
 } from "@mui/material";
 import CustomTableHeader from "../Shared/CustomTableHeader";
 import CustomTableRow from "../Shared/CustomTableRow";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { documentService } from "../../services/documentsServices";
 import useTokenStatus from "../../utils/useTokenStatus";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
 import { documentsFromDataBaseTableHeader } from "../../resources/tableHeaders/documentsTableHeaderData";
-import {
-  documentsFromDataBaseTableRowDefs,
-  scrappedDocumentsTableRowDefs,
-} from "../../resources/tableRowDefs/documentsTableRowDefs";
+import { documentsFromDataBaseTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
 import { DocumentFromDataBase } from "../../interfaces/DocumentInterfaces";
 import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
 import { Box } from "@mui/system";
-import PdfPreviewComponent from "../Shared/PdfPreviewComponent";
-import { jobService } from "../../services/jobsService";
-import { Job, JobResponse } from "../../interfaces/JobInterfaces";
-import { jobsTableHeaderData } from "../../resources/tableHeaders/jobsTableHeaderData";
-import { jobsTableRowDefs } from "../../resources/tableRowDefs/jobsTableRowDefs";
+import { Job } from "../../interfaces/JobInterfaces";
 import moment from "moment";
 import { useNavigate } from "react-router";
 

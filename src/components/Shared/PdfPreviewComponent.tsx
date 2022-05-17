@@ -1,6 +1,6 @@
 import { Paper } from "@mui/material";
 import React from "react";
-import { Document, Page, pdfjs } from "react-pdf";
+import { Document, Page } from "react-pdf";
 
 interface Props {
   path: string;

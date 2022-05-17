@@ -3,7 +3,6 @@ import {
   Institution,
   InstitutionResponse,
 } from "../interfaces/IntitutionInterfaces";
-
 import { API_BASE_URL } from "../resources/apiLinks";
 
 export const institutionService = {

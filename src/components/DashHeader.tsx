@@ -3,9 +3,8 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../store/AuthContext";
 import UserContext from "../store/UserContext";
-import LanguageSelector from "./LanguageSelector";
-
 import "./DashHeader.css";
+import LanguageSelector from "./LanguageSelector";
 
 const DashHeader = () => {
   const navigate = useNavigate();

@@ -1,14 +1,14 @@
 import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import userService from "../../services/userService";
-import useTokenStatus from "../../utils/useTokenStatus";
-import UserProfileNotFound from "../../components/CurrentUserProfile/UserProfileNotFound";
 import CurrentUserProfileHeader from "../../components/CurrentUserProfile/CurrentUserProfileHeader";
 import CurrentUserProfileHeaderContent from "../../components/CurrentUserProfile/CurrentUserProfileHeaderContent";
 import CurrentUserProfileHeaderEditContent from "../../components/CurrentUserProfile/CurrentUserProfileHeaderEditContent";
-import { CurrentUser } from "../../interfaces/UserInterfaces";
-import UserContext from "../../store/UserContext";
+import UserProfileNotFound from "../../components/CurrentUserProfile/UserProfileNotFound";
 import Loader from "../../components/Shared/Loader";
+import { CurrentUser } from "../../interfaces/UserInterfaces";
+import userService from "../../services/userService";
+import UserContext from "../../store/UserContext";
+import useTokenStatus from "../../utils/useTokenStatus";
 
 const CurrentUserProfilePage = () => {
   const tokenStatus = useTokenStatus(),

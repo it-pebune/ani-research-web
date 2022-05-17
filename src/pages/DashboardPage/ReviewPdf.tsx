@@ -7,21 +7,19 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";
-import { interestsOrder } from "../../resources/declarations/interestsOrder";
-import { assetsOrder } from "../../resources/declarations/assetsOrder";
-
-import CustomTableHeader from "../../components/Shared/CustomTableHeader";
-import { HeaderCell } from "../../interfaces/TableHeaderInterface";
-import { FieldData } from "../../interfaces/ReviewPdf";
-
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import { useParams } from "react-router-dom";
 import CustomRowOfInterests from "../../components/Shared/CustomRowOfInterests";
+import CustomTableHeader from "../../components/Shared/CustomTableHeader";
+import { DocumentFromDataBase } from "../../interfaces/DocumentInterfaces";
+import { FieldData } from "../../interfaces/ReviewPdf";
+import { HeaderCell } from "../../interfaces/TableHeaderInterface";
+import { assetsOrder } from "../../resources/declarations/assetsOrder";
+import { interestsOrder } from "../../resources/declarations/interestsOrder";
 import { documentService } from "../../services/documentsServices";
 import useTokenStatus from "../../utils/useTokenStatus";
-import { DocumentFromDataBase } from "../../interfaces/DocumentInterfaces";
 
-import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface Props {}

@@ -1,11 +1,11 @@
 import axios from "axios";
-import { API_BASE_URL } from "../resources/apiLinks";
 import {
   CurrentUser,
   SpecifiedUser,
   SpecifiedUserToUpdate,
   User,
 } from "../interfaces/UserInterfaces";
+import { API_BASE_URL } from "../resources/apiLinks";
 
 const userService = {
   getUsers: async (tokenStatus: {

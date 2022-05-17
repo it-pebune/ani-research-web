@@ -1,7 +1,7 @@
 import { TableRow } from "@mui/material";
-import React, { useState } from "react";
-import CustomTableCellWithFunctions from "./CustomTableCellWithFunctions";
+import React from "react";
 import { FieldData } from "../../interfaces/ReviewPdf";
+import CustomTableCellWithFunctions from "./CustomTableCellWithFunctions";
 
 interface Props {
   columnsGrid: string;

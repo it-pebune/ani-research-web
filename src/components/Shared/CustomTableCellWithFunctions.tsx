@@ -5,9 +5,9 @@ import {
   TextareaAutosize,
   TextareaAutosizeProps,
 } from "@mui/material";
-import React, { useState, useEffect, useRef } from "react";
-import { FieldData } from "../../interfaces/ReviewPdf";
 import { styled } from "@mui/material/styles";
+import React, { useEffect, useRef, useState } from "react";
+import { FieldData } from "../../interfaces/ReviewPdf";
 
 interface Props {
   data: FieldData;

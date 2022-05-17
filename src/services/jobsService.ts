@@ -1,6 +1,5 @@
 import axios from "axios";
-import { Job, JobResponse } from "../interfaces/JobInterfaces";
-
+import { Job } from "../interfaces/JobInterfaces";
 import { API_BASE_URL } from "../resources/apiLinks";
 
 export const jobService = {

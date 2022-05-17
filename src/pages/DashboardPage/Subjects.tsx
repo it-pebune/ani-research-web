@@ -7,27 +7,22 @@ import {
   TableContainer,
   TablePagination,
 } from "@mui/material";
-import moment from "moment";
-import { useState, useEffect } from "react";
-import SubjectsFIltersOverview from "../../components/SubjectsComponents.js/SubjectsFIltersOverview";
-import CustomTableRow from "../../components/Shared/CustomTableRow";
+import { useEffect, useState } from "react";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
+import CustomTableRow from "../../components/Shared/CustomTableRow";
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
-import {
-  SubjectFromDataBase,
-  SubjectFilters,
-  SubjectsResponse,
-} from "../../interfaces/SubjectInterfaces";
-
-import { subjectService } from "../../services/subjectService";
-import useTokenStatus from "../../utils/useTokenStatus";
-
-import { subjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
-import { subjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
 import AddSubjectDialog from "../../components/SubjectsComponents.js/AddSubjectDialog";
 import AssignDialog from "../../components/SubjectsComponents.js/AssignDialog";
-// import AddRolesDialog from "../../components/SubjectsComponents/AddRolesDialog";
-// import { subjectRoles } from "../../resources/subjectRoles";
+import SubjectsFIltersOverview from "../../components/SubjectsComponents.js/SubjectsFIltersOverview";
+import {
+  SubjectFilters,
+  SubjectFromDataBase,
+  SubjectsResponse,
+} from "../../interfaces/SubjectInterfaces";
+import { subjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
+import { subjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
+import { subjectService } from "../../services/subjectService";
+import useTokenStatus from "../../utils/useTokenStatus";
 
 const Subjects = (props: any) => {
   const columnsGrid = "100px .8fr .7fr .6fr .8fr .5fr .9fr 60px ";

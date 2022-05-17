@@ -1,9 +1,9 @@
-import React from "react";
-import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import InputBase from "@mui/material/InputBase";
+import Paper from "@mui/material/Paper";
+import React from "react";
 
 interface Props {
   onFiltersOpen: any;
