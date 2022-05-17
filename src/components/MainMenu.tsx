@@ -45,6 +45,10 @@ const MainMenu = () => {
           </div>
         </Link>
       ))}
+
+      <span className="app-version">
+        Version: <span>{process.env.REACT_APP_VERSION}</span>
+      </span>
     </div>
   );
 };

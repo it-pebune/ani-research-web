@@ -26,7 +26,8 @@
   - [Deployement](#deployement)
   - [Contributing](#contributing)
 - [Instructions](#instructions)
-- [Tags](#tags)
+- [Tags & Auto Versioning](#tags--auto-versioning)
+  - [Auto Versioning](#auto-versioning)
 - [Outside Collaborators](#outside-collaborators)
 
 ## About The Project
@@ -105,13 +106,22 @@ For [outside collaborators check this](#outside-collaborators)
 - Create a PR pointing to either main or prod
 - Review & Publish
 
-## Tags
+## Tags & Auto Versioning
 
 Follow a clear workflow when contributing, using the same branch tags:
 
 - ![](https://img.shields.io/badge/-feature-5319e7) - `feature/branch-name` - New feature from main
 - ![](https://img.shields.io/badge/-fix-d93f0b) - `fix/branch-name` - New fix from main
 - ![](https://img.shields.io/badge/-hotfix-b60205) - `hotfix/branch-name` - New fix from prod (deployed directly, skips staging)
+
+### Auto Versioning
+
+If you want to create a new tag and release when merging a PR you may use the following commit messages:
+
+- `[major]` - to increase the major version
+- `[minor]` - to increase the minor version
+- `[skip-release]` - to skip the release all together
+- no message to increase the `patch`
 
 ## Outside Collaborators
 
