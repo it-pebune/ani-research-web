@@ -1,6 +1,3 @@
-import { InstitutionResponse } from "./IntitutionInterfaces";
-import { Job, JobResponse } from "./JobInterfaces";
-
 export interface DocumentsFromScrapperResult {
   [key: string]: any;
   name: string;

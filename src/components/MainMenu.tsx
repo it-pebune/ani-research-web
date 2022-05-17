@@ -1,11 +1,11 @@
+import { Icon } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import "./MainMenu.css";
-import UserContext from "../store/UserContext";
+import { Link } from "react-router-dom";
 import { UserRoles } from "../enums/UsersEnums";
 import { MenuItem } from "../interfaces/MenuItemInterface";
-import { rolesToMenuItems, defaultMenuItems } from "../resources/menuItems";
-import { Link } from "react-router-dom";
-import { Icon } from "@mui/material";
+import { defaultMenuItems, rolesToMenuItems } from "../resources/menuItems";
+import UserContext from "../store/UserContext";
+import "./MainMenu.css";
 
 const MainMenu = () => {
   const userContext = useContext(UserContext);

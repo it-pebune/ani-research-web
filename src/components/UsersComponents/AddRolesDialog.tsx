@@ -1,10 +1,10 @@
 import { Checkbox, FormControlLabel } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import CustomDialog from "../Shared/CustomDialog";
-import CustomDialogSection from "../Shared/CustomDialogSection";
+import { SpecifiedUser } from "../../interfaces/UserInterfaces";
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
-import { SpecifiedUser } from "../../interfaces/UserInterfaces";
+import CustomDialog from "../Shared/CustomDialog";
+import CustomDialogSection from "../Shared/CustomDialogSection";
 
 interface Props {
   open: boolean;

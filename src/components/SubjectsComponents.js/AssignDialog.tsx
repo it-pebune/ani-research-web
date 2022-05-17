@@ -1,24 +1,15 @@
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormGroup,
-  FormControl,
-  FormControlLabel,
   Icon,
   IconButton,
-  Radio,
-  RadioGroup,
-  TextField,
   Table,
   TableBody,
   TableContainer,
   TablePagination,
-  Typography,
-  Autocomplete,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";

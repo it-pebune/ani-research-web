@@ -1,9 +1,8 @@
-import { Box, Dialog } from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import DocumenstFromScrapperDialog from "../../components/ReviewerComponents/DocumenstFromScrapperDialog";
 import DocumentsListDialog from "../../components/ReviewerComponents/DocumentsListDialog";
 import MySubjects from "../../components/ReviewerComponents/MySubjects";
-import ReviewerTabs from "../../components/ReviewerComponents/ReviewerTabs";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
 import { subjectService } from "../../services/subjectService";
 import UserContext from "../../store/UserContext";

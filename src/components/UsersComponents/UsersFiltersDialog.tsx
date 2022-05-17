@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
 import {
   Checkbox,
-  FormControlLabel,
   FormControl,
+  FormControlLabel,
   InputLabel,
-  Select,
   MenuItem,
   Radio,
+  Select,
 } from "@mui/material";
-
-import { Filters } from "../../interfaces/UserInterfaces";
-import CustomDialogSection from "../Shared/CustomDialogSection";
 import { Box } from "@mui/system";
-import CustomDialog from "../Shared/CustomDialog";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Filters } from "../../interfaces/UserInterfaces";
+import CustomDialog from "../Shared/CustomDialog";
+import CustomDialogSection from "../Shared/CustomDialogSection";
 
 interface Props {
   open: boolean;

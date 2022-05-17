@@ -3,12 +3,6 @@ import {
   DocumentFromDataBase,
   DocumentsFromScrapper,
 } from "../interfaces/DocumentInterfaces";
-import { Job } from "../interfaces/JobInterfaces";
-import {
-  SubjectDetailFromScrapper,
-  SubjectFromDataBase,
-  SubjectFromScrapperResult,
-} from "../interfaces/SubjectInterfaces";
 import { API_BASE_URL } from "../resources/apiLinks";
 import { jobService } from "./jobsService";
 

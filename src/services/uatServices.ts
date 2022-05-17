@@ -1,10 +1,5 @@
 import axios from "axios";
-import {
-  UatsResponse,
-  CountiesResponse,
-  County,
-  Uat,
-} from "../interfaces/UatInterfaces";
+import { County, Uat } from "../interfaces/UatInterfaces";
 import { API_BASE_URL } from "../resources/apiLinks";
 
 export const uatsServices = {

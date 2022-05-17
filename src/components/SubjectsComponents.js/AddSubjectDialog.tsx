@@ -1,45 +1,43 @@
 import {
+  Autocomplete,
   Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormGroup,
   FormControl,
   FormControlLabel,
+  FormGroup,
   Icon,
   IconButton,
   Radio,
   RadioGroup,
-  TextField,
   Table,
   TableBody,
   TableContainer,
   TablePagination,
+  TextField,
   Typography,
-  Autocomplete,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import moment from "moment";
 import "moment/locale/ro";
-
+import React, { useEffect, useState } from "react";
 import {
   SubjectData,
   SubjectFromDataBase,
   SubjectFromScrapper,
   SubjectFromScrapperResult,
 } from "../../interfaces/SubjectInterfaces";
+import { County, Uat } from "../../interfaces/UatInterfaces";
 import { scrappedSubjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
 import { scrappedSubjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
-
 import { subjectService } from "../../services/subjectService";
+import { uatsServices } from "../../services/uatServices";
 import useTokenStatus from "../../utils/useTokenStatus";
 import CustomTableHeader from "../Shared/CustomTableHeader";
 import CustomTableRow from "../Shared/CustomTableRow";
 import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
-import { County, Uat } from "../../interfaces/UatInterfaces";
-import { uatsServices } from "../../services/uatServices";
 
 interface Props {
   open: boolean;

@@ -1,5 +1,6 @@
 import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { ApiErrors } from "../../enums/ErrorsEnums";
 import {
   CurrentUser,
   SocialInfo,
@@ -8,7 +9,6 @@ import {
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
 import FormInputText from "../Shared/FormComponents/FormInputText";
-import { ApiErrors } from "../../enums/ErrorsEnums";
 
 interface IFormInput {
   firstName: string;

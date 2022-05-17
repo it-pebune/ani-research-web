@@ -1,7 +1,6 @@
-import { Button, Tabs, Tab } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { Tab, Tabs } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { userRoles } from "../../resources/userRoles";
-
 import "./RoleSelector.css";
 
 interface Props {

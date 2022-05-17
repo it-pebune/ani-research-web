@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Button,
   Dialog,
   DialogActions,
@@ -6,37 +7,31 @@ import {
   DialogTitle,
   Icon,
   IconButton,
-  TableContainer,
   Table,
   TableBody,
+  TableContainer,
   TablePagination,
-  Autocomplete,
   TextField,
 } from "@mui/material";
-import CustomTableHeader from "../Shared/CustomTableHeader";
-import CustomTableRow from "../Shared/CustomTableRow";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { documentService } from "../../services/documentsServices";
-import useTokenStatus from "../../utils/useTokenStatus";
+import { Box } from "@mui/system";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { DocumentsFromScrapperResult } from "../../interfaces/DocumentInterfaces";
+import { Institution } from "../../interfaces/IntitutionInterfaces";
+import { Job } from "../../interfaces/JobInterfaces";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
 import { scrappedDocumentsTableHeaderData } from "../../resources/tableHeaders/documentsTableHeaderData";
-import { scrappedDocumentsTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
-import { DocumentsFromScrapperResult } from "../../interfaces/DocumentInterfaces";
-import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
-import { Box } from "@mui/system";
-import PdfPreviewComponent from "../Shared/PdfPreviewComponent";
-import { jobService } from "../../services/jobsService";
-import { Job, JobResponse } from "../../interfaces/JobInterfaces";
 import { jobsTableHeaderData } from "../../resources/tableHeaders/jobsTableHeaderData";
+import { scrappedDocumentsTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
 import { jobsTableRowDefs } from "../../resources/tableRowDefs/jobsTableRowDefs";
-import moment from "moment";
+import { documentService } from "../../services/documentsServices";
 import { institutionService } from "../../services/institutionsService";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-
-import {
-  Institution,
-  InstitutionResponse,
-} from "../../interfaces/IntitutionInterfaces";
+import { jobService } from "../../services/jobsService";
+import useTokenStatus from "../../utils/useTokenStatus";
+import CustomTableHeader from "../Shared/CustomTableHeader";
+import CustomTableRow from "../Shared/CustomTableRow";
+import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
 
 interface Props {
   subject?: SubjectFromDataBase;

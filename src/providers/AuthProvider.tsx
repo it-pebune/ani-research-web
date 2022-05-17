@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
-import auth from "../services/authService";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { SignUpResponse } from "../interfaces/AuthInterfaces";
-import SignUp from "../pages/SignUp";
-import Terms from "../pages/Terms";
-import Gdpr from "../pages/Gdpr";
-import AuthContext from "../store/AuthContext";
-import UserContext from "../store/UserContext";
+import React, { useContext, useEffect, useState } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Loader from "../components/Shared/Loader";
 import { UserRoles } from "../enums/UsersEnums";
+import { SignUpResponse } from "../interfaces/AuthInterfaces";
+import Gdpr from "../pages/Gdpr";
+import SignUp from "../pages/SignUp";
+import Terms from "../pages/Terms";
+import auth from "../services/authService";
+import AuthContext from "../store/AuthContext";
+import UserContext from "../store/UserContext";
 
 interface Props {
   children?: React.ReactNode;

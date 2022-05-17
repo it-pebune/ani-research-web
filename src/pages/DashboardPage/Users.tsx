@@ -6,21 +6,19 @@ import {
   TablePagination,
 } from "@mui/material";
 import moment from "moment";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import CustomTableHeader from "../../components/Shared/CustomTableHeader";
+import CustomTableRow from "../../components/Shared/CustomTableRow";
+import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
+import AddRolesDialog from "../../components/UsersComponents/AddRolesDialog";
 import UsersFiltersDialog from "../../components/UsersComponents/UsersFiltersDialog";
 import UsersFIltersOverview from "../../components/UsersComponents/UsersFIltersOverview";
-import CustomTableRow from "../../components/Shared/CustomTableRow";
-import CustomTableHeader from "../../components/Shared/CustomTableHeader";
-import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
-import { User, Filters } from "../../interfaces/UserInterfaces";
-
-import userService from "../../services/userService";
-import useTokenStatus from "../../utils/useTokenStatus";
-
+import { Filters, User } from "../../interfaces/UserInterfaces";
 import { usersTableHeaderData } from "../../resources/tableHeaders/usersTableHeaderData";
 import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDefs";
-import AddRolesDialog from "../../components/UsersComponents/AddRolesDialog";
 import { userRoles } from "../../resources/userRoles";
+import userService from "../../services/userService";
+import useTokenStatus from "../../utils/useTokenStatus";
 
 const Users = (props: any) => {
   const columnsGrid = "60px 200px 1fr 200px 150px 70px";
