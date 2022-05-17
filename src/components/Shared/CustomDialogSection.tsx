@@ -4,7 +4,7 @@ import React from "react";
 interface Props {
   title: string;
   columnsGrid: string;
-  children: JSX.Element[] | JSX.Element;
+  children: React.ReactNode;
   sx?: object;
 }
 

@@ -6,7 +6,7 @@ interface Props {
   title: string;
   actionText: string;
   icon: string;
-  children: JSX.Element[] | JSX.Element;
+  children: React.ReactNode;
   open: boolean;
   onClose: any;
   onAction: any;

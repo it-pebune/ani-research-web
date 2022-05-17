@@ -10,7 +10,11 @@ import UserContext from "../store/UserContext";
 import Loader from "../components/Shared/Loader";
 import { UserRoles } from "../enums/UsersEnums";
 
-const AuthProvider: React.FC = ({ children }) => {
+interface Props {
+  children?: React.ReactNode;
+}
+
+const AuthProvider: React.FC<Props> = ({ children }) => {
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   const userContext = useContext(UserContext);
