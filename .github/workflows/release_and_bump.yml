@@ -16,8 +16,8 @@ jobs:
 
       - name: git config
         run: |
-          git config user.name "${ secrets.IT_PEBUNE_BOT_ACCOUNT }"
-          git config user.email "${ IT_PEBUNE_BOT_ACCOUNT }@users.noreply.github.com"
+          git config user.name "${{ secrets.IT_PEBUNE_BOT_ACCOUNT }}"
+          git config user.email "${{ secrets.IT_PEBUNE_BOT_ACCOUNT }}@users.noreply.github.com"
 
       - name: get major version
         if: "contains(github.event.head_commit.message, '[major]')"
