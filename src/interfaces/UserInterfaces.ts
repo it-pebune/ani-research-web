@@ -33,19 +33,14 @@ export interface CurrentUser {
 export interface SpecifiedUser {
   id: number;
   email: string;
-
   firstName: string;
   lastName: string;
   displayName: string;
-
   profileImageUrl: string;
   socialInfo: SocialInfo;
   phone: string;
-
   roles: number[];
-
   settings: object;
-
   notes: string[];
 }
 

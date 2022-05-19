@@ -3,10 +3,17 @@ import { useParams } from "react-router";
 import { SpecifiedUser } from "../../interfaces/UserInterfaces";
 import useTokenStatus from "../../utils/useTokenStatus";
 import userService from "../../services/userService";
-import { Box } from "@mui/material";
+import { Box, Button, Grid, ListItem, Stack, Typography } from "@mui/material";
 import UserProfileHeader from "../../components/UserProfile/UserProfileHeader";
 import Loader from "../../components/Shared/Loader";
 import UserProfileHeaderContent from "../../components/UserProfile/UserProfileHeaderContent";
+import FormInputText from "../../components/Shared/FormComponents/FormInputText";
+import { useForm } from "react-hook-form";
+import { ApiErrors } from "../../enums/ErrorsEnums";
+
+interface IFormInput {
+  note: string;
+}
 
 const UserProfilePage: React.FC = () => {
   const tokenStatus = useTokenStatus(),
@@ -21,6 +28,23 @@ const UserProfilePage: React.FC = () => {
     loadUser();
   }, [id]);
 
+  const { control, handleSubmit, setError } = useForm<IFormInput>({
+      defaultValues: { note: "" },
+    }),
+    onSubmit = async (formInput: IFormInput) => {
+      try {
+        setUser(await userService.addUserNote(tokenStatus, id, formInput.note));
+      } catch (error: any) {
+        if (ApiErrors.VALIDATION !== error?.response?.data?.code) {
+          return;
+        }
+
+        for (const validationError of error.response.data.details) {
+          setError(validationError.context.key, validationError);
+        }
+      }
+    };
+
   return (
     <Box sx={{ padding: "100px 90px" }}>
       <UserProfileHeader elevation={0}>
@@ -34,7 +58,37 @@ const UserProfilePage: React.FC = () => {
             socialInfo={user.socialInfo}
             phone={user.phone}
             roles={user.roles}
-          />
+          >
+            <Grid container>
+              <Stack>
+                {user.notes &&
+                  user.notes.map((note: string) => (
+                    <ListItem>
+                      <Typography>{note}</Typography>
+                    </ListItem>
+                  ))}
+              </Stack>
+            </Grid>
+
+            <Grid container>
+              <FormInputText
+                name="note"
+                control={control}
+                label="Note"
+                multiline
+                required
+              />
+
+              <Button
+                variant="contained"
+                size="large"
+                fullWidth
+                onClick={handleSubmit(onSubmit)}
+              >
+                <Typography>Add note</Typography>
+              </Button>
+            </Grid>
+          </UserProfileHeaderContent>
         )}
       </UserProfileHeader>
     </Box>
