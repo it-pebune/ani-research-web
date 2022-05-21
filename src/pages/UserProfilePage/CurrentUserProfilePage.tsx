@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import CurrentUserProfileHeader from "../../components/CurrentUserProfile/CurrentUserProfileHeader";
-import CurrentUserProfileHeaderContent from "../../components/CurrentUserProfile/CurrentUserProfileHeaderContent";
-import CurrentUserProfileHeaderEditContent from "../../components/CurrentUserProfile/CurrentUserProfileHeaderEditContent";
-import UserProfileNotFound from "../../components/CurrentUserProfile/UserProfileNotFound";
+import UserProfileHeader from "../../components/UserProfile/UserProfileHeader";
+import UserProfileHeaderContent from "../../components/UserProfile/UserProfileHeaderContent";
+import CurrentUserProfileHeaderEditContent from "../../components/UserProfile/CurrentUserProfileHeaderEditContent";
+import UserProfileNotFound from "../../components/UserProfile/UserProfileNotFound";
 import Loader from "../../components/Shared/Loader";
 import { CurrentUser } from "../../interfaces/UserInterfaces";
 import userService from "../../services/userService";
