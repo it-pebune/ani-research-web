@@ -8,6 +8,8 @@ const FormInputText = ({
   label,
   multiline,
   required,
+  rows,
+  sx,
 }: FormInputProps) => {
   return (
     <Controller
@@ -21,8 +23,10 @@ const FormInputText = ({
           value={value}
           label={label}
           variant="outlined"
-          multiline={multiline}
-          required={required}
+          multiline={multiline ?? false}
+          required={required ?? false}
+          rows={rows ?? 1}
+          sx={sx ?? {}}
         />
       )}
     />

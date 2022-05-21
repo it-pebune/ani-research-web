@@ -1,8 +1,11 @@
+import { SxProps, Theme } from "@mui/material";
+
 export interface FormInputProps {
   name: string;
   control: any;
   label: string;
-  setValue?: any;
   multiline?: boolean;
   required?: boolean;
+  rows?: number;
+  sx?: SxProps<Theme>;
 }
