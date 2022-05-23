@@ -70,7 +70,27 @@ const DocumentsListDialog: React.FC<Props> = ({
     setPage(newPage);
   };
 
-  const handleSearch = () => {};
+  const handleSearch = (string: string) => {
+    setFilteredDocuments((prevState) =>
+      prevState.filter((document) => {
+        let check = false;
+        string.split(" ").forEach((subString) => {
+          if (document.type === 1) {
+            if (!check) {
+              check = "declaratie avere".includes(
+                subString.toLocaleLowerCase()
+              );
+            }
+          } else {
+            if (!check) {
+              check = "declaratie interese".includes(subString.toLowerCase());
+            }
+          }
+        });
+        return check;
+      })
+    );
+  };
 
   const handleJobsSearch = () => {};
 
@@ -79,7 +99,6 @@ const DocumentsListDialog: React.FC<Props> = ({
   const handleJobsFiltersOpen = () => {};
 
   const handleDocumentAction = (action: string, data: any) => {
-    console.log(action, data);
     if (action === "review-document") {
       navigate(`/review-pdf/${data[0].id}`);
     } else if (action === "delete-document") {
@@ -101,8 +120,6 @@ const DocumentsListDialog: React.FC<Props> = ({
   };
 
   const handlePdfSubmit = async (action: string, data: any) => {
-    console.log(data);
-    console.log(docDate);
     const response = await documentService.addNewDocument({
       token: tokenStatus.token as string,
       active: tokenStatus.active,
@@ -114,14 +131,11 @@ const DocumentsListDialog: React.FC<Props> = ({
       downloadUrl: dataUrl,
       date: docDate,
     });
-
-    console.log(response);
   };
 
   const handleInstitution = async (e: object, value: string | null) => {};
 
   useEffect(() => {
-    console.log(open);
     if (tokenStatus.active && subject && open) {
       const documentsResponse = async () => {
         const response = await documentService.getDocumentsFromDataBase({
@@ -129,7 +143,6 @@ const DocumentsListDialog: React.FC<Props> = ({
           active: tokenStatus.active,
           subjectId: subject?.id,
         });
-        console.log(response);
         setDocuments(response);
         setFilteredDocuments(response);
       };

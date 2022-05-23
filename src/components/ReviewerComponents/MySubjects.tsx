@@ -108,7 +108,6 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
   }, [selectedSubject]);
 
   useEffect(() => {
-    console.log(subjects);
     if (subjects.length > 0) {
       setFilteredResult(subjects);
     }
