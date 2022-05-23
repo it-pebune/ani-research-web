@@ -18,6 +18,12 @@ export interface SocialInfo {
   linkedIn: string;
 }
 
+export interface Note {
+  content: string;
+  author: string;
+  createdAt: Date;
+}
+
 export interface CurrentUser {
   id: number;
   firstName: string;
@@ -41,7 +47,7 @@ export interface SpecifiedUser {
   phone: string;
   roles: number[];
   settings: object;
-  notes: string[];
+  notes?: Note[];
 }
 
 export interface SpecifiedUserToUpdate {

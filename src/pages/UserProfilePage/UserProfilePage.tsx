@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { SpecifiedUser } from "../../interfaces/UserInterfaces";
+import { Note, SpecifiedUser } from "../../interfaces/UserInterfaces";
 import useTokenStatus from "../../utils/useTokenStatus";
 import userService from "../../services/userService";
-import { Box, Button, Grid, List, ListItem, Typography } from "@mui/material";
+import { Box, Button, Card, Grid, List, Typography } from "@mui/material";
 import UserProfileHeader from "../../components/UserProfile/UserProfileHeader";
 import Loader from "../../components/Shared/Loader";
 import UserProfileHeaderContent from "../../components/UserProfile/UserProfileHeaderContent";
@@ -69,17 +69,10 @@ const UserProfilePage: React.FC = () => {
               sx={{ marginTop: "48px", padding: "24px" }}
             >
               <Grid item md={6}>
-                {user.notes?.length > 0 ? (
+                {user.notes && user.notes.length > 0 ? (
                   <List>
-                    {user.notes.map((note: string) => (
-                      <ListItem>
-                        <Typography
-                          variant="h5"
-                          sx={{ color: "#818386", fontStyle: "italic" }}
-                        >
-                          {note}
-                        </Typography>
-                      </ListItem>
+                    {user.notes.map((note: Note) => (
+                      <Card variant="outlined">{note.content}</Card>
                     ))}
                   </List>
                 ) : (
