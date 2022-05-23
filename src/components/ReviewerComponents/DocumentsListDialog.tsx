@@ -71,8 +71,8 @@ const DocumentsListDialog: React.FC<Props> = ({
   };
 
   const handleSearch = (string: string) => {
-    setFilteredDocuments((prevState) =>
-      prevState.filter((document) => {
+    setFilteredDocuments(() =>
+      documents.filter((document) => {
         let check = false;
         string.split(" ").forEach((subString) => {
           if (document.type === 1) {
