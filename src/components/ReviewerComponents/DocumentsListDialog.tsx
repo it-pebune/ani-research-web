@@ -101,8 +101,6 @@ const DocumentsListDialog: React.FC<Props> = ({
   };
 
   const handlePdfSubmit = async (action: string, data: any) => {
-    console.log(data);
-    console.log(docDate);
     const response = await documentService.addNewDocument({
       token: tokenStatus.token as string,
       active: tokenStatus.active,

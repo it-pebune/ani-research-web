@@ -44,9 +44,15 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
   };
 
   const handleSearch = (string: string) => {
-    setFilteredSubjects(
-      subjects.filter((subject) =>
-        subject.name.toLowerCase().includes(string.toLowerCase())
+    setFilteredResult(
+      subjects.filter(
+        (subject) =>
+          `${subject.firstName.toLowerCase()}${subject.lastName.toLowerCase()}`.includes(
+            string.split(" ").join("").toLowerCase()
+          ) ||
+          `${subject.lastName.toLowerCase()}${subject.firstName.toLowerCase()}`.includes(
+            string.split(" ").join("").toLowerCase()
+          )
       )
     );
     setPage(0);
@@ -108,7 +114,6 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
   }, [selectedSubject]);
 
   useEffect(() => {
-    console.log(subjects);
     if (subjects.length > 0) {
       setFilteredResult(subjects);
     }
