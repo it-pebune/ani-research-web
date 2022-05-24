@@ -36,8 +36,10 @@ Frontend application that is serving [ANI-Research-Backend](https://github.com/i
 
 ## Built With
 
-- [React 17.x](https://17.reactjs.org/)
+- [React 18.x](https://17.reactjs.org/)
 - [Mui 5.x](https://mui.com/material-ui/getting-started/installation/)
+- [Storybook 6.5.x](https://storybook.js.org/docs/6.5/react/get-started/introduction)
+- [Chromatic](https://www.chromatic.com)
 
 ## Getting Started
 
@@ -80,6 +82,9 @@ yarn start
 - `yarn lint` - Check files with ESLint
 - `yarn lint:fix` - Format files with ESLint
 - `yarn prepare` - Autorun to install husky (pre-commit linting)
+- `yarn release` - Run _release-it_, should only be run by CI
+- `yarn storybook` - Run storybook server locally
+- `yarn build-storybook` - Build static storybook
 
 ## Production Environment
 
