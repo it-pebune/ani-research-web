@@ -50,6 +50,7 @@
     "@storybook/theming": "^6.5.5",
     "@types/react-pdf": "^5.0.9",
     "babel-plugin-named-exports-order": "^0.0.2",
+    "chromatic": "^6.5.4",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
     "husky": "^7.0.4",
