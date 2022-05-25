@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { Note, SpecifiedUser } from "../../interfaces/UserInterfaces";
 import useTokenStatus from "../../utils/useTokenStatus";
 import userService from "../../services/userService";
-import { Box, Button, Card, Grid, List, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, Stack, Typography } from "@mui/material";
 import UserProfileHeader from "../../components/UserProfile/UserProfileHeader";
 import Loader from "../../components/Shared/Loader";
 import UserProfileHeaderContent from "../../components/UserProfile/UserProfileHeaderContent";
@@ -20,6 +20,7 @@ const UserProfilePage: React.FC = () => {
   const tokenStatus = useTokenStatus(),
     id: number = useParams().id as unknown as number,
     [user, setUser] = useState<SpecifiedUser>(),
+    [notes, setNotes] = useState<Note[]>([]),
     navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +30,28 @@ const UserProfilePage: React.FC = () => {
 
     loadUser();
   }, [id]);
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    } else if (!user.notes || 0 === user.notes.length) {
+      setNotes([]);
+
+      return;
+    }
+
+    const sortedNotes = user.notes.slice();
+
+    sortedNotes.sort((note1: Note, note2: Note): number => {
+      if (note1.createdAt === note2.createdAt) {
+        return 0;
+      }
+
+      return note1.createdAt < note2.createdAt ? 1 : -1;
+    });
+
+    setNotes(sortedNotes);
+  }, [user]);
 
   const { control, handleSubmit, setError } = useForm<IFormInput>({
       defaultValues: { note: "" },
@@ -65,31 +88,46 @@ const UserProfilePage: React.FC = () => {
           >
             <Grid
               container
-              justifyContent="center"
-              sx={{ marginTop: "48px", padding: "24px" }}
+              justifyContent="space-between"
+              sx={{ marginTop: 12 }}
             >
-              <Grid item md={6}>
-                {user.notes && user.notes.length > 0 ? (
-                  <List>
-                    {user.notes.map((note: Note) => (
-                      <Card variant="outlined">{note.content}</Card>
-                    ))}
-                  </List>
-                ) : (
-                  <Typography variant="h5">
-                    No notes were added for this user.
-                  </Typography>
-                )}
+              <Grid container md={6} sx={{ paddingLeft: 12, paddingRight: 12 }}>
+                <Stack
+                  sx={{
+                    width: "100%",
+                    height: "fit-content",
+                    maxHeight: 200,
+                    padding: 2,
+                    overflow: "auto",
+                    backgroundColor: "#F6F6F6",
+                    borderRadius: 1,
+                  }}
+                >
+                  {notes.length > 0 ? (
+                    notes.map((note: Note) => (
+                      <Paper sx={{ margin: 1, padding: 1 }}>
+                        <Typography color="#000000">
+                          <Typography fontWeight="bold">{`${note.author} [${note.createdAt}]:`}</Typography>
+                          {note.content}
+                        </Typography>
+                      </Paper>
+                    ))
+                  ) : (
+                    <Typography variant="h5" textAlign={"center"}>
+                      No notes were added for this user.
+                    </Typography>
+                  )}
+                </Stack>
               </Grid>
 
               <Grid
                 container
                 direction="column"
                 justifyContent="space-between"
-                spacing={16}
                 md={6}
+                sx={{ paddingLeft: 12, paddingRight: 12 }}
               >
-                <Grid item>
+                <Grid item sx={{ marginBottom: 12 }}>
                   <FormInputText
                     name="note"
                     control={control}
