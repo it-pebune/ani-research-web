@@ -53,7 +53,8 @@ const UserProfilePage: React.FC = () => {
     setNotes(sortedNotes);
   }, [user]);
 
-  const { control, handleSubmit, setError } = useForm<IFormInput>({
+  const formatDate = (date: string) => new Date(date).toLocaleString(),
+    { control, handleSubmit, setError } = useForm<IFormInput>({
       defaultValues: { note: "" },
     }),
     onSubmit = async (formInput: IFormInput) => {
@@ -91,7 +92,12 @@ const UserProfilePage: React.FC = () => {
               justifyContent="space-between"
               sx={{ marginTop: 12 }}
             >
-              <Grid container md={6} sx={{ paddingLeft: 12, paddingRight: 12 }}>
+              <Grid
+                item
+                container
+                md={6}
+                sx={{ paddingLeft: 12, paddingRight: 12 }}
+              >
                 <Stack
                   sx={{
                     width: "100%",
@@ -104,10 +110,12 @@ const UserProfilePage: React.FC = () => {
                   }}
                 >
                   {notes.length > 0 ? (
-                    notes.map((note: Note) => (
-                      <Paper sx={{ margin: 1, padding: 1 }}>
+                    notes.map((note: Note, index: number) => (
+                      <Paper key={index} sx={{ margin: 1, padding: 1 }}>
                         <Typography color="#000000">
-                          <Typography fontWeight="bold">{`${note.author} [${note.createdAt}]:`}</Typography>
+                          <Typography component="span" fontWeight="bold">
+                            {`${note.author} [${formatDate(note.createdAt)}]: `}
+                          </Typography>
                           {note.content}
                         </Typography>
                       </Paper>
@@ -121,6 +129,7 @@ const UserProfilePage: React.FC = () => {
               </Grid>
 
               <Grid
+                item
                 container
                 direction="column"
                 justifyContent="space-between"

@@ -21,7 +21,7 @@ export interface SocialInfo {
 export interface Note {
   content: string;
   author: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface CurrentUser {
