@@ -13,6 +13,7 @@ import {
 import { makeStyles, styled } from "@mui/styles";
 import { SocialInfo } from "../../interfaces/UserInterfaces";
 import { userRoleConvertor } from "../../utils/userRoles";
+import { MouseEventHandler, ReactNode } from "react";
 
 const CustomTypographyPrimary = styled(Typography)({
     fontSize: "25px",
@@ -38,8 +39,8 @@ interface UserProfileDisplayProps {
   socialInfo: SocialInfo | string;
   phone: string;
   roles: number[];
-  switchToEditModeHandler?: any;
-  children?: JSX.Element | JSX.Element[];
+  switchToEditModeHandler?: MouseEventHandler<HTMLButtonElement>;
+  children?: ReactNode;
 }
 
 const UserProfileHeaderContent = (props: UserProfileDisplayProps) => {
