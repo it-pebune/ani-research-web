@@ -44,11 +44,11 @@ interface UserProfileDisplayProps {
 }
 
 const UserProfileHeaderContent = (props: UserProfileDisplayProps) => {
-  const socialInfo: SocialInfo = !props.socialInfo
-      ? { facebook: "", linkedIn: "" }
-      : typeof props.socialInfo === "string"
-      ? JSON.parse(props.socialInfo as string)
-      : props.socialInfo,
+  const parsedSocialInfo: SocialInfo =
+      typeof props.socialInfo === "string"
+        ? JSON.parse(props.socialInfo)
+        : props.socialInfo,
+    socialInfo: SocialInfo = parsedSocialInfo ?? { facebook: "", linkedIn: "" },
     classes = useStyles();
 
   return (
