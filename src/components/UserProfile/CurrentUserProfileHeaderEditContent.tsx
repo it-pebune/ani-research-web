@@ -81,8 +81,6 @@ const CurrentUserProfileHeaderEditContent = (
   };
 
   const onSubmitError = (error: any): void => {
-    console.log(error);
-
     if (ApiErrors.VALIDATION !== error?.response?.data?.code) {
       return;
     }

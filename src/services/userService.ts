@@ -234,33 +234,22 @@ const userService = {
     return response;
   },
 
-  updateUserNotes: async (
-    tokenStatus: {
-      token: string;
-      active: boolean;
-    },
+  addUserNote: async (
+    tokenStatus: { token: string; active: boolean },
     id: number,
-    notes: string
-  ): Promise<User> => {
-    let response: any;
-    if (tokenStatus.active) {
-      const config = {
-        headers: { Authorization: `Bearer ${tokenStatus.token}` },
-      };
-      try {
-        response = await axios.put(
-          `${API_BASE_URL}/users/${id}/notes`,
-          { notes },
-          config
-        );
-        const resData = await response.data;
-        return resData;
-      } catch (error) {
-        response = error;
-        console.log(error);
-      }
+    note: string
+  ): Promise<SpecifiedUser> => {
+    if (!tokenStatus.active) {
+      throw new Error("Active token required for updating user.");
     }
-    return response;
+
+    const config = {
+      headers: { Authorization: `Bearer ${tokenStatus.token}` },
+    };
+
+    return (
+      await axios.post(`${API_BASE_URL}/users/${id}/note`, { note }, config)
+    ).data;
   },
 };
 

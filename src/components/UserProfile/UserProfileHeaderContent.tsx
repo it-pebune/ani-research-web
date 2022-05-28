@@ -11,45 +11,45 @@ import {
   Typography,
 } from "@mui/material";
 import { makeStyles, styled } from "@mui/styles";
-import { Theme } from "@mui/system";
 import { SocialInfo } from "../../interfaces/UserInterfaces";
 import { userRoleConvertor } from "../../utils/userRoles";
+import { MouseEventHandler, ReactNode } from "react";
 
 const CustomTypographyPrimary = styled(Typography)({
-  fontSize: "25px",
-  fontWeight: "500",
-});
-
-const CustomTypographySecondary = styled(Typography)({
-  color: "#818386",
-  fontSize: "25px",
-  fontWeight: "500",
-});
-
-const useStyles = makeStyles((theme: Theme) => ({
-  socialMediaIcon: {
-    "&:hover": {
-      color: "blue",
+    fontSize: "25px",
+    fontWeight: "500",
+  }),
+  CustomTypographySecondary = styled(Typography)({
+    color: "#818386",
+    fontSize: "25px",
+    fontWeight: "500",
+  }),
+  useStyles = makeStyles(() => ({
+    socialMediaIcon: {
+      "&:hover": {
+        color: "blue",
+      },
     },
-  },
-}));
+  }));
 
 interface UserProfileDisplayProps {
   email: string;
   displayName: string;
   profileImageUrl: string;
-  socialInfo: string;
+  socialInfo: SocialInfo | string;
   phone: string;
   roles: number[];
-  switchToEditModeHandler: any;
+  switchToEditModeHandler?: MouseEventHandler<HTMLButtonElement>;
+  children?: ReactNode;
 }
 
-const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
-  const classes = useStyles();
-
-  const socialInfo: SocialInfo = props.socialInfo
-    ? JSON.parse(props.socialInfo)
-    : { facebook: "", linkedIn: "" };
+const UserProfileHeaderContent = (props: UserProfileDisplayProps) => {
+  const parsedSocialInfo: SocialInfo =
+      typeof props.socialInfo === "string"
+        ? JSON.parse(props.socialInfo)
+        : props.socialInfo,
+    socialInfo: SocialInfo = parsedSocialInfo ?? { facebook: "", linkedIn: "" },
+    classes = useStyles();
 
   return (
     <Grid container direction={"row"} sx={{ padding: "30px 0px" }}>
@@ -64,7 +64,6 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
               boxShadow: "0 8px 24px rgba(0, 0, 0, 0.05)",
               height: "200px",
               width: "200px",
-
               display: "relative",
               bottom: "60px",
             }}
@@ -72,11 +71,13 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
           />
         </Box>
       </Grid>
+
       {/* name & social media area */}
       <Grid item xs={12} md={6} lg={4} container direction={"column"}>
         <CustomTypographyPrimary sx={{ fontSize: "40px !important" }}>
           {props.displayName}
         </CustomTypographyPrimary>
+
         <Stack>
           {props.roles &&
             props.roles.map((roleId) => (
@@ -87,6 +88,7 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
               </ListItem>
             ))}
         </Stack>
+
         <Grid item container direction={"row"} sx={{ marginTop: "10px" }}>
           {socialInfo?.facebook && (
             <Link href={socialInfo.facebook} target="_blank">
@@ -96,6 +98,7 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
               />
             </Link>
           )}
+
           {socialInfo?.linkedIn && (
             <Link href={socialInfo.linkedIn} target="_blank">
               <LinkedInIcon
@@ -106,6 +109,7 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
           )}
         </Grid>
       </Grid>
+
       {/* email & phone area */}
       <Grid
         item
@@ -120,33 +124,39 @@ const CurrentUserProfileHeaderContent = (props: UserProfileDisplayProps) => {
         <CustomTypographyPrimary>
           {props.email || "Not found"}
         </CustomTypographyPrimary>
+
         <CustomTypographySecondary>Phone</CustomTypographySecondary>
         <CustomTypographyPrimary>
           {props.phone || "Not found"}
         </CustomTypographyPrimary>
-        <Button onClick={props.switchToEditModeHandler}></Button>
       </Grid>
-      <Grid
-        item
-        xs={12}
-        md={6}
-        lg={3}
-        container
-        direction={"column"}
-        justifyContent={"center"}
-        sx={{ paddingLeft: "150px", paddingRight: "60px" }}
-      >
-        <Button
-          variant="contained"
-          size="large"
-          fullWidth
-          onClick={props.switchToEditModeHandler}
+
+      {/* edit button area */}
+      {props.switchToEditModeHandler && (
+        <Grid
+          item
+          xs={12}
+          md={6}
+          lg={3}
+          container
+          direction={"column"}
+          justifyContent={"center"}
+          sx={{ paddingLeft: "150px", paddingRight: "60px" }}
         >
-          <Typography>Edit profile</Typography>
-        </Button>
-      </Grid>
+          <Button
+            variant="contained"
+            size="large"
+            fullWidth
+            onClick={props.switchToEditModeHandler}
+          >
+            <Typography>Edit profile</Typography>
+          </Button>
+        </Grid>
+      )}
+
+      {props.children}
     </Grid>
   );
 };
 
-export default CurrentUserProfileHeaderContent;
+export default UserProfileHeaderContent;

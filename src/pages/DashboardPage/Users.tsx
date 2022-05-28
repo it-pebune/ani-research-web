@@ -19,8 +19,9 @@ import { usersTableRowDefs } from "../../resources/tableRowDefs/usersTableRowDef
 import { userRoles } from "../../resources/userRoles";
 import userService from "../../services/userService";
 import useTokenStatus from "../../utils/useTokenStatus";
+import { useNavigate } from "react-router-dom";
 
-const Users = (props: any) => {
+const Users = () => {
   const columnsGrid = "60px 200px 1fr 200px 150px 70px";
   const [users, setUsers] = useState<User[]>([]);
   const [filteredResult, setFilteredResult] = useState<User[]>([]);
@@ -36,6 +37,7 @@ const Users = (props: any) => {
   const [selectedId, setSelectedId] = useState<number | string>();
   const [rolesDialogOpened, setRolesDialogOpened] = useState(false);
   const tokenStatus = useTokenStatus();
+  const navigate = useNavigate();
 
   const handleFiltersOpen = () => {
     setDialogOpened(true);
@@ -66,19 +68,30 @@ const Users = (props: any) => {
   };
 
   const handleUserAction = async (action: string, id: string | number) => {
-    if (action === "modify-roles") {
-      setRolesDialogOpened(true);
-      setSelectedId(id);
-    }
-    if (action === "delete") {
-      const user = filteredUsers.find((user) => user.id === id);
-      setFilteredUsers((prevState) =>
-        prevState.filter((user) => user.id !== id)
-      );
+    switch (action) {
+      case "modify-roles":
+        setRolesDialogOpened(true);
+        setSelectedId(id);
 
-      if (tokenStatus.active) {
-        await userService.deleteSpecifiedUser(tokenStatus, user);
-      }
+        break;
+
+      case "delete":
+        const user = filteredUsers.find((user) => user.id === id);
+
+        setFilteredUsers((prevState) =>
+          prevState.filter((user) => user.id !== id)
+        );
+
+        if (tokenStatus.active) {
+          await userService.deleteSpecifiedUser(tokenStatus, user);
+        }
+
+        break;
+
+      case "view":
+        navigate(`/users/${id}`);
+
+        break;
     }
   };
 
@@ -156,7 +169,7 @@ const Users = (props: any) => {
       myFilters.roleFilters.length === 0 &&
       myFilters.lastDateFilter.period === ""
     ) {
-      setFilteredResult((prevUsers) => [...filteredUsers]);
+      setFilteredResult(() => [...filteredUsers]);
     } else {
       let filteredResult = filteredUsers;
       if (myFilters.statusFilters.length === 1) {
