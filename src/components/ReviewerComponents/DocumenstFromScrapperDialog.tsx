@@ -107,7 +107,6 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
   };
 
   const handleScrappedDocumentAction = (action: string, data: any) => {
-    console.log(action, data[3].date);
     if (action === "download-document") {
       setFileName(data[0].filename);
       setUid(data[1].uid);
@@ -176,7 +175,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
     handleSetAsExistent(fileName);
     setJobsListOpened(false);
     if (response) {
-      console.log(response);
+      // console.log(response);
     }
   };
 

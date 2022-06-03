@@ -7,8 +7,10 @@ import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
 import { subjectService } from "../../services/subjectService";
 import UserContext from "../../store/UserContext";
 import useTokenStatus from "../../utils/useTokenStatus";
+import { useNavigate } from "react-router";
 
 const AssignedSubjects = () => {
+  const navigate = useNavigate();
   const [subjects, setSubjects] = useState<SubjectFromDataBase[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<SubjectFromDataBase>();
   const [documentsFromScrapperOpen, setDocumentsFromScrapperOpen] =
@@ -29,7 +31,7 @@ const AssignedSubjects = () => {
     if (action === "to-documents") {
       setDocumentsListOpen(true);
     } else if (action === "to-download") {
-      setDocumentsFromScrapperOpen(true);
+      navigate(`/scrapped-docs/${subject.id}`);
     }
   };
 

@@ -177,4 +177,29 @@ export const subjectService = {
     }
     return response;
   },
+  getSpecificSubject: async (reqData: {
+    token: string;
+    active: boolean;
+    id: number | undefined;
+  }): Promise<any> => {
+    let response: any;
+    if (reqData.active) {
+      const config = {
+        headers: { Authorization: `Bearer ${reqData.token}` },
+      };
+
+      try {
+        response = await axios.get(
+          `${API_BASE_URL}/subjects/${reqData.id}`,
+          config
+        );
+        const data = await response.data;
+        return data;
+      } catch (error) {
+        response = error;
+        console.log(error);
+      }
+    }
+    return response;
+  },
 };
