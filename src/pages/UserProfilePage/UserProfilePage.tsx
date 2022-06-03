@@ -10,7 +10,6 @@ import UserProfileHeaderContent from "../../components/UserProfile/UserProfileHe
 import FormInputText from "../../components/Shared/FormComponents/FormInputText";
 import { useForm } from "react-hook-form";
 import { ApiErrors } from "../../enums/ErrorsEnums";
-import { useNavigate } from "react-router-dom";
 
 interface IFormInput {
   note: string;
@@ -20,8 +19,7 @@ const UserProfilePage: React.FC = () => {
   const tokenStatus = useTokenStatus(),
     id: number = useParams().id as unknown as number,
     [user, setUser] = useState<SpecifiedUser>(),
-    [notes, setNotes] = useState<Note[]>([]),
-    navigate = useNavigate();
+    [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -54,14 +52,14 @@ const UserProfilePage: React.FC = () => {
   }, [user]);
 
   const formatDate = (date: string) => new Date(date).toLocaleString(),
-    { control, handleSubmit, setError } = useForm<IFormInput>({
+    { control, handleSubmit, reset, setError } = useForm<IFormInput>({
       defaultValues: { note: "" },
     }),
     onSubmit = async (formInput: IFormInput) => {
       try {
         setUser(await userService.addUserNote(tokenStatus, id, formInput.note));
 
-        navigate("/users");
+        reset();
       } catch (error: any) {
         if (ApiErrors.VALIDATION !== error?.response?.data?.code) {
           return;
