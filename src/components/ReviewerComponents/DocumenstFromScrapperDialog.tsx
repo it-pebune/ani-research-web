@@ -68,7 +68,7 @@ const DocumenstFromScrapperDialog: React.FC<Props> = ({
   >();
   const [dateStart, setDateStart] = useState<object | null>();
   const [dateEnd, setDateEnd] = useState<object | null>();
-  const [sirutaId, setSirutaId] = useState<number>();
+  const [sirutaId, setSirutaId] = useState<number | null>();
 
   const [functionName, setFunctionName] = useState<string>("");
   const [docType, setDocType] = useState<number>();

@@ -73,7 +73,7 @@ const AssignedSubjects = () => {
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <MySubjects
         onSubjectSelected={handleSelectedSubject}
         subjects={subjects}

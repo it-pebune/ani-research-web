@@ -54,15 +54,15 @@ export const institutionService = {
     token: string;
     active: boolean;
     name: string;
-    type: number;
-    sirutaId: number;
-    uat: string;
-    dateStart: Date;
-    dateEnd: string;
-    address: string;
-    cui: string;
-    regCom: string;
-    info: string;
+    type: number | null;
+    requireDecls: number;
+    sirutaId: number | null;
+    dateStart: Date | undefined;
+    dateEnd: Date | undefined;
+    address?: string;
+    cui?: string;
+    regCom?: string;
+    info?: string;
   }): Promise<any> => {
     let response: any;
     if (reqData.active) {
@@ -73,9 +73,9 @@ export const institutionService = {
         name,
         type,
         sirutaId,
-        uat,
         dateStart,
         dateEnd,
+        requireDecls,
         address,
         cui,
         regCom,
@@ -86,7 +86,7 @@ export const institutionService = {
           name,
           type,
           sirutaId,
-          uat,
+          requireDecls,
           dateStart,
           dateEnd,
           address,
