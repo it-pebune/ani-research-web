@@ -6,16 +6,16 @@ import Paper from "@mui/material/Paper";
 import React from "react";
 
 interface Props {
-  onFiltersOpen: any;
-  onSearchChanged: any;
+  onFiltersOpen: React.MouseEventHandler<HTMLButtonElement>;
+  onSearchChanged: (string: string) => void;
 }
 
 const SearchBarWithFiltersController: React.FC<Props> = ({
   onSearchChanged,
   onFiltersOpen,
 }) => {
-  const handleSearch = (e: any) => {
-    onSearchChanged(e.target.value);
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    onSearchChanged((e.target as HTMLInputElement).value);
   };
 
   return (
