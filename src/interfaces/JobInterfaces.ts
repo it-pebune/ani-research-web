@@ -1,4 +1,5 @@
 export interface Job {
+  id: number;
   [key: string]: any;
   subjectId: string;
   institutionId: string;

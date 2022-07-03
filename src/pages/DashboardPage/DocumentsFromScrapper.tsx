@@ -4,7 +4,8 @@ import {
   Button,
   Icon,
   IconButton,
-  Paper,
+  Radio,
+  RadioGroup,
   Table,
   TableBody,
   TableCell,
@@ -15,16 +16,14 @@ import {
   Typography,
 } from "@mui/material";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
-import CustomTableRow from "../../components/Shared/CustomTableRow";
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
 import { DocumentsFromScrapperResult } from "../../interfaces/DocumentInterfaces";
 import { Institution } from "../../interfaces/IntitutionInterfaces";
 import { Job } from "../../interfaces/JobInterfaces";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
 import { scrappedDocumentsTableHeaderData } from "../../resources/tableHeaders/documentsTableHeaderData";
-import { scrappedDocumentsTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
 import { documentService } from "../../services/documentsServices";
 import { institutionService } from "../../services/institutionsService";
 import { jobService } from "../../services/jobsService";
@@ -68,6 +67,8 @@ export const DocumentsFromScrapper = () => {
   const [filteredDocuments, setFilteredDocuments] = useState<
     DocumentsFromScrapperResult[]
   >([]);
+  const [selectedJob, setSelectedJob] = useState<Job>();
+
   const handleScrappedSort = () => {};
   const handleChangeRowsPerPage = (e: any) => {
     setRowsPerPage(e.target.value);
@@ -151,6 +152,13 @@ export const DocumentsFromScrapper = () => {
 
     setSubjectJobs(jobsResponse);
     setAddJobOpened(false);
+  };
+
+  const handleChangeJob = (event: ChangeEvent, value: string) => {
+    const jobId = parseInt(value),
+      job = subjectJobs.find((subjectJob: Job) => subjectJob.id === jobId);
+
+    setSelectedJob(job);
   };
 
   const handleScrappedDocumentAction = (action: string, data: any) => {
@@ -389,50 +397,61 @@ export const DocumentsFromScrapper = () => {
               </Button>
             </Box>
           )}
-          {subjectJobs.map((subjectJob) => (
-            <Box
-              key={subjectJob.id}
-              sx={{
-                px: "16px",
-                display: "grid",
-                gridTemplateColumns: "60px 1fr",
-              }}
-            >
-              <IconButton color="primary">
-                <Icon>check_box_outline_blank</Icon>
-              </IconButton>
-              <Box>
-                <Typography variant="body1">
-                  <b>{subjectJob.name.toLowerCase()}</b>
-                </Typography>
-                <Typography variant="body2">
-                  {subjectJob.institution
-                    .toLowerCase()
-                    .split(" ")
-                    .map(
-                      (str: string) =>
-                        str.charAt(0).toUpperCase() + str.slice(1)
-                    )
-                    .join(" ")}{" "}
-                  {subjectJob.uat
-                    .toLowerCase()
-                    .split(" ")
-                    .map(
-                      (str: string) =>
-                        str.charAt(0).toUpperCase() + str.slice(1)
-                    )
-                    .join(" ")}
-                </Typography>
-                <Typography variant="body2">
-                  {moment(subjectJob.dateStart).format("YYYY")} -
-                  {subjectJob.dateEnd
-                    ? moment(subjectJob.dateEnd).format("YYYY")
-                    : " prezent"}
-                </Typography>
+
+          <RadioGroup
+            aria-labelledby="radio-buttons-group-label"
+            onChange={handleChangeJob}
+          >
+            {subjectJobs.map((subjectJob: Job) => (
+              <Box
+                key={subjectJob.id}
+                sx={{
+                  px: "16px",
+                  display: "grid",
+                  gridTemplateColumns: "60px 1fr",
+                }}
+              >
+                <Radio
+                  value={subjectJob.id}
+                  checked={subjectJob.id === selectedJob?.id}
+                />
+
+                <Box>
+                  <Typography variant="body1">
+                    <b>{subjectJob.name.toLowerCase()}</b>
+                  </Typography>
+
+                  <Typography variant="body2">
+                    {subjectJob.institution
+                      .toLowerCase()
+                      .split(" ")
+                      .map(
+                        (str: string) =>
+                          str.charAt(0).toUpperCase() + str.slice(1)
+                      )
+                      .join(" ")}{" "}
+                    {subjectJob.uat
+                      .toLowerCase()
+                      .split(" ")
+                      .map(
+                        (str: string) =>
+                          str.charAt(0).toUpperCase() + str.slice(1)
+                      )
+                      .join(" ")}
+                  </Typography>
+
+                  <Typography variant="body2">
+                    {moment(subjectJob.dateStart).format("YYYY")} -
+                    {subjectJob.dateEnd
+                      ? moment(subjectJob.dateEnd).format("YYYY")
+                      : " prezent"}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
-          ))}
+            ))}
+          </RadioGroup>
         </Box>
+
         <Box
           sx={{
             display: "flex",
