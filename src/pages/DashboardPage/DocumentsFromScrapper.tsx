@@ -116,7 +116,7 @@ export const DocumentsFromScrapper = () => {
   };
 
   const handleFunctionName = (e: object, value: string) => {
-    // setFunctionName(value);
+    setFunctionName(value);
   };
 
   const handleDateStart = (date: object | null) => {
@@ -125,6 +125,32 @@ export const DocumentsFromScrapper = () => {
 
   const handleDateEnd = (date: object | null) => {
     setDateEnd(date);
+  };
+
+  const handleAddJob = async () => {
+    const job = {
+      subjectId: subject?.id as number,
+      institutionId: selectedInstitutionId as number,
+      sirutaId: sirutaId as number,
+      name: functionName as string,
+      dateStart: moment(dateStart).format("YYYY-MM-DD"),
+      dateEnd: moment(dateEnd).format("YYYY-MM-DD"),
+    };
+
+    await jobService.addJob({
+      token: tokenStatus.token,
+      active: tokenStatus.active,
+      ...job,
+    });
+
+    const jobsResponse = await jobService.getSubjectsJobs({
+      token: tokenStatus.token,
+      active: tokenStatus.active,
+      subjectId: subject?.id as number,
+    });
+
+    setSubjectJobs(jobsResponse);
+    setAddJobOpened(false);
   };
 
   const handleScrappedDocumentAction = (action: string, data: any) => {
@@ -214,7 +240,7 @@ export const DocumentsFromScrapper = () => {
         <SearchBarWithFiltersController
           onSearchChanged={handleSearch}
           onFiltersOpen={handleFiltersOpen}
-        ></SearchBarWithFiltersController>
+        />
       </Box>
       <Box
         sx={{
@@ -310,7 +336,8 @@ export const DocumentsFromScrapper = () => {
                     }}
                   />
                 )}
-              ></Autocomplete>
+              />
+
               <Autocomplete
                 options={["deputat", "senator", ""]}
                 value={functionName}
@@ -333,7 +360,8 @@ export const DocumentsFromScrapper = () => {
                     }}
                   />
                 )}
-              ></Autocomplete>
+              />
+
               <DesktopDatePicker
                 label="Data inceput"
                 mask="__ __ ____"
@@ -352,7 +380,11 @@ export const DocumentsFromScrapper = () => {
                 renderInput={(params) => <TextField {...params} />}
               />
 
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddJob}
+              >
                 Adauga functie
               </Button>
             </Box>
@@ -420,7 +452,7 @@ export const DocumentsFromScrapper = () => {
                 columnsGrid={columnsGrid}
                 headerCells={scrappedDocumentsTableHeaderData}
                 onSorted={handleScrappedSort}
-              ></CustomTableHeader>
+              />
               <TableBody style={{ flex: "1", overflow: "auto" }}>
                 {filteredDocuments.length > 0 &&
                   filteredDocuments
