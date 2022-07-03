@@ -32,7 +32,7 @@ import useTokenStatus from "../../utils/useTokenStatus";
 import { useParams } from "react-router-dom";
 import { subjectService } from "../../services/subjectService";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import AddIntitutionDialogue from "../../components/DialoguesComponents.js/AddIntitutionDialogue";
+import AddInstitutionDialogue from "../../components/DialoguesComponents/AddInstitutionDialogue";
 
 export const DocumentsFromScrapper = () => {
   const params = useParams();
@@ -546,11 +546,11 @@ export const DocumentsFromScrapper = () => {
         </Box>
       </Box>
 
-      <AddIntitutionDialogue
+      <AddInstitutionDialogue
         open={addInstitutionOpened}
         onClose={handleNewInstitutionClose}
         onAction={handleNewInstitution}
-      ></AddIntitutionDialogue>
+      />
     </Box>
   );
 };

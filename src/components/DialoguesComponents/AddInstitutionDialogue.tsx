@@ -34,7 +34,7 @@ interface Props {
   onAction: any;
 }
 
-const AddIntitutionDialogue: React.FC<Props> = ({
+const AddInstitutionDialogue: React.FC<Props> = ({
   open,
   onClose,
   onAction,
@@ -404,4 +404,4 @@ const AddIntitutionDialogue: React.FC<Props> = ({
   );
 };
 
-export default AddIntitutionDialogue;
+export default AddInstitutionDialogue;
