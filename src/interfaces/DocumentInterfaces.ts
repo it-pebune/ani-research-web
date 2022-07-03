@@ -8,6 +8,7 @@ export interface DocumentsFromScrapperResult {
   date: string;
   type: string;
   link: string;
+  filename: string;
   uid: string;
   existent?: boolean;
 }

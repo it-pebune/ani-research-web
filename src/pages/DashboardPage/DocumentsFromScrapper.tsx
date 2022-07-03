@@ -2,6 +2,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  Checkbox,
   Icon,
   IconButton,
   Radio,
@@ -68,6 +69,9 @@ export const DocumentsFromScrapper = () => {
     DocumentsFromScrapperResult[]
   >([]);
   const [selectedJob, setSelectedJob] = useState<Job>();
+  const [selectedDocumentUids, setSelectedDocumentUids] = useState<string[]>(
+    []
+  );
 
   const handleScrappedSort = () => {};
   const handleChangeRowsPerPage = (e: any) => {
@@ -159,6 +163,65 @@ export const DocumentsFromScrapper = () => {
       job = subjectJobs.find((subjectJob: Job) => subjectJob.id === jobId);
 
     setSelectedJob(job);
+  };
+
+  const handleChangeDocuments = (
+    event: ChangeEvent<HTMLInputElement>,
+    checked: boolean
+  ) => {
+    const documentUid = event.target.value;
+
+    if (checked) {
+      setSelectedDocumentUids((selectedDocumentUids: string[]): string[] =>
+        selectedDocumentUids.concat([documentUid])
+      );
+    } else {
+      setSelectedDocumentUids((selectedDocumentUids: string[]): string[] =>
+        selectedDocumentUids.filter((uid: string) => uid !== documentUid)
+      );
+    }
+  };
+
+  const handleUploadDocuments = async () => {
+    const selectedDocumentsForRequest = documents
+      .filter((document: DocumentsFromScrapperResult) =>
+        selectedDocumentUids.includes(document.uid)
+      )
+      .map((selectedDocument: DocumentsFromScrapperResult): any => ({
+        subjectId: subject?.id,
+        status: 0,
+        jobId: selectedJob?.id,
+        type:
+          selectedDocument.type === "I"
+            ? 2
+            : selectedDocument.type === "A"
+            ? 1
+            : 2,
+        name: selectedDocument.name,
+        downloadUrl: dataUrl
+          .replace(":filename", selectedDocument.filename)
+          .replace(":uid", selectedDocument.uid),
+        date: selectedDocument.date,
+      }));
+
+    await documentService.addNewDocuments(
+      tokenStatus,
+      selectedDocumentsForRequest
+    );
+
+    setFilteredDocuments((documents: DocumentsFromScrapperResult[]) =>
+      documents.map(
+        (
+          document: DocumentsFromScrapperResult
+        ): DocumentsFromScrapperResult => {
+          if (selectedDocumentUids.includes(document.uid)) {
+            document.existent = true;
+          }
+
+          return document;
+        }
+      )
+    );
   };
 
   const handleScrappedDocumentAction = (action: string, data: any) => {
@@ -261,6 +324,16 @@ export const DocumentsFromScrapper = () => {
         <Box
           sx={{ boxShadow: 1, m: 1, display: "flex", flexDirection: "column" }}
         >
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!selectedDocumentUids.length}
+            sx={{ marginBottom: "20px" }}
+            onClick={handleUploadDocuments}
+          >
+            Incarca documente
+          </Button>
+
           <IconButton
             onClick={() => setAddJobOpened((prevState) => !prevState)}
             sx={{ marginLeft: "auto", width: "40px" }}
@@ -486,31 +559,65 @@ export const DocumentsFromScrapper = () => {
                       chamberName:
                         document.chamber === 1 ? "Senat" : "Camera deputatilor",
                     }))
-                    .map((document, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{
-                          display: "grid",
-                          gridTemplateColumns: columnsGrid,
-                          gap: "16px",
-                        }}
-                      >
-                        <TableCell>
-                          <IconButton>
-                            <Icon>check_box_outline_blank</Icon>
-                          </IconButton>
-                        </TableCell>
+                    .map(
+                      (
+                        document: DocumentsFromScrapperResult,
+                        index: number
+                      ) => (
+                        <TableRow
+                          key={index}
+                          sx={{
+                            display: "grid",
+                            gridTemplateColumns: columnsGrid,
+                            gap: "16px",
+                          }}
+                        >
+                          <TableCell>
+                            <Checkbox
+                              value={document.uid}
+                              disabled={!selectedJob}
+                              onChange={handleChangeDocuments}
+                            />
+                          </TableCell>
 
-                        <TableCell>
-                          <Typography variant="body1">
-                            {document.type}
-                          </Typography>
-                        </TableCell>
+                          <TableCell>
+                            <Typography variant="body1">
+                              {document.type}
+                            </Typography>
+                          </TableCell>
 
-                        <TableCell>
-                          <Typography variant="body2">
-                            <b>
-                              {document.name
+                          <TableCell>
+                            <Typography variant="body2">
+                              <b>
+                                {document.name
+                                  .toLowerCase()
+                                  .split(" ")
+                                  .map(
+                                    (str: string) =>
+                                      str.charAt(0).toUpperCase() + str.slice(1)
+                                  )
+                                  .join(" ")}
+                              </b>
+                            </Typography>
+                          </TableCell>
+
+                          <TableCell
+                            sx={{
+                              display: "grid",
+                              gridTemplateColumns: "150px 1fr",
+                            }}
+                          >
+                            <Typography variant="body2">Institutie:</Typography>
+                            <Typography variant="body2">
+                              {document.institution
+                                .toLowerCase()
+                                .split(" ")
+                                .map(
+                                  (str: string) =>
+                                    str.charAt(0).toUpperCase() + str.slice(1)
+                                )
+                                .join(" ")}{" "}
+                              {document.locality
                                 .toLowerCase()
                                 .split(" ")
                                 .map(
@@ -518,64 +625,37 @@ export const DocumentsFromScrapper = () => {
                                     str.charAt(0).toUpperCase() + str.slice(1)
                                 )
                                 .join(" ")}
-                            </b>
-                          </Typography>
-                        </TableCell>
+                            </Typography>
 
-                        <TableCell
-                          sx={{
-                            display: "grid",
-                            gridTemplateColumns: "150px 1fr",
-                          }}
-                        >
-                          <Typography variant="body2">Institutie:</Typography>
-                          <Typography variant="body2">
-                            {document.institution
-                              .toLowerCase()
-                              .split(" ")
-                              .map(
-                                (str: string) =>
-                                  str.charAt(0).toUpperCase() + str.slice(1)
-                              )
-                              .join(" ")}{" "}
-                            {document.locality
-                              .toLowerCase()
-                              .split(" ")
-                              .map(
-                                (str: string) =>
-                                  str.charAt(0).toUpperCase() + str.slice(1)
-                              )
-                              .join(" ")}
-                          </Typography>
+                            <Typography variant="body2">Functie:</Typography>
+                            <Typography variant="body2">
+                              {document.function
+                                .toLowerCase()
+                                .split(" ")
+                                .map(
+                                  (str: string) =>
+                                    str.charAt(0).toUpperCase() + str.slice(1)
+                                )
+                                .join(" ")}{" "}
+                            </Typography>
 
-                          <Typography variant="body2">Functie:</Typography>
-                          <Typography variant="body2">
-                            {document.function
-                              .toLowerCase()
-                              .split(" ")
-                              .map(
-                                (str: string) =>
-                                  str.charAt(0).toUpperCase() + str.slice(1)
-                              )
-                              .join(" ")}{" "}
-                          </Typography>
-
-                          <Typography variant="body2">
-                            Data depunerii:
-                          </Typography>
-                          <Typography variant="body2">
-                            {document.date
-                              .toLowerCase()
-                              .split(" ")
-                              .map(
-                                (str: string) =>
-                                  str.charAt(0).toUpperCase() + str.slice(1)
-                              )
-                              .join(" ")}{" "}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                            <Typography variant="body2">
+                              Data depunerii:
+                            </Typography>
+                            <Typography variant="body2">
+                              {document.date
+                                .toLowerCase()
+                                .split(" ")
+                                .map(
+                                  (str: string) =>
+                                    str.charAt(0).toUpperCase() + str.slice(1)
+                                )
+                                .join(" ")}{" "}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
               </TableBody>
             </Table>
           </TableContainer>
