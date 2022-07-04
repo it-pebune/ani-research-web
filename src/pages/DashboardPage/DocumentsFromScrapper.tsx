@@ -108,7 +108,7 @@ export const DocumentsFromScrapper = () => {
         )?.id
       );
       setFunctionName(
-        element.value === "Camera Deputatilor" ? "DEPUTAT" : "SENATOR"
+        element.value === "Camera Deputatilor" ? "Deputat" : "Senator"
       );
       setSirutaId(
         institutionsResponse?.find(
@@ -197,11 +197,11 @@ export const DocumentsFromScrapper = () => {
             : selectedDocument.type === "A"
             ? 1
             : 2,
-        name: selectedDocument.name,
+        name: selectedDocument.filename,
         downloadUrl: dataUrl
           .replace(":filename", selectedDocument.filename)
           .replace(":uid", selectedDocument.uid),
-        date: selectedDocument.date,
+        date: moment(selectedDocument.date, "DD.MM.YYYY").format("YYYY-MM-DD"),
       }));
 
     await documentService.addNewDocuments(
@@ -420,7 +420,7 @@ export const DocumentsFromScrapper = () => {
               />
 
               <Autocomplete
-                options={["deputat", "senator", ""]}
+                options={["Deputat", "Senator", ""]}
                 value={functionName}
                 isOptionEqualToValue={(option, value) => option === value}
                 getOptionLabel={(option) => option}
@@ -491,7 +491,7 @@ export const DocumentsFromScrapper = () => {
 
                 <Box>
                   <Typography variant="body1">
-                    <b>{subjectJob.name.toLowerCase()}</b>
+                    <b>{subjectJob.name}</b>
                   </Typography>
 
                   <Typography variant="body2">
@@ -514,9 +514,10 @@ export const DocumentsFromScrapper = () => {
                   </Typography>
 
                   <Typography variant="body2">
-                    {moment(subjectJob.dateStart).format("YYYY")} -
+                    {moment(subjectJob.dateStart).format("MM.YYYY")}
+                    {" - "}
                     {subjectJob.dateEnd
-                      ? moment(subjectJob.dateEnd).format("YYYY")
+                      ? moment(subjectJob.dateEnd).format("MM.YYYY")
                       : " prezent"}
                   </Typography>
                 </Box>
@@ -575,7 +576,7 @@ export const DocumentsFromScrapper = () => {
                           <TableCell>
                             <Checkbox
                               value={document.uid}
-                              disabled={!selectedJob}
+                              disabled={!selectedJob || document.existent}
                               onChange={handleChangeDocuments}
                             />
                           </TableCell>
