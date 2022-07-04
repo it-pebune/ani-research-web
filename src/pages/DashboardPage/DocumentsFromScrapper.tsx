@@ -37,8 +37,7 @@ import AddInstitutionDialogue from "../../components/DialoguesComponents/AddInst
 export const DocumentsFromScrapper = () => {
   const params = useParams();
   const tokenStatus = useTokenStatus();
-  const columnsGrid = "40px 250px 250px 1fr";
-  const jobsColumnsGrid = "60px 1fr 1fr 1fr 1fr 70px";
+  const columnsGrid = "60px 250px 250px 1fr";
   const [documents, setDocuments] = useState<DocumentsFromScrapperResult[]>([]);
   const [downloadedDocuments, setDownloadedDocuments] = useState<string[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -73,7 +72,6 @@ export const DocumentsFromScrapper = () => {
     []
   );
 
-  const handleScrappedSort = () => {};
   const handleChangeRowsPerPage = (e: any) => {
     setRowsPerPage(e.target.value);
     setPage(0);
@@ -544,8 +542,8 @@ export const DocumentsFromScrapper = () => {
               <CustomTableHeader
                 columnsGrid={columnsGrid}
                 headerCells={scrappedDocumentsTableHeaderData}
-                onSorted={handleScrappedSort}
               />
+
               <TableBody style={{ flex: "1", overflow: "auto" }}>
                 {filteredDocuments.length > 0 &&
                   filteredDocuments
@@ -570,7 +568,6 @@ export const DocumentsFromScrapper = () => {
                           sx={{
                             display: "grid",
                             gridTemplateColumns: columnsGrid,
-                            gap: "16px",
                           }}
                         >
                           <TableCell>

@@ -8,24 +8,18 @@ export const scrappedDocumentsTableHeaderData: HeaderCell[] = [
   },
   {
     field: "type",
-    title: "TIPUL DOCUMENTULUI",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
+    align: "left",
+    title: "Tipul documentului",
   },
   {
     field: "name",
-    title: "NUME SI PRENUME",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
+    align: "left",
+    title: "Nume si prenume",
   },
   {
     field: "institution",
-    title: "DETALII",
-    hasSortFunction: true,
-    sortActive: true,
-    direction: "asc",
+    align: "left",
+    title: "Detalii",
   },
 ];
 
