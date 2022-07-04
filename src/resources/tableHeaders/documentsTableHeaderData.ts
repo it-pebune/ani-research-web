@@ -9,17 +9,17 @@ export const scrappedDocumentsTableHeaderData: HeaderCell[] = [
   {
     field: "type",
     align: "left",
-    title: "Tipul documentului",
+    title: "TIPUL DOCUMENTULUI",
   },
   {
     field: "name",
     align: "left",
-    title: "Nume si prenume",
+    title: "NUME SI PRENUME",
   },
   {
     field: "institution",
     align: "left",
-    title: "Detalii",
+    title: "DETALII",
   },
 ];
 
