@@ -161,6 +161,7 @@ export const DocumentsFromScrapper = () => {
       job = subjectJobs.find((subjectJob: Job) => subjectJob.id === jobId);
 
     setSelectedJob(job);
+    setSelectedDocumentUids([]);
   };
 
   const handleChangeDocuments = (
@@ -220,6 +221,7 @@ export const DocumentsFromScrapper = () => {
         }
       )
     );
+    setSelectedDocumentUids([]);
   };
 
   const handleScrappedDocumentAction = (action: string, data: any) => {
