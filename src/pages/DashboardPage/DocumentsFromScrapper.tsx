@@ -575,6 +575,9 @@ export const DocumentsFromScrapper = () => {
                           <TableCell>
                             <Checkbox
                               value={document.uid}
+                              checked={selectedDocumentUids.includes(
+                                document.uid
+                              )}
                               disabled={!selectedJob || document.existent}
                               onChange={handleChangeDocuments}
                             />
