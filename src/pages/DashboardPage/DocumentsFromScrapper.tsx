@@ -20,7 +20,10 @@ import moment from "moment";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
-import { DocumentsFromScrapperResult } from "../../interfaces/DocumentInterfaces";
+import {
+  DocumentFromDataBase,
+  DocumentsFromScrapperResult,
+} from "../../interfaces/DocumentInterfaces";
 import { Institution } from "../../interfaces/IntitutionInterfaces";
 import { Job } from "../../interfaces/JobInterfaces";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
@@ -71,6 +74,28 @@ export const DocumentsFromScrapper = () => {
   const [selectedDocumentUids, setSelectedDocumentUids] = useState<string[]>(
     []
   );
+
+  const filterDocumentsByJob = (
+    documents: DocumentsFromScrapperResult[],
+    job?: Job
+  ): DocumentsFromScrapperResult[] => {
+    return documents.filter(
+      (document: DocumentsFromScrapperResult): boolean => {
+        if (!job) {
+          return true;
+        }
+
+        return (
+          document.institution.toLowerCase() ===
+            job.institution.toLowerCase() &&
+          document.function.toLowerCase() === job.name.toLowerCase() &&
+          document.locality.toLowerCase() === job.uat.toLowerCase() &&
+          moment(document.date, "DD.MM.YYYY") >= moment(job.dateStart) &&
+          moment(document.date, "DD.MM.YYYY") <= moment(job.dateEnd)
+        );
+      }
+    );
+  };
 
   const handleChangeRowsPerPage = (e: any) => {
     setRowsPerPage(e.target.value);
@@ -162,6 +187,7 @@ export const DocumentsFromScrapper = () => {
 
     setSelectedJob(job);
     setSelectedDocumentUids([]);
+    setFilteredDocuments(filterDocumentsByJob(documents, job));
   };
 
   const handleChangeDocuments = (
@@ -250,12 +276,18 @@ export const DocumentsFromScrapper = () => {
             subjectId: subject?.id,
           });
         setFilteredDocuments(
-          response.results.map((document) => ({
-            ...document,
-            existent: downloadedResponse
-              .map((item) => item.name)
-              .includes(document.filename),
-          }))
+          filterDocumentsByJob(
+            response.results.map(
+              (
+                document: DocumentsFromScrapperResult
+              ): DocumentsFromScrapperResult => ({
+                ...document,
+                existent: downloadedResponse
+                  .map((item: DocumentFromDataBase): string => item.name)
+                  .includes(document.filename),
+              })
+            )
+          )
         );
         setDownloadedDocuments(downloadedResponse.map((item) => item.name));
         setDataUrl(response.downloadUrl);

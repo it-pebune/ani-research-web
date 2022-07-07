@@ -3,7 +3,9 @@ export interface Job {
   [key: string]: any;
   subjectId: string;
   institutionId: string;
+  institution: string;
   sirutaId: string;
+  uat: string;
   name: string;
   dateStart: string;
   dateEnd: string;
