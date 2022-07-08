@@ -43,31 +43,23 @@ export const DocumentsFromScrapper = () => {
   const tokenStatus = useTokenStatus();
   const columnsGrid = "60px 250px 250px 1fr";
   const [documents, setDocuments] = useState<DocumentsFromScrapperResult[]>([]);
-  const [downloadedDocuments, setDownloadedDocuments] = useState<string[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [subject, setSubject] = useState<SubjectFromDataBase>();
-  const [jobsListOpened, setJobsListOpened] = useState(false);
   const [addJobOpened, setAddJobOpened] = useState(false);
   const [addInstitutionOpened, setAddInstitutionOpened] = useState(false);
-  const [fileName, setFileName] = useState("");
-  const [uid, setUid] = useState("");
   const [dataUrl, setDataUrl] = useState("");
   const [institutions, setInstitutions] = useState<string[]>([]);
   const [institutionsResponse, setInstitutionsResponse] =
     useState<Institution[]>();
   const [subjectJobs, setSubjectJobs] = useState<Job[]>([]);
-  const [selectedInstitution, setSelectedInstitution] = useState<string>("");
   const [selectedInstitutionId, setSelectedInstitutionId] = useState<
     number | undefined
   >();
   const [dateStart, setDateStart] = useState<object | null>();
   const [dateEnd, setDateEnd] = useState<object | null>();
   const [sirutaId, setSirutaId] = useState<number | null>();
-
   const [functionName, setFunctionName] = useState<string>("");
-  const [docType, setDocType] = useState<number>();
-  const [docDate, setDocDate] = useState<string>();
   const [filteredDocuments, setFilteredDocuments] = useState<
     DocumentsFromScrapperResult[]
   >([]);
@@ -126,7 +118,6 @@ export const DocumentsFromScrapper = () => {
     } | null
   ) => {
     if (element && element.value !== "adauga") {
-      setSelectedInstitution(element.value);
       setSelectedInstitutionId(
         institutionsResponse?.find(
           (institution) => institution.name === element.value
@@ -267,16 +258,6 @@ export const DocumentsFromScrapper = () => {
     setLoadingDocuments(false);
   };
 
-  const handleScrappedDocumentAction = (action: string, data: any) => {
-    if (action === "download-document") {
-      setFileName(data[0].filename);
-      setUid(data[1].uid);
-      setDocType(data[2].type === "I" ? 2 : data[2].type === "A" ? 1 : 2);
-      setDocDate(moment(data[3].date, "DD.MM.YYYY").format("YYYY-MM-DD"));
-      setJobsListOpened(true);
-    }
-  };
-
   useEffect(() => {
     if (tokenStatus.active && subject) {
       const documentsResponse = async () => {
@@ -312,7 +293,6 @@ export const DocumentsFromScrapper = () => {
             )
           )
         );
-        setDownloadedDocuments(downloadedResponse.map((item) => item.name));
         setDataUrl(response.downloadUrl);
         setDocuments([...response.results]);
 
