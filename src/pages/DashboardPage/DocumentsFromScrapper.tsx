@@ -281,28 +281,32 @@ export const DocumentsFromScrapper = () => {
         setLoadingDocuments(true);
 
         const response = await documentService.getDocumentsFromScrapper({
-          token: tokenStatus.token,
-          active: tokenStatus.active,
-          firstName: subject.firstName,
-          lastName: subject.lastName,
-        });
-        const downloadedResponse =
-          await documentService.getDocumentsFromDataBase({
+            token: tokenStatus.token,
+            active: tokenStatus.active,
+            firstName: subject.firstName,
+            lastName: subject.lastName,
+          }),
+          downloadedResponse = await documentService.getDocumentsFromDataBase({
             token: tokenStatus.token,
             active: tokenStatus.active,
             subjectId: subject?.id,
-          });
+          }),
+          existingDocumentFilenames = downloadedResponse.map(
+            (document: DocumentFromDataBase): string => document.name
+          );
+
         setFilteredDocuments(
           filterDocumentsByJob(
             response.results.map(
               (
                 document: DocumentsFromScrapperResult
-              ): DocumentsFromScrapperResult => ({
-                ...document,
-                existent: downloadedResponse
-                  .map((item: DocumentFromDataBase): string => item.name)
-                  .includes(document.filename),
-              })
+              ): DocumentsFromScrapperResult => {
+                document.existent = existingDocumentFilenames.includes(
+                  document.filename
+                );
+
+                return document;
+              }
             )
           )
         );
