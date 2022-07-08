@@ -181,13 +181,22 @@ export const DocumentsFromScrapper = () => {
     setAddJobOpened(false);
   };
 
-  const handleChangeJob = (event: ChangeEvent, value: string) => {
+  const handleChangeJob = (event: ChangeEvent, value: string): void => {
     const jobId = parseInt(value),
       job = subjectJobs.find((subjectJob: Job) => subjectJob.id === jobId);
 
     setSelectedJob(job);
     setSelectedDocumentUids([]);
     setFilteredDocuments(filterDocumentsByJob(documents, job));
+  };
+
+  const handleClickJob = (event: any): void => {
+    const jobId = parseInt(event.target.value);
+
+    if (jobId === selectedJob?.id) {
+      setSelectedJob(undefined);
+      setFilteredDocuments(filterDocumentsByJob(documents));
+    }
   };
 
   const handleChangeDocuments = (
@@ -519,6 +528,7 @@ export const DocumentsFromScrapper = () => {
                 <Radio
                   value={subjectJob.id}
                   checked={subjectJob.id === selectedJob?.id}
+                  onClick={handleClickJob}
                 />
 
                 <Box>
