@@ -360,14 +360,18 @@ export const DocumentsFromScrapper = () => {
           </Button>
 
           <Box sx={{ boxShadow: 1, m: 1, pb: 4 }}>
-            <IconButton
-              onClick={() => setAddJobOpened((prevState) => !prevState)}
-              sx={{ marginLeft: "auto", width: "40px" }}
-              color="primary"
-            >
-              {" "}
-              <Icon> {!addJobOpened ? "add" : "close"} </Icon>
-            </IconButton>
+            <Box>
+              <IconButton
+                onClick={() => setAddJobOpened((prevState) => !prevState)}
+                sx={{ marginLeft: "auto", width: "40px", float: "right" }}
+                color="primary"
+              >
+                {" "}
+                <Icon> {!addJobOpened ? "add" : "close"} </Icon>
+              </IconButton>
+            </Box>
+
+            <Box sx={{ clear: "both" }} />
 
             {addJobOpened && (
               <Box
