@@ -19,7 +19,6 @@ import {
 import moment from "moment";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
-import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
 import {
   DocumentFromDataBase,
   DocumentsFromScrapperResult,
@@ -99,10 +98,6 @@ export const DocumentsFromScrapper = () => {
   const handleChangePage = (e: any, newPage: number) => {
     setPage(newPage);
   };
-
-  const handleFiltersOpen = () => {};
-
-  const handleSearch = () => {};
 
   const handleNewInstitutionClose = () => {
     setAddInstitutionOpened(false);
@@ -344,224 +339,221 @@ export const DocumentsFromScrapper = () => {
         flexDirection: "column",
       }}
     >
-      <Box sx={{ flex: "0 60px", p: "24px" }}>
-        <SearchBarWithFiltersController
-          onSearchChanged={handleSearch}
-          onFiltersOpen={handleFiltersOpen}
-        />
-      </Box>
       <Box
         sx={{
           flex: "1",
           display: "grid",
           gridTemplateColumns: "300px 1fr",
           gap: "16px",
+          pt: 4,
         }}
       >
-        <Box
-          sx={{ boxShadow: 1, m: 1, display: "flex", flexDirection: "column" }}
-        >
+        <Box sx={{ display: "flex", flexDirection: "column", marginTop: 1 }}>
           <Button
             variant="contained"
             color="primary"
             disabled={!selectedDocumentUids.length}
-            sx={{ marginBottom: "20px" }}
+            sx={{ m: 1 }}
             onClick={handleUploadDocuments}
           >
             Incarca documente
           </Button>
 
-          <IconButton
-            onClick={() => setAddJobOpened((prevState) => !prevState)}
-            sx={{ marginLeft: "auto", width: "40px" }}
-            color="primary"
-          >
-            {" "}
-            <Icon> {!addJobOpened ? "add" : "close"} </Icon>
-          </IconButton>
-
-          {addJobOpened && (
-            <Box
-              sx={{
-                p: 1,
-                height: addJobOpened ? "auto" : 0,
-                overflow: "hidden",
-                display: "grid",
-                mb: 2,
-                gridTemplateColumns: "1fr",
-                "& .MuiFormControl-root": {
-                  py: "16px",
-                },
-              }}
+          <Box sx={{ boxShadow: 1, m: 1, pb: 4 }}>
+            <IconButton
+              onClick={() => setAddJobOpened((prevState) => !prevState)}
+              sx={{ marginLeft: "auto", width: "40px" }}
+              color="primary"
             >
-              <Autocomplete
-                options={[...institutions, "adauga"].map((element, index) => ({
-                  value: element,
-                  label:
-                    element !== "adauga" ? (
-                      element
-                    ) : (
-                      <Box
-                        sx={{
-                          display: "grid",
-                          width: "100%",
-                          gridTemplateColumns: "1fr 40px",
-                          alignContent: "center",
-                        }}
-                      >
-                        Adauga Institutie
-                        <Icon color="primary">add</Icon>
-                      </Box>
-                    ),
-                }))}
-                getOptionLabel={(option) =>
-                  option.value !== "adauga" ? option.value : ""
-                }
-                onChange={(
-                  e: React.SyntheticEvent<Element, Event>,
-                  value: {
-                    value: string;
-                    label: string | JSX.Element;
-                  } | null
-                ) => handleInstitution(e, value)}
-                isOptionEqualToValue={(
-                  option: {
-                    value: string;
-                    label: string | JSX.Element;
-                  },
-                  item: {
-                    value: string;
-                    label: string | JSX.Element;
-                  }
-                ) => option.value === item.value}
-                renderOption={(
-                  props: any,
-                  option: {
-                    value: string;
-                    label: string | JSX.Element;
-                  }
-                ) => (
-                  <Box component="li" {...props}>
-                    {option.label}
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Alege institutia"
-                    inputProps={{
-                      ...params.inputProps,
-                    }}
-                  />
-                )}
-              />
+              {" "}
+              <Icon> {!addJobOpened ? "add" : "close"} </Icon>
+            </IconButton>
 
-              <Autocomplete
-                options={["Deputat", "Senator", ""]}
-                value={functionName}
-                isOptionEqualToValue={(option, value) => option === value}
-                getOptionLabel={(option) => option}
-                onChange={(e: object, value: any | null) =>
-                  handleFunctionName(e, value)
-                }
-                renderOption={(props: any, option: any) => (
-                  <Box component="li" {...props}>
-                    {option}
-                  </Box>
-                )}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Alege functia"
-                    inputProps={{
-                      ...params.inputProps,
-                    }}
-                  />
-                )}
-              />
-
-              <DesktopDatePicker
-                label="Data inceput"
-                mask="__ __ ____"
-                inputFormat="DD MM YYYY"
-                value={dateStart}
-                onChange={handleDateStart}
-                renderInput={(params) => <TextField {...params} />}
-              />
-
-              <DesktopDatePicker
-                label="Data sfarsit"
-                mask="__ __ ____"
-                inputFormat="DD MM YYYY"
-                value={dateEnd}
-                onChange={handleDateEnd}
-                renderInput={(params) => <TextField {...params} />}
-              />
-
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleAddJob}
-              >
-                Adauga functie
-              </Button>
-            </Box>
-          )}
-
-          <RadioGroup
-            aria-labelledby="radio-buttons-group-label"
-            onChange={handleChangeJob}
-          >
-            {subjectJobs.map((subjectJob: Job) => (
+            {addJobOpened && (
               <Box
-                key={subjectJob.id}
                 sx={{
-                  px: "16px",
+                  p: 1,
+                  height: addJobOpened ? "auto" : 0,
+                  overflow: "hidden",
                   display: "grid",
-                  gridTemplateColumns: "60px 1fr",
+                  mb: 2,
+                  gridTemplateColumns: "1fr",
+                  "& .MuiFormControl-root": {
+                    py: "16px",
+                  },
                 }}
               >
-                <Radio
-                  value={subjectJob.id}
-                  checked={subjectJob.id === selectedJob?.id}
-                  onClick={handleClickJob}
+                <Autocomplete
+                  options={[...institutions, "adauga"].map(
+                    (element, index) => ({
+                      value: element,
+                      label:
+                        element !== "adauga" ? (
+                          element
+                        ) : (
+                          <Box
+                            sx={{
+                              display: "grid",
+                              width: "100%",
+                              gridTemplateColumns: "1fr 40px",
+                              alignContent: "center",
+                            }}
+                          >
+                            Adauga Institutie
+                            <Icon color="primary">add</Icon>
+                          </Box>
+                        ),
+                    })
+                  )}
+                  getOptionLabel={(option) =>
+                    option.value !== "adauga" ? option.value : ""
+                  }
+                  onChange={(
+                    e: React.SyntheticEvent<Element, Event>,
+                    value: {
+                      value: string;
+                      label: string | JSX.Element;
+                    } | null
+                  ) => handleInstitution(e, value)}
+                  isOptionEqualToValue={(
+                    option: {
+                      value: string;
+                      label: string | JSX.Element;
+                    },
+                    item: {
+                      value: string;
+                      label: string | JSX.Element;
+                    }
+                  ) => option.value === item.value}
+                  renderOption={(
+                    props: any,
+                    option: {
+                      value: string;
+                      label: string | JSX.Element;
+                    }
+                  ) => (
+                    <Box component="li" {...props}>
+                      {option.label}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Alege institutia"
+                      inputProps={{
+                        ...params.inputProps,
+                      }}
+                    />
+                  )}
                 />
 
-                <Box>
-                  <Typography variant="body1">
-                    <b>{subjectJob.name}</b>
-                  </Typography>
+                <Autocomplete
+                  options={["Deputat", "Senator", ""]}
+                  value={functionName}
+                  isOptionEqualToValue={(option, value) => option === value}
+                  getOptionLabel={(option) => option}
+                  onChange={(e: object, value: any | null) =>
+                    handleFunctionName(e, value)
+                  }
+                  renderOption={(props: any, option: any) => (
+                    <Box component="li" {...props}>
+                      {option}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Alege functia"
+                      inputProps={{
+                        ...params.inputProps,
+                      }}
+                    />
+                  )}
+                />
 
-                  <Typography variant="body2">
-                    {subjectJob.institution
-                      .toLowerCase()
-                      .split(" ")
-                      .map(
-                        (str: string) =>
-                          str.charAt(0).toUpperCase() + str.slice(1)
-                      )
-                      .join(" ")}{" "}
-                    {subjectJob.uat
-                      .toLowerCase()
-                      .split(" ")
-                      .map(
-                        (str: string) =>
-                          str.charAt(0).toUpperCase() + str.slice(1)
-                      )
-                      .join(" ")}
-                  </Typography>
+                <DesktopDatePicker
+                  label="Data inceput"
+                  mask="__ __ ____"
+                  inputFormat="DD MM YYYY"
+                  value={dateStart}
+                  onChange={handleDateStart}
+                  renderInput={(params) => <TextField {...params} />}
+                />
 
-                  <Typography variant="body2">
-                    {moment(subjectJob.dateStart).format("MM.YYYY")}
-                    {" - "}
-                    {subjectJob.dateEnd
-                      ? moment(subjectJob.dateEnd).format("MM.YYYY")
-                      : " prezent"}
-                  </Typography>
-                </Box>
+                <DesktopDatePicker
+                  label="Data sfarsit"
+                  mask="__ __ ____"
+                  inputFormat="DD MM YYYY"
+                  value={dateEnd}
+                  onChange={handleDateEnd}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddJob}
+                >
+                  Adauga functie
+                </Button>
               </Box>
-            ))}
-          </RadioGroup>
+            )}
+
+            <RadioGroup
+              aria-labelledby="radio-buttons-group-label"
+              onChange={handleChangeJob}
+            >
+              {subjectJobs.map((subjectJob: Job) => (
+                <Box
+                  key={subjectJob.id}
+                  sx={{
+                    px: "16px",
+                    display: "grid",
+                    gridTemplateColumns: "60px 1fr",
+                  }}
+                >
+                  <Radio
+                    value={subjectJob.id}
+                    checked={subjectJob.id === selectedJob?.id}
+                    onClick={handleClickJob}
+                  />
+
+                  <Box>
+                    <Typography variant="body1">
+                      <b>{subjectJob.name}</b>
+                    </Typography>
+
+                    <Typography variant="body2">
+                      {subjectJob.institution
+                        .toLowerCase()
+                        .split(" ")
+                        .map(
+                          (str: string) =>
+                            str.charAt(0).toUpperCase() + str.slice(1)
+                        )
+                        .join(" ")}{" "}
+                      {subjectJob.uat
+                        .toLowerCase()
+                        .split(" ")
+                        .map(
+                          (str: string) =>
+                            str.charAt(0).toUpperCase() + str.slice(1)
+                        )
+                        .join(" ")}
+                    </Typography>
+
+                    <Typography variant="body2">
+                      {moment(subjectJob.dateStart).format("MM.YYYY")}
+                      {" - "}
+                      {subjectJob.dateEnd
+                        ? moment(subjectJob.dateEnd).format("MM.YYYY")
+                        : " prezent"}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))}
+            </RadioGroup>
+          </Box>
         </Box>
 
         {loadingDocuments && <Loader />}
