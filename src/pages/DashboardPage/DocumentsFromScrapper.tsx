@@ -190,6 +190,7 @@ export const DocumentsFromScrapper = () => {
     setSelectedJob(job);
     setSelectedDocumentUids([]);
     setFilteredDocuments(filterDocumentsByJob(documents, job));
+    setPage(0);
   };
 
   const handleClickJob = (event: any): void => {
@@ -198,6 +199,7 @@ export const DocumentsFromScrapper = () => {
     if (jobId === selectedJob?.id) {
       setSelectedJob(undefined);
       setFilteredDocuments(filterDocumentsByJob(documents));
+      setPage(0);
     }
   };
 
