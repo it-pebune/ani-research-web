@@ -36,6 +36,7 @@ import { useParams } from "react-router-dom";
 import { subjectService } from "../../services/subjectService";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import AddInstitutionDialogue from "../../components/DialoguesComponents/AddInstitutionDialogue";
+import Loader from "../../components/Shared/Loader";
 
 export const DocumentsFromScrapper = () => {
   const params = useParams();
@@ -74,6 +75,7 @@ export const DocumentsFromScrapper = () => {
   const [selectedDocumentUids, setSelectedDocumentUids] = useState<string[]>(
     []
   );
+  const [loadingDocuments, setLoadingDocuments] = useState<boolean>(true);
 
   const filterDocumentsByJob = (
     documents: DocumentsFromScrapperResult[],
@@ -217,6 +219,8 @@ export const DocumentsFromScrapper = () => {
   };
 
   const handleUploadDocuments = async () => {
+    setLoadingDocuments(true);
+
     const selectedDocumentsForRequest = documents
       .filter((document: DocumentsFromScrapperResult) =>
         selectedDocumentUids.includes(document.uid)
@@ -257,6 +261,8 @@ export const DocumentsFromScrapper = () => {
       )
     );
     setSelectedDocumentUids([]);
+
+    setLoadingDocuments(false);
   };
 
   const handleScrappedDocumentAction = (action: string, data: any) => {
@@ -272,6 +278,8 @@ export const DocumentsFromScrapper = () => {
   useEffect(() => {
     if (tokenStatus.active && subject) {
       const documentsResponse = async () => {
+        setLoadingDocuments(true);
+
         const response = await documentService.getDocumentsFromScrapper({
           token: tokenStatus.token,
           active: tokenStatus.active,
@@ -301,6 +309,8 @@ export const DocumentsFromScrapper = () => {
         setDownloadedDocuments(downloadedResponse.map((item) => item.name));
         setDataUrl(response.downloadUrl);
         setDocuments([...response.results]);
+
+        setLoadingDocuments(false);
       };
       const institutionsResponse = async () => {
         const response = await institutionService.getInstitutions({
@@ -568,73 +578,112 @@ export const DocumentsFromScrapper = () => {
           </RadioGroup>
         </Box>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignContent: "flex-start",
-          }}
-        >
-          <TableContainer>
-            <Table
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                height: "calc(100vh - 230px)",
-              }}
-            >
-              <CustomTableHeader
-                columnsGrid={columnsGrid}
-                headerCells={scrappedDocumentsTableHeaderData}
-              />
+        {loadingDocuments && <Loader />}
 
-              <TableBody style={{ flex: "1", overflow: "auto" }}>
-                {filteredDocuments.length > 0 &&
-                  filteredDocuments
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((document, index) => ({
-                      ...document,
-                      index: index + 1,
-                      type:
-                        document.type === "A"
-                          ? "Declaratie de avere"
-                          : "Declaratie de interese",
-                      chamberName:
-                        document.chamber === 1 ? "Senat" : "Camera deputatilor",
-                    }))
-                    .map(
-                      (
-                        document: DocumentsFromScrapperResult,
-                        index: number
-                      ) => (
-                        <TableRow
-                          key={index}
-                          sx={{
-                            display: "grid",
-                            gridTemplateColumns: columnsGrid,
-                          }}
-                        >
-                          <TableCell>
-                            <Checkbox
-                              value={document.uid}
-                              checked={selectedDocumentUids.includes(
-                                document.uid
-                              )}
-                              disabled={!selectedJob || document.existent}
-                              onChange={handleChangeDocuments}
-                            />
-                          </TableCell>
+        {!loadingDocuments && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignContent: "flex-start",
+            }}
+          >
+            <TableContainer>
+              <Table
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "calc(100vh - 230px)",
+                }}
+              >
+                <CustomTableHeader
+                  columnsGrid={columnsGrid}
+                  headerCells={scrappedDocumentsTableHeaderData}
+                />
 
-                          <TableCell>
-                            <Typography variant="body1">
-                              {document.type}
-                            </Typography>
-                          </TableCell>
+                <TableBody style={{ flex: "1", overflow: "auto" }}>
+                  {filteredDocuments.length > 0 &&
+                    filteredDocuments
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((document, index) => ({
+                        ...document,
+                        index: index + 1,
+                        type:
+                          document.type === "A"
+                            ? "Declaratie de avere"
+                            : "Declaratie de interese",
+                        chamberName:
+                          document.chamber === 1
+                            ? "Senat"
+                            : "Camera deputatilor",
+                      }))
+                      .map(
+                        (
+                          document: DocumentsFromScrapperResult,
+                          index: number
+                        ) => (
+                          <TableRow
+                            key={index}
+                            sx={{
+                              display: "grid",
+                              gridTemplateColumns: columnsGrid,
+                            }}
+                          >
+                            <TableCell>
+                              <Checkbox
+                                value={document.uid}
+                                checked={selectedDocumentUids.includes(
+                                  document.uid
+                                )}
+                                disabled={!selectedJob || document.existent}
+                                onChange={handleChangeDocuments}
+                              />
+                            </TableCell>
 
-                          <TableCell>
-                            <Typography variant="body2">
-                              <b>
-                                {document.name
+                            <TableCell>
+                              <Typography variant="body1">
+                                {document.type}
+                              </Typography>
+                            </TableCell>
+
+                            <TableCell>
+                              <Typography variant="body2">
+                                <b>
+                                  {document.name
+                                    .toLowerCase()
+                                    .split(" ")
+                                    .map(
+                                      (str: string) =>
+                                        str.charAt(0).toUpperCase() +
+                                        str.slice(1)
+                                    )
+                                    .join(" ")}
+                                </b>
+                              </Typography>
+                            </TableCell>
+
+                            <TableCell
+                              sx={{
+                                display: "grid",
+                                gridTemplateColumns: "150px 1fr",
+                              }}
+                            >
+                              <Typography variant="body2">
+                                Institutie:
+                              </Typography>
+                              <Typography variant="body2">
+                                {document.institution
+                                  .toLowerCase()
+                                  .split(" ")
+                                  .map(
+                                    (str: string) =>
+                                      str.charAt(0).toUpperCase() + str.slice(1)
+                                  )
+                                  .join(" ")}{" "}
+                                {document.locality
                                   .toLowerCase()
                                   .split(" ")
                                   .map(
@@ -642,84 +691,57 @@ export const DocumentsFromScrapper = () => {
                                       str.charAt(0).toUpperCase() + str.slice(1)
                                   )
                                   .join(" ")}
-                              </b>
-                            </Typography>
-                          </TableCell>
+                              </Typography>
 
-                          <TableCell
-                            sx={{
-                              display: "grid",
-                              gridTemplateColumns: "150px 1fr",
-                            }}
-                          >
-                            <Typography variant="body2">Institutie:</Typography>
-                            <Typography variant="body2">
-                              {document.institution
-                                .toLowerCase()
-                                .split(" ")
-                                .map(
-                                  (str: string) =>
-                                    str.charAt(0).toUpperCase() + str.slice(1)
-                                )
-                                .join(" ")}{" "}
-                              {document.locality
-                                .toLowerCase()
-                                .split(" ")
-                                .map(
-                                  (str: string) =>
-                                    str.charAt(0).toUpperCase() + str.slice(1)
-                                )
-                                .join(" ")}
-                            </Typography>
+                              <Typography variant="body2">Functie:</Typography>
+                              <Typography variant="body2">
+                                {document.function
+                                  .toLowerCase()
+                                  .split(" ")
+                                  .map(
+                                    (str: string) =>
+                                      str.charAt(0).toUpperCase() + str.slice(1)
+                                  )
+                                  .join(" ")}{" "}
+                              </Typography>
 
-                            <Typography variant="body2">Functie:</Typography>
-                            <Typography variant="body2">
-                              {document.function
-                                .toLowerCase()
-                                .split(" ")
-                                .map(
-                                  (str: string) =>
-                                    str.charAt(0).toUpperCase() + str.slice(1)
-                                )
-                                .join(" ")}{" "}
-                            </Typography>
-
-                            <Typography variant="body2">
-                              Data depunerii:
-                            </Typography>
-                            <Typography variant="body2">
-                              {document.date
-                                .toLowerCase()
-                                .split(" ")
-                                .map(
-                                  (str: string) =>
-                                    str.charAt(0).toUpperCase() + str.slice(1)
-                                )
-                                .join(" ")}{" "}
-                            </Typography>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            style={{
-              height: "60px",
-              borderTop: "1px solid #bdbdbd",
-              flex: "0 60px",
-            }}
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={filteredDocuments.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            labelRowsPerPage="Randuri pe pagina"
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Box>
+                              <Typography variant="body2">
+                                Data depunerii:
+                              </Typography>
+                              <Typography variant="body2">
+                                {document.date
+                                  .toLowerCase()
+                                  .split(" ")
+                                  .map(
+                                    (str: string) =>
+                                      str.charAt(0).toUpperCase() + str.slice(1)
+                                  )
+                                  .join(" ")}{" "}
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              style={{
+                height: "60px",
+                borderTop: "1px solid #bdbdbd",
+                flex: "0 60px",
+              }}
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={filteredDocuments.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              labelRowsPerPage="Randuri pe pagina"
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Box>
+        )}
       </Box>
 
       <AddInstitutionDialogue
