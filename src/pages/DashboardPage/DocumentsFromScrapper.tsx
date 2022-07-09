@@ -352,7 +352,7 @@ export const DocumentsFromScrapper = () => {
           <Button
             variant="contained"
             color="primary"
-            disabled={!selectedDocumentUids.length}
+            disabled={!selectedDocumentUids.length || loadingDocuments}
             sx={{ m: 1 }}
             onClick={handleUploadDocuments}
           >
