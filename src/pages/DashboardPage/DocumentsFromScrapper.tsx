@@ -14,6 +14,7 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  TextFieldProps,
   Typography,
 } from "@mui/material";
 import moment from "moment";
@@ -36,11 +37,19 @@ import { subjectService } from "../../services/subjectService";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import AddInstitutionDialogue from "../../components/DialoguesComponents/AddInstitutionDialogue";
 import Loader from "../../components/Shared/Loader";
+import { ApiErrors } from "../../enums/ErrorsEnums";
+
+interface IJobErrors {
+  institutionId?: string;
+  name?: string;
+  dateStart?: string;
+  dateEnd?: string;
+}
 
 export const DocumentsFromScrapper = () => {
   const params = useParams();
   const tokenStatus = useTokenStatus();
-  const columnsGrid = "60px 250px 250px 1fr";
+  const columnsGrid = "70px 350px 350px 1fr";
   const [documents, setDocuments] = useState<DocumentsFromScrapperResult[]>([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
@@ -59,6 +68,7 @@ export const DocumentsFromScrapper = () => {
   const [dateEnd, setDateEnd] = useState<object | null>();
   const [sirutaId, setSirutaId] = useState<number | null>();
   const [functionName, setFunctionName] = useState<string>("");
+  const [jobErrors, setJobErrors] = useState<IJobErrors>({});
   const [filteredDocuments, setFilteredDocuments] = useState<
     DocumentsFromScrapperResult[]
   >([]);
@@ -143,7 +153,7 @@ export const DocumentsFromScrapper = () => {
     setDateEnd(date);
   };
 
-  const handleAddJob = async () => {
+  const handleAddJob = async (): Promise<void> => {
     const job = {
       subjectId: subject?.id as number,
       institutionId: selectedInstitutionId as number,
@@ -153,11 +163,19 @@ export const DocumentsFromScrapper = () => {
       dateEnd: moment(dateEnd).format("YYYY-MM-DD"),
     };
 
-    await jobService.addJob({
-      token: tokenStatus.token,
-      active: tokenStatus.active,
-      ...job,
-    });
+    setJobErrors({});
+
+    try {
+      await jobService.addJob({
+        token: tokenStatus.token,
+        active: tokenStatus.active,
+        ...job,
+      });
+    } catch (e: any) {
+      handleAddJobError(e);
+
+      return;
+    }
 
     const jobsResponse = await jobService.getSubjectsJobs({
       token: tokenStatus.token,
@@ -167,6 +185,21 @@ export const DocumentsFromScrapper = () => {
 
     setSubjectJobs(jobsResponse);
     setAddJobOpened(false);
+  };
+
+  const handleAddJobError = (error: any): void => {
+    if (ApiErrors.VALIDATION !== error?.response?.data?.code) {
+      return;
+    }
+
+    const jobErrors: IJobErrors = {};
+
+    for (const validationError of error.response.data.details) {
+      jobErrors[validationError.context.key as keyof IJobErrors] =
+        validationError.message;
+    }
+
+    setJobErrors(jobErrors);
   };
 
   const handleChangeJob = (event: ChangeEvent, value: string): void => {
@@ -309,7 +342,6 @@ export const DocumentsFromScrapper = () => {
           subjectId: subject.id,
         });
         setSubjectJobs(response);
-        console.log(response);
       };
       documentsResponse();
       subjectJobsResponse();
@@ -440,13 +472,17 @@ export const DocumentsFromScrapper = () => {
                       {option.label}
                     </Box>
                   )}
-                  renderInput={(params) => (
+                  renderInput={(params: TextFieldProps): JSX.Element => (
                     <TextField
                       {...params}
                       label="Alege institutia"
                       inputProps={{
                         ...params.inputProps,
                       }}
+                      error={!!jobErrors.institutionId}
+                      {...(jobErrors.institutionId
+                        ? { helperText: jobErrors.institutionId }
+                        : {})}
                     />
                   )}
                 />
@@ -464,13 +500,17 @@ export const DocumentsFromScrapper = () => {
                       {option}
                     </Box>
                   )}
-                  renderInput={(params) => (
+                  renderInput={(params: TextFieldProps): JSX.Element => (
                     <TextField
                       {...params}
                       label="Alege functia"
                       inputProps={{
                         ...params.inputProps,
                       }}
+                      error={!!jobErrors.name}
+                      {...(jobErrors.name
+                        ? { helperText: jobErrors.name }
+                        : {})}
                     />
                   )}
                 />
@@ -481,7 +521,15 @@ export const DocumentsFromScrapper = () => {
                   inputFormat="DD MM YYYY"
                   value={dateStart}
                   onChange={handleDateStart}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params: TextFieldProps): JSX.Element => (
+                    <TextField
+                      {...params}
+                      error={!!jobErrors.dateStart}
+                      {...(jobErrors.dateStart
+                        ? { helperText: jobErrors.dateStart }
+                        : {})}
+                    />
+                  )}
                 />
 
                 <DesktopDatePicker
@@ -490,7 +538,15 @@ export const DocumentsFromScrapper = () => {
                   inputFormat="DD MM YYYY"
                   value={dateEnd}
                   onChange={handleDateEnd}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params: TextFieldProps): JSX.Element => (
+                    <TextField
+                      {...params}
+                      error={!!jobErrors.dateEnd}
+                      {...(jobErrors.dateEnd
+                        ? { helperText: jobErrors.dateEnd }
+                        : {})}
+                    />
+                  )}
                 />
 
                 <Button

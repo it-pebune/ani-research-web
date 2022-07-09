@@ -49,6 +49,7 @@ export const jobService = {
     }
     return response;
   },
+
   addJob: async (reqData: {
     token: string;
     active: boolean;
@@ -60,21 +61,14 @@ export const jobService = {
     dateEnd?: string | undefined;
     info?: string;
   }): Promise<any> => {
-    let response: any;
-    if (reqData.active) {
-      const config = {
-        headers: { Authorization: `Bearer ${reqData.token}` },
-      };
-      const {
-        subjectId,
-        institutionId,
-        sirutaId,
-        name,
-        dateStart,
-        dateEnd,
-        info,
-      } = reqData;
-      const payload = JSON.parse(
+    if (!reqData.active) {
+      throw new Error("Active token required for adding job.");
+    }
+
+    const config = { headers: { Authorization: `Bearer ${reqData.token}` } },
+      { subjectId, institutionId, sirutaId, name, dateStart, dateEnd, info } =
+        reqData,
+      payload = JSON.parse(
         JSON.stringify({
           subjectId,
           institutionId,
@@ -86,17 +80,9 @@ export const jobService = {
         })
       );
 
-      try {
-        response = await axios.post(`${API_BASE_URL}/jobs`, payload, config);
-        const data = await response.data;
-        return data;
-      } catch (error) {
-        response = error;
-        console.log(error);
-      }
-    }
-    return response;
+    return (await axios.post(`${API_BASE_URL}/jobs`, payload, config)).data;
   },
+
   updateInstitution: async (reqData: {
     token: string;
     active: boolean;
