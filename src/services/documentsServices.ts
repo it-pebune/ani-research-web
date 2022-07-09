@@ -85,7 +85,7 @@ export const documentService = {
       name: string;
       downloadUrl: string;
     }[]
-  ): Promise<void> => {
+  ): Promise<boolean[]> => {
     if (!tokenStatus.active) {
       throw new Error("Active token required for adding documents.");
     }
@@ -94,7 +94,7 @@ export const documentService = {
       headers: { Authorization: `Bearer ${tokenStatus.token}` },
     };
 
-    await axios.post(`${API_BASE_URL}/docs`, documents, config);
+    return (await axios.post(`${API_BASE_URL}/docs`, documents, config)).data;
   },
 
   getDocumentsFromDataBase: async (reqData: {

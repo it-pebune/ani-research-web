@@ -50,6 +50,9 @@ export const jobService = {
     return response;
   },
 
+  /**
+   * @throws {Error}
+   */
   addJob: async (reqData: {
     token: string;
     active: boolean;

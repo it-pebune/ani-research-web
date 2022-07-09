@@ -1,4 +1,5 @@
 import {
+  Alert,
   Autocomplete,
   Box,
   Button,
@@ -7,6 +8,7 @@ import {
   IconButton,
   Radio,
   RadioGroup,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -77,6 +79,10 @@ export const DocumentsFromScrapper = () => {
     []
   );
   const [loadingDocuments, setLoadingDocuments] = useState<boolean>(true);
+  const [documentsUploadedSuccessfully, setDocumentsUploadedSuccessfully] =
+    useState<boolean>(false);
+  const [documentsUploadedWithFailure, setDocumentsUploadedWithFailure] =
+    useState<boolean>(false);
 
   const filterDocumentsByJob = (
     documents: DocumentsFromScrapperResult[],
@@ -239,7 +245,7 @@ export const DocumentsFromScrapper = () => {
     }
   };
 
-  const handleUploadDocuments = async () => {
+  const handleUploadDocuments = async (): Promise<void> => {
     setLoadingDocuments(true);
 
     const selectedDocumentsForRequest = documents
@@ -263,17 +269,37 @@ export const DocumentsFromScrapper = () => {
         date: moment(selectedDocument.date, "DD.MM.YYYY").format("YYYY-MM-DD"),
       }));
 
-    await documentService.addNewDocuments(
-      tokenStatus,
-      selectedDocumentsForRequest
-    );
+    const uploadedDocumentFilenames: string[] = [];
+
+    try {
+      const uploadedDocumentIndexes = await documentService.addNewDocuments(
+        tokenStatus,
+        selectedDocumentsForRequest
+      );
+
+      for (const uploadedDocumentIndex in uploadedDocumentIndexes) {
+        if (uploadedDocumentIndexes[uploadedDocumentIndex]) {
+          uploadedDocumentFilenames.push(
+            selectedDocumentsForRequest[uploadedDocumentIndex].name
+          );
+        }
+      }
+
+      if (uploadedDocumentFilenames.length === selectedDocumentUids.length) {
+        setDocumentsUploadedSuccessfully(true);
+      } else {
+        setDocumentsUploadedWithFailure(true);
+      }
+    } catch (e: any) {
+      setDocumentsUploadedWithFailure(true);
+    }
 
     setFilteredDocuments((documents: DocumentsFromScrapperResult[]) =>
       documents.map(
         (
           document: DocumentsFromScrapperResult
         ): DocumentsFromScrapperResult => {
-          if (selectedDocumentUids.includes(document.uid)) {
+          if (uploadedDocumentFilenames.includes(document.filename)) {
             document.existent = true;
           }
 
@@ -318,7 +344,8 @@ export const DocumentsFromScrapper = () => {
 
                 return document;
               }
-            )
+            ),
+            selectedJob
           )
         );
         setDataUrl(response.downloadUrl);
@@ -787,6 +814,26 @@ export const DocumentsFromScrapper = () => {
         onClose={handleNewInstitutionClose}
         onAction={handleNewInstitution}
       />
+
+      <Snackbar
+        open={documentsUploadedSuccessfully}
+        autoHideDuration={5000}
+        onClose={(): void => setDocumentsUploadedSuccessfully(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert severity="success">
+          Selected documents were successfully uploaded.
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={documentsUploadedWithFailure}
+        autoHideDuration={5000}
+        onClose={(): void => setDocumentsUploadedWithFailure(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert severity="error">Could not upload all selected documents.</Alert>
+      </Snackbar>
     </Box>
   );
 };
