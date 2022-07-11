@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import {
   Autocomplete,
   Box,
@@ -27,18 +26,25 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import moment from "moment";
 import { capitalizeFirst } from "../../utils/stringUtils";
 import { institutionService } from "../../services/institutionsService";
+import { ApiErrors } from "../../enums/ErrorsEnums";
 
 interface Props {
-  open: boolean;
   onClose: any;
   onAction: any;
 }
 
-const AddInstitutionDialogue: React.FC<Props> = ({
-  open,
-  onClose,
-  onAction,
-}) => {
+interface IErrors {
+  name?: string;
+  address?: string;
+  type?: string;
+  sirutaId?: string;
+  cui?: string;
+  regCom?: string;
+  dateStart?: string;
+  dateEnd?: string;
+}
+
+const AddInstitutionDialogue: React.FC<Props> = ({ onClose, onAction }) => {
   const noInstitution = {
     name: "",
     type: null,
@@ -58,24 +64,17 @@ const AddInstitutionDialogue: React.FC<Props> = ({
   const [selectedType, setSelectedType] = useState<string | undefined>("");
   const [institutionData, setInstitutionData] =
     useState<Institution>(noInstitution);
-
-  const [formErrors, setFormErrors] = useState({
-    name: false,
-    type: false,
-    sirutaId: false,
-  });
-
+  const [errors, setErrors] = useState<IErrors>({});
   const [dateStart, setDateStart] = useState<object | null>();
   const [dateEnd, setDateEnd] = useState<object | null>();
-
   const institutionTypes = [
-    { label: "institutie publica", value: 0 },
-    { label: "institutie privata", value: 1 },
+    { label: "Institutie Publica", value: 0 },
+    { label: "Institutie Privata", value: 1 },
     { label: "ONG", value: 2 },
-    { label: " universitate", value: 3 },
-    { label: "liceu", value: 4 },
-    { label: "senat", value: 254 },
-    { label: "camera depututilor", value: 255 },
+    { label: "Universitate", value: 3 },
+    { label: "Liceu", value: 4 },
+    { label: "Senat", value: 254 },
+    { label: "Camera Deputatilor", value: 255 },
   ];
 
   const handleCounty = (evt: any, data: any) => {
@@ -131,46 +130,48 @@ const AddInstitutionDialogue: React.FC<Props> = ({
     }));
   };
 
-  const handleAddInstitution = async () => {
-    console.log(institutionData.type);
-    if (
-      institutionData.sirutaId ||
-      institutionData.name === "" ||
-      institutionData.type ||
-      institutionData.type === 0
-    ) {
-      if (tokenStatus.active) {
-        const addInstitutionResponse = await institutionService.addInstitution({
-          ...tokenStatus,
-          ...institutionData,
-          requireDecls: institutionData.requireDecls ? 1 : 0,
-          regCom:
-            institutionData.regCom !== "" ? institutionData.regCom : undefined,
-          cui: institutionData.cui !== "" ? institutionData.cui : undefined,
-          address:
-            institutionData.address !== ""
-              ? institutionData.address
-              : undefined,
-          dateStart:
-            institutionData.dateStart !== ""
-              ? new Date(institutionData.dateStart)
-              : undefined,
-          dateEnd:
-            institutionData.dateEnd !== ""
-              ? new Date(institutionData.dateEnd)
-              : undefined,
-        });
+  const handleAddInstitution = async (): Promise<void> => {
+    setErrors({});
 
-        console.log(addInstitutionResponse);
-      }
-    } else {
-      setFormErrors((prevData) => ({
-        ...prevData,
-        sirutaId: !institutionData.sirutaId ? true : false,
-        name: institutionData.name === "" ? true : false,
-        type: !institutionData.type ? true : false,
-      }));
+    try {
+      await institutionService.addInstitution({
+        ...tokenStatus,
+        ...institutionData,
+        requireDecls: institutionData.requireDecls ? 1 : 0,
+        regCom:
+          institutionData.regCom !== "" ? institutionData.regCom : undefined,
+        cui: institutionData.cui !== "" ? institutionData.cui : undefined,
+        address:
+          institutionData.address !== "" ? institutionData.address : undefined,
+        dateStart:
+          institutionData.dateStart !== ""
+            ? new Date(institutionData.dateStart)
+            : undefined,
+        dateEnd:
+          institutionData.dateEnd !== ""
+            ? new Date(institutionData.dateEnd)
+            : undefined,
+      });
+
+      onAction();
+    } catch (e: any) {
+      handleAddInstitutionError(e);
     }
+  };
+
+  const handleAddInstitutionError = (error: any): void => {
+    if (ApiErrors.VALIDATION !== error?.response?.data?.code) {
+      return;
+    }
+
+    const errors: IErrors = {};
+
+    for (const validationError of error.response.data.details) {
+      errors[validationError.context.key as keyof IErrors] =
+        validationError.message;
+    }
+
+    setErrors(errors);
   };
 
   useEffect(() => {
@@ -206,7 +207,7 @@ const AddInstitutionDialogue: React.FC<Props> = ({
         },
       }}
       onClose={onClose}
-      open={open}
+      open={true}
     >
       <DialogTitle
         sx={{
@@ -237,21 +238,26 @@ const AddInstitutionDialogue: React.FC<Props> = ({
           name="name"
           spellCheck={false}
           onChange={handleTextField}
-          error={formErrors.name}
-          helperText={formErrors.name && "Acest camp este obligatoriu"}
+          error={!!errors.name}
+          helperText={errors.name}
           FormHelperTextProps={{
             sx: { marginLeft: "auto" },
           }}
           sx={{ height: "50px" }}
-        ></TextField>
+        />
 
         <TextField
           label="Adresa institutiei"
           name="adress"
           spellCheck={false}
           onChange={handleTextField}
+          error={!!errors.address}
+          helperText={errors.address}
+          FormHelperTextProps={{
+            sx: { marginLeft: "auto" },
+          }}
           sx={{ height: "50px" }}
-        ></TextField>
+        />
 
         <Box
           sx={{
@@ -264,7 +270,7 @@ const AddInstitutionDialogue: React.FC<Props> = ({
           <FormControl fullWidth>
             <InputLabel
               id="type-select-label"
-              sx={{ color: formErrors.type ? "red" : "inherit" }}
+              sx={{ color: errors.type ? "red" : "inherit" }}
             >
               Tipul institutiei
             </InputLabel>
@@ -273,7 +279,7 @@ const AddInstitutionDialogue: React.FC<Props> = ({
               labelId="type-select-label"
               id="demo-simple-select"
               name="type"
-              error={formErrors.type}
+              error={!!errors.type}
               value={selectedType}
               label="Tipul institutiei"
               onChange={(e) => handleType(e.target)}
@@ -284,9 +290,9 @@ const AddInstitutionDialogue: React.FC<Props> = ({
                 </MenuItem>
               ))}
             </Select>
-            {formErrors.type && (
+            {errors.type && (
               <FormHelperText sx={{ color: "red", marginLeft: "auto" }}>
-                Acest camp este obligatoriu
+                {errors.type}
               </FormHelperText>
             )}
           </FormControl>
@@ -323,7 +329,7 @@ const AddInstitutionDialogue: React.FC<Props> = ({
                 }}
               />
             )}
-          ></Autocomplete>
+          />
 
           <Autocomplete
             id="uat-select"
@@ -339,8 +345,8 @@ const AddInstitutionDialogue: React.FC<Props> = ({
               <TextField
                 {...params}
                 label="Alege localitate"
-                error={formErrors.sirutaId}
-                helperText={formErrors.name && "Acest camp este obligatoriu"}
+                error={!!errors.sirutaId}
+                helperText={errors.sirutaId}
                 FormHelperTextProps={{
                   sx: { marginLeft: "auto" },
                 }}
@@ -349,7 +355,7 @@ const AddInstitutionDialogue: React.FC<Props> = ({
                 }}
               />
             )}
-          ></Autocomplete>
+          />
         </Box>
         <Box
           sx={{
@@ -363,12 +369,22 @@ const AddInstitutionDialogue: React.FC<Props> = ({
             label="Cod unic de inregistrare"
             name="cui"
             onChange={handleTextField}
-          ></TextField>
+            error={!!errors.cui}
+            helperText={errors.cui}
+            FormHelperTextProps={{
+              sx: { marginLeft: "auto" },
+            }}
+          />
           <TextField
             label="Nr inreg registrul Comertului"
             name="regCom"
             onChange={handleTextField}
-          ></TextField>
+            error={!!errors.regCom}
+            helperText={errors.regCom}
+            FormHelperTextProps={{
+              sx: { marginLeft: "auto" },
+            }}
+          />
         </Box>
 
         <Box
@@ -384,7 +400,16 @@ const AddInstitutionDialogue: React.FC<Props> = ({
             inputFormat="DD MM YYYY"
             value={dateStart}
             onChange={handleDateStart}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={!!errors.dateStart}
+                helperText={errors.dateStart}
+                FormHelperTextProps={{
+                  sx: { marginLeft: "auto" },
+                }}
+              />
+            )}
           />
 
           <DesktopDatePicker
@@ -393,7 +418,16 @@ const AddInstitutionDialogue: React.FC<Props> = ({
             inputFormat="DD MM YYYY"
             value={dateEnd}
             onChange={handleDateEnd}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={!!errors.dateEnd}
+                helperText={errors.dateEnd}
+                FormHelperTextProps={{
+                  sx: { marginLeft: "auto" },
+                }}
+              />
+            )}
           />
         </Box>
       </DialogContent>

@@ -84,6 +84,16 @@ export const DocumentsFromScrapper = () => {
   const [documentsUploadedWithFailure, setDocumentsUploadedWithFailure] =
     useState<boolean>(false);
 
+  const loadInstitutions = async () => {
+    const response = await institutionService.getInstitutions({
+      token: tokenStatus.token,
+      active: tokenStatus.active,
+    });
+
+    setInstitutionsResponse(response);
+    setInstitutions(response.map((institution) => institution.name));
+  };
+
   const filterDocumentsByJob = (
     documents: DocumentsFromScrapperResult[],
     job?: Job
@@ -119,7 +129,10 @@ export const DocumentsFromScrapper = () => {
     setAddInstitutionOpened(false);
   };
 
-  const handleNewInstitution = () => {};
+  const handleNewInstitution = () => {
+    setAddInstitutionOpened(false);
+    loadInstitutions();
+  };
 
   const handleInstitution = (
     e: React.SyntheticEvent<Element, Event>,
@@ -353,14 +366,6 @@ export const DocumentsFromScrapper = () => {
 
         setLoadingDocuments(false);
       };
-      const institutionsResponse = async () => {
-        const response = await institutionService.getInstitutions({
-          token: tokenStatus.token,
-          active: tokenStatus.active,
-        });
-        setInstitutionsResponse(response);
-        setInstitutions(response.map((institution) => institution.name));
-      };
 
       const subjectJobsResponse = async () => {
         const response = await jobService.getSubjectsJobs({
@@ -372,7 +377,7 @@ export const DocumentsFromScrapper = () => {
       };
       documentsResponse();
       subjectJobsResponse();
-      institutionsResponse();
+      loadInstitutions();
     }
   }, [subject]);
 
@@ -448,7 +453,7 @@ export const DocumentsFromScrapper = () => {
               >
                 <Autocomplete
                   options={[...institutions, "adauga"].map(
-                    (element, index) => ({
+                    (element: string) => ({
                       value: element,
                       label:
                         element !== "adauga" ? (
@@ -507,9 +512,7 @@ export const DocumentsFromScrapper = () => {
                         ...params.inputProps,
                       }}
                       error={!!jobErrors.institutionId}
-                      {...(jobErrors.institutionId
-                        ? { helperText: jobErrors.institutionId }
-                        : {})}
+                      helperText={jobErrors.institutionId}
                     />
                   )}
                 />
@@ -535,9 +538,7 @@ export const DocumentsFromScrapper = () => {
                         ...params.inputProps,
                       }}
                       error={!!jobErrors.name}
-                      {...(jobErrors.name
-                        ? { helperText: jobErrors.name }
-                        : {})}
+                      helperText={jobErrors.name}
                     />
                   )}
                 />
@@ -552,9 +553,7 @@ export const DocumentsFromScrapper = () => {
                     <TextField
                       {...params}
                       error={!!jobErrors.dateStart}
-                      {...(jobErrors.dateStart
-                        ? { helperText: jobErrors.dateStart }
-                        : {})}
+                      helperText={jobErrors.dateStart}
                     />
                   )}
                 />
@@ -569,9 +568,7 @@ export const DocumentsFromScrapper = () => {
                     <TextField
                       {...params}
                       error={!!jobErrors.dateEnd}
-                      {...(jobErrors.dateEnd
-                        ? { helperText: jobErrors.dateEnd }
-                        : {})}
+                      helperText={jobErrors.dateEnd}
                     />
                   )}
                 />
@@ -809,11 +806,12 @@ export const DocumentsFromScrapper = () => {
         )}
       </Box>
 
-      <AddInstitutionDialogue
-        open={addInstitutionOpened}
-        onClose={handleNewInstitutionClose}
-        onAction={handleNewInstitution}
-      />
+      {addInstitutionOpened && (
+        <AddInstitutionDialogue
+          onClose={handleNewInstitutionClose}
+          onAction={handleNewInstitution}
+        />
+      )}
 
       <Snackbar
         open={documentsUploadedSuccessfully}

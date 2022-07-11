@@ -50,6 +50,10 @@ export const institutionService = {
     }
     return response;
   },
+
+  /**
+   * @throws {Error}
+   */
   addInstitution: async (reqData: {
     token: string;
     active: boolean;
@@ -63,13 +67,15 @@ export const institutionService = {
     cui?: string;
     regCom?: string;
     info?: string;
-  }): Promise<any> => {
-    let response: any;
-    if (reqData.active) {
-      const config = {
+  }): Promise<void> => {
+    if (!reqData.active) {
+      throw new Error("Active token required for adding institution.");
+    }
+
+    const config = {
         headers: { Authorization: `Bearer ${reqData.token}` },
-      };
-      const {
+      },
+      {
         name,
         type,
         sirutaId,
@@ -80,8 +86,8 @@ export const institutionService = {
         cui,
         regCom,
         info,
-      } = reqData;
-      const payload = JSON.parse(
+      } = reqData,
+      payload = JSON.parse(
         JSON.stringify({
           name,
           type,
@@ -96,17 +102,9 @@ export const institutionService = {
         })
       );
 
-      try {
-        response = await axios.post(`${API_BASE_URL}/insts`, payload, config);
-        const data = await response.data;
-        return data;
-      } catch (error) {
-        response = error;
-        console.log(error);
-      }
-    }
-    return response;
+    await axios.post(`${API_BASE_URL}/insts`, payload, config);
   },
+
   updateInstitution: async (reqData: {
     token: string;
     active: boolean;
