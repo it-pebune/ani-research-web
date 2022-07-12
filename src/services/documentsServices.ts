@@ -70,6 +70,33 @@ export const documentService = {
     }
     return response;
   },
+
+  /**
+   * @throws {Error}
+   */
+  addNewDocuments: async (
+    tokenStatus: { active: boolean; token: string },
+    documents: {
+      subjectId: number;
+      type: number;
+      jobId: number;
+      status: number;
+      date: string;
+      name: string;
+      downloadUrl: string;
+    }[]
+  ): Promise<boolean[]> => {
+    if (!tokenStatus.active) {
+      throw new Error("Active token required for adding documents.");
+    }
+
+    const config = {
+      headers: { Authorization: `Bearer ${tokenStatus.token}` },
+    };
+
+    return (await axios.post(`${API_BASE_URL}/docs`, documents, config)).data;
+  },
+
   getDocumentsFromDataBase: async (reqData: {
     token: string;
     active: boolean;

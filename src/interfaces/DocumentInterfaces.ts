@@ -6,8 +6,9 @@ export interface DocumentsFromScrapperResult {
   locality: string;
   county: string;
   date: string;
-  type: number;
+  type: string;
   link: string;
+  filename: string;
   uid: string;
   existent?: boolean;
 }

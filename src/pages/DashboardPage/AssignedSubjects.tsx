@@ -1,25 +1,20 @@
 import { Box } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import DocumenstFromScrapperDialog from "../../components/ReviewerComponents/DocumenstFromScrapperDialog";
 import DocumentsListDialog from "../../components/ReviewerComponents/DocumentsListDialog";
 import MySubjects from "../../components/ReviewerComponents/MySubjects";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
 import { subjectService } from "../../services/subjectService";
 import UserContext from "../../store/UserContext";
 import useTokenStatus from "../../utils/useTokenStatus";
+import { useNavigate } from "react-router";
 
 const AssignedSubjects = () => {
+  const navigate = useNavigate();
   const [subjects, setSubjects] = useState<SubjectFromDataBase[]>([]);
   const [selectedSubject, setSelectedSubject] = useState<SubjectFromDataBase>();
-  const [documentsFromScrapperOpen, setDocumentsFromScrapperOpen] =
-    useState(false);
   const [documentsListOpen, setDocumentsListOpen] = useState(false);
   const tokenStatus = useTokenStatus();
   const userContext = useContext(UserContext);
-
-  useEffect(() => {
-    // console.log(subjects);
-  }, [subjects]);
 
   const handleSelectedSubject = (
     subject: SubjectFromDataBase,
@@ -29,28 +24,15 @@ const AssignedSubjects = () => {
     if (action === "to-documents") {
       setDocumentsListOpen(true);
     } else if (action === "to-download") {
-      setDocumentsFromScrapperOpen(true);
+      navigate(`/scrapped-docs/${subject.id}`);
     }
-  };
-
-  const handleDocumentAction = () => {
-    setDocumentsFromScrapperOpen(false);
-    setDocumentsListOpen(true);
   };
 
   const handleDocumentFromListAction = () => {};
 
-  const handleDocumentsFromScrapperClose = () => {
-    setDocumentsFromScrapperOpen(false);
-  };
-
   const handleDocumentsListClose = () => {
     setDocumentsListOpen(false);
   };
-
-  useEffect(() => {
-    // console.log(selectedSubject);
-  }, [selectedSubject]);
 
   useEffect(() => {
     if (tokenStatus.active) {
@@ -71,25 +53,18 @@ const AssignedSubjects = () => {
   }, []);
 
   return (
-    <Box>
+    <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <MySubjects
         onSubjectSelected={handleSelectedSubject}
         subjects={subjects}
-      ></MySubjects>
-
-      <DocumenstFromScrapperDialog
-        open={documentsFromScrapperOpen}
-        subject={selectedSubject}
-        onClose={handleDocumentsFromScrapperClose}
-        onAction={handleDocumentAction}
-      ></DocumenstFromScrapperDialog>
+      />
 
       <DocumentsListDialog
         open={documentsListOpen}
         subject={selectedSubject}
         onClose={handleDocumentsListClose}
         onAction={handleDocumentFromListAction}
-      ></DocumentsListDialog>
+      />
     </Box>
   );
 };

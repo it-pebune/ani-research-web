@@ -11,9 +11,9 @@ import { useEffect, useState } from "react";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
 import CustomTableRow from "../../components/Shared/CustomTableRow";
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
-import AddSubjectDialog from "../../components/SubjectsComponents.js/AddSubjectDialog";
-import AssignDialog from "../../components/SubjectsComponents.js/AssignDialog";
-import SubjectsFIltersOverview from "../../components/SubjectsComponents.js/SubjectsFIltersOverview";
+import AddSubjectDialog from "../../components/SubjectsComponents/AddSubjectDialog";
+import AssignDialog from "../../components/SubjectsComponents/AssignDialog";
+import SubjectsFiltersOverview from "../../components/SubjectsComponents/SubjectsFiltersOverview";
 import {
   SubjectFilters,
   SubjectFromDataBase,
@@ -200,10 +200,10 @@ const Subjects = (props: any) => {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Box>
-        <SubjectsFIltersOverview
+        <SubjectsFiltersOverview
           filters={myFilters}
           onFiltersChanged={setFilters}
-        ></SubjectsFIltersOverview>
+        />
       </Box>
       <Box
         sx={{

@@ -76,7 +76,6 @@ const CustomTableRow: React.FC<Props> = ({
           color: "#6B636B",
           display: "grid",
           alignContent: "center",
-          fontFamily: "'Montserrat',  sans-serif",
         },
         ...(highlighted && {
           "& .MuiTableCell-root": {

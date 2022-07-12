@@ -7,7 +7,7 @@ interface Props {
   onFiltersChanged: any;
 }
 
-const SubjectsFIltersOverview: React.FC<Props> = ({
+const SubjectsFiltersOverview: React.FC<Props> = ({
   filters,
   onFiltersChanged,
 }) => {
@@ -60,4 +60,4 @@ const SubjectsFIltersOverview: React.FC<Props> = ({
   );
 };
 
-export default SubjectsFIltersOverview;
+export default SubjectsFiltersOverview;
