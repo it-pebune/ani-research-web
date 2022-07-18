@@ -108,8 +108,18 @@ export const DocumentsFromScrapper = () => {
         }
 
         return (
-          document.function.toLowerCase() === job.name.toLowerCase() &&
-          document.locality.toLowerCase() === job.uat.toLowerCase() &&
+          0 ===
+            document.function
+              .toLowerCase()
+              .localeCompare(job.name.toLowerCase(), "en", {
+                sensitivity: "base",
+              }) &&
+          0 ===
+            document.locality
+              .toLowerCase()
+              .localeCompare(job.uat.toLowerCase(), "en", {
+                sensitivity: "base",
+              }) &&
           moment(document.date, "DD.MM.YYYY") >= moment(job.dateStart) &&
           moment(document.date, "DD.MM.YYYY") <= moment(job.dateEnd)
         );
