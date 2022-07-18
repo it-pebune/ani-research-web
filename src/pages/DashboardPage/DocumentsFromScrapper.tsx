@@ -69,6 +69,9 @@ export const DocumentsFromScrapper = () => {
   const [dateStart, setDateStart] = useState<object | null>();
   const [dateEnd, setDateEnd] = useState<object | null>();
   const [sirutaId, setSirutaId] = useState<number | null>();
+  const [availableFunctionNames, setAvailableFunctionNames] = useState<
+    string[]
+  >([]);
   const [functionName, setFunctionName] = useState<string>("");
   const [jobErrors, setJobErrors] = useState<IJobErrors>({});
   const [filteredDocuments, setFilteredDocuments] = useState<
@@ -105,8 +108,6 @@ export const DocumentsFromScrapper = () => {
         }
 
         return (
-          document.institution.toLowerCase() ===
-            job.institution.toLowerCase() &&
           document.function.toLowerCase() === job.name.toLowerCase() &&
           document.locality.toLowerCase() === job.uat.toLowerCase() &&
           moment(document.date, "DD.MM.YYYY") >= moment(job.dateStart) &&
@@ -146,9 +147,6 @@ export const DocumentsFromScrapper = () => {
         institutionsResponse?.find(
           (institution) => institution.name === element.value
         )?.id
-      );
-      setFunctionName(
-        element.value === "Camera Deputatilor" ? "Deputat" : "Senator"
       );
       setSirutaId(
         institutionsResponse?.find(
@@ -363,6 +361,24 @@ export const DocumentsFromScrapper = () => {
         );
         setDataUrl(response.downloadUrl);
         setDocuments([...response.results]);
+        setAvailableFunctionNames(
+          response.results
+            .map((document: DocumentsFromScrapperResult): string => {
+              return (
+                document.function.charAt(0).toUpperCase() +
+                document.function.slice(1).toLowerCase()
+              );
+            })
+            .filter(
+              (
+                functionName: string,
+                index: number,
+                self: string[]
+              ): boolean => {
+                return self.indexOf(functionName) === index;
+              }
+            )
+        );
 
         setLoadingDocuments(false);
       };
@@ -518,7 +534,7 @@ export const DocumentsFromScrapper = () => {
                 />
 
                 <Autocomplete
-                  options={["Deputat", "Senator", ""]}
+                  options={["", ...availableFunctionNames]}
                   value={functionName}
                   isOptionEqualToValue={(option, value) => option === value}
                   getOptionLabel={(option) => option}
