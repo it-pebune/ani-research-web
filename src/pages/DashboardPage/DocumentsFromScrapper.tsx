@@ -6,7 +6,6 @@ import {
   Checkbox,
   Icon,
   IconButton,
-  Radio,
   RadioGroup,
   Snackbar,
   Table,
@@ -40,6 +39,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import AddInstitutionDialogue from "../../components/DialoguesComponents/AddInstitutionDialogue";
 import Loader from "../../components/Shared/Loader";
 import { ApiErrors } from "../../enums/ErrorsEnums";
+import { JobOption } from "../../components/Documents/JobOption";
 
 interface IJobErrors {
   institutionId?: string;
@@ -614,53 +614,11 @@ export const DocumentsFromScrapper = () => {
               onChange={handleChangeJob}
             >
               {subjectJobs.map((subjectJob: Job) => (
-                <Box
-                  key={subjectJob.id}
-                  sx={{
-                    px: "16px",
-                    display: "grid",
-                    gridTemplateColumns: "60px 1fr",
-                  }}
-                >
-                  <Radio
-                    value={subjectJob.id}
-                    checked={subjectJob.id === selectedJob?.id}
-                    onClick={handleClickJob}
-                  />
-
-                  <Box>
-                    <Typography variant="body1">
-                      <b>{subjectJob.name}</b>
-                    </Typography>
-
-                    <Typography variant="body2">
-                      {subjectJob.institution
-                        .toLowerCase()
-                        .split(" ")
-                        .map(
-                          (str: string) =>
-                            str.charAt(0).toUpperCase() + str.slice(1)
-                        )
-                        .join(" ")}{" "}
-                      {subjectJob.uat
-                        .toLowerCase()
-                        .split(" ")
-                        .map(
-                          (str: string) =>
-                            str.charAt(0).toUpperCase() + str.slice(1)
-                        )
-                        .join(" ")}
-                    </Typography>
-
-                    <Typography variant="body2">
-                      {moment(subjectJob.dateStart).format("MM.YYYY")}
-                      {" - "}
-                      {subjectJob.dateEnd
-                        ? moment(subjectJob.dateEnd).format("MM.YYYY")
-                        : " prezent"}
-                    </Typography>
-                  </Box>
-                </Box>
+                <JobOption
+                  job={subjectJob}
+                  checked={subjectJob.id === selectedJob?.id}
+                  handleRadioClick={handleClickJob}
+                />
               ))}
             </RadioGroup>
           </Box>
