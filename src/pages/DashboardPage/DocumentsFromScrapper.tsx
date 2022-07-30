@@ -40,6 +40,7 @@ import AddInstitutionDialogue from "../../components/DialoguesComponents/AddInst
 import Loader from "../../components/Shared/Loader";
 import { ApiErrors } from "../../enums/ErrorsEnums";
 import { JobOption } from "../../components/Documents/JobOption";
+import { MouseEvent } from "react";
 
 interface IJobErrors {
   institutionId?: string;
@@ -128,7 +129,7 @@ export const DocumentsFromScrapper = () => {
   };
 
   const handleChangeRowsPerPage = (e: any) => {
-    setRowsPerPage(e.target.value);
+    setRowsPerPage(e.currentTarget.value);
     setPage(0);
   };
 
@@ -239,8 +240,8 @@ export const DocumentsFromScrapper = () => {
     setPage(0);
   };
 
-  const handleClickJob = (event: any): void => {
-    const jobId = parseInt(event.target.value);
+  const handleClickJob = (event: MouseEvent): void => {
+    const jobId = parseInt((event.currentTarget as HTMLInputElement).value);
 
     if (jobId === selectedJob?.id) {
       setSelectedJob(undefined);
@@ -253,7 +254,7 @@ export const DocumentsFromScrapper = () => {
     event: ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
-    const documentUid = event.target.value;
+    const documentUid = event.currentTarget.value;
 
     if (checked) {
       setSelectedDocumentUids((selectedDocumentUids: string[]): string[] =>
