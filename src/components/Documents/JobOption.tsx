@@ -21,14 +21,16 @@ interface Props {
   job: Job;
   checked: boolean;
   handleRadioClick: MouseEventHandler;
-  onDeleteJobSuccess: (job: Job) => void;
+  onEdit: (job: Job) => void;
+  onDeleteSuccess: (job: Job) => void;
 }
 
 export const JobOption: React.FC<Props> = ({
   job,
   checked,
   handleRadioClick,
-  onDeleteJobSuccess,
+  onEdit,
+  onDeleteSuccess,
 }: Props): ReactElement => {
   const [menuAnchorElement, setMenuAnchorElement] = useState<Element | null>(
       null
@@ -47,6 +49,10 @@ export const JobOption: React.FC<Props> = ({
   const openMenu = (event: MouseEvent): void =>
       setMenuAnchorElement(event.currentTarget),
     closeMenu = (): void => setMenuAnchorElement(null),
+    startEdit = (): void => {
+      closeMenu();
+      onEdit(job);
+    },
     openDeleteDialog = (): void => {
       closeMenu();
       setDeleteDialogOpened(true);
@@ -58,7 +64,7 @@ export const JobOption: React.FC<Props> = ({
       try {
         await jobService.deleteJob(tokenStatus, job.id);
 
-        onDeleteJobSuccess(job);
+        onDeleteSuccess(job);
       } catch (e: any) {
         setJobDeletedWithFailure(true);
       }
@@ -105,7 +111,9 @@ export const JobOption: React.FC<Props> = ({
               },
             }}
           >
-            <MenuItem key="edit">Editeaza</MenuItem>
+            <MenuItem key="edit" onClick={startEdit}>
+              Editeaza
+            </MenuItem>
 
             <MenuItem key="delete" onClick={openDeleteDialog}>
               Sterge
