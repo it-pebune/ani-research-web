@@ -89,6 +89,45 @@ export const jobService = {
   /**
    * @throws {Error}
    */
+  editJob: async (reqData: {
+    token: string;
+    active: boolean;
+    id: number;
+    subjectId?: number | undefined;
+    institutionId: number;
+    sirutaId: number;
+    name: string;
+    dateStart: string | undefined;
+    dateEnd?: string | undefined;
+    info?: string;
+  }): Promise<any> => {
+    if (!reqData.active) {
+      throw new Error("Active token required for editing job.");
+    }
+
+    const config = { headers: { Authorization: `Bearer ${reqData.token}` } },
+      { subjectId, institutionId, sirutaId, name, dateStart, dateEnd, info } =
+        reqData,
+      payload = JSON.parse(
+        JSON.stringify({
+          subjectId,
+          institutionId,
+          sirutaId,
+          name,
+          dateStart,
+          dateEnd,
+          info,
+        })
+      );
+
+    return (
+      await axios.put(`${API_BASE_URL}/jobs/${reqData.id}`, payload, config)
+    ).data;
+  },
+
+  /**
+   * @throws {Error}
+   */
   deleteJob: async (
     tokenStatus: { token: string; active: boolean },
     id: number
