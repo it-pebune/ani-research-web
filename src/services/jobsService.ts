@@ -86,6 +86,24 @@ export const jobService = {
     return (await axios.post(`${API_BASE_URL}/jobs`, payload, config)).data;
   },
 
+  /**
+   * @throws {Error}
+   */
+  deleteJob: async (
+    tokenStatus: { token: string; active: boolean },
+    id: number
+  ): Promise<void> => {
+    if (!tokenStatus.active) {
+      throw new Error("Active token required for deleting job.");
+    }
+
+    const config = {
+      headers: { Authorization: `Bearer ${tokenStatus.token}` },
+    };
+
+    await axios.delete(`${API_BASE_URL}/jobs/${id}`, config);
+  },
+
   updateInstitution: async (reqData: {
     token: string;
     active: boolean;

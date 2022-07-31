@@ -1,31 +1,42 @@
 import { Job } from "../../interfaces/JobInterfaces";
 import React, { MouseEventHandler, ReactElement, useState } from "react";
 import {
+  Alert,
   Box,
   Icon,
   IconButton,
   Menu,
   MenuItem,
   Radio,
+  Snackbar,
   Typography,
 } from "@mui/material";
 import moment from "moment";
 import { MouseEvent } from "react";
+import CustomDialog from "../Shared/CustomDialog";
+import useTokenStatus from "../../utils/useTokenStatus";
+import { jobService } from "../../services/jobsService";
 
 interface Props {
   job: Job;
   checked: boolean;
   handleRadioClick: MouseEventHandler;
+  onDeleteJobSuccess: (job: Job) => void;
 }
 
 export const JobOption: React.FC<Props> = ({
   job,
   checked,
   handleRadioClick,
+  onDeleteJobSuccess,
 }: Props): ReactElement => {
   const [menuAnchorElement, setMenuAnchorElement] = useState<Element | null>(
-    null
-  );
+      null
+    ),
+    [deleteDialogOpened, setDeleteDialogOpened] = useState<boolean>(false),
+    tokenStatus = useTokenStatus(),
+    [jobDeletedWithFailure, setJobDeletedWithFailure] =
+      useState<boolean>(false);
 
   const uppercaseFirstLetter = (word: string): string =>
       word.charAt(0).toUpperCase() + word.slice(1),
@@ -35,7 +46,23 @@ export const JobOption: React.FC<Props> = ({
 
   const openMenu = (event: MouseEvent): void =>
       setMenuAnchorElement(event.currentTarget),
-    closeMenu = (): void => setMenuAnchorElement(null);
+    closeMenu = (): void => setMenuAnchorElement(null),
+    openDeleteDialog = (): void => {
+      closeMenu();
+      setDeleteDialogOpened(true);
+    },
+    closeDeleteDialog = (): void => setDeleteDialogOpened(false),
+    deleteJob = async (): Promise<void> => {
+      closeDeleteDialog();
+
+      try {
+        await jobService.deleteJob(tokenStatus, job.id);
+
+        onDeleteJobSuccess(job);
+      } catch (e: any) {
+        setJobDeletedWithFailure(true);
+      }
+    };
 
   return (
     <Box
@@ -80,7 +107,9 @@ export const JobOption: React.FC<Props> = ({
           >
             <MenuItem key="edit">Editeaza</MenuItem>
 
-            <MenuItem key="delete">Sterge</MenuItem>
+            <MenuItem key="delete" onClick={openDeleteDialog}>
+              Sterge
+            </MenuItem>
           </Menu>
         </Typography>
 
@@ -96,6 +125,32 @@ export const JobOption: React.FC<Props> = ({
             (job.dateEnd ? formatDate(job.dateEnd) : "prezent")}
         </Typography>
       </Box>
+
+      <CustomDialog
+        title="Sterge functie"
+        actionText="sterge"
+        icon="delete"
+        open={deleteDialogOpened}
+        onClose={closeDeleteDialog}
+        onAction={deleteJob}
+        contentHeight="100px"
+      >
+        <Typography variant="h6" align="center" color="error">
+          Sunteti sigur ca doriti sa stergeti functia "{job.name}"?
+        </Typography>
+      </CustomDialog>
+
+      <Snackbar
+        open={jobDeletedWithFailure}
+        autoHideDuration={5000}
+        onClose={(): void => setJobDeletedWithFailure(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert severity="error">
+          Functia "{job.name}" nu a putut fi stearsa. Va rog sa incercati din
+          nou.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

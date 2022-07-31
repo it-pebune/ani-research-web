@@ -250,6 +250,20 @@ export const DocumentsFromScrapper = () => {
     }
   };
 
+  const handleDeleteJob = (job: Job): void => {
+    setSubjectJobs((prevSubjectJobs: Job[]) =>
+      prevSubjectJobs.filter(
+        (prevSubjectJob: Job): boolean => prevSubjectJob !== job
+      )
+    );
+
+    if (job === selectedJob) {
+      setSelectedJob(undefined);
+      setFilteredDocuments(filterDocumentsByJob(documents));
+      setPage(0);
+    }
+  };
+
   const handleChangeDocuments = (
     event: ChangeEvent<HTMLInputElement>,
     checked: boolean
@@ -616,9 +630,11 @@ export const DocumentsFromScrapper = () => {
             >
               {subjectJobs.map((subjectJob: Job) => (
                 <JobOption
+                  key={subjectJob.id}
                   job={subjectJob}
                   checked={subjectJob.id === selectedJob?.id}
                   handleRadioClick={handleClickJob}
+                  onDeleteJobSuccess={handleDeleteJob}
                 />
               ))}
             </RadioGroup>
