@@ -10,6 +10,7 @@ interface Props {
   open: boolean;
   onClose: any;
   onAction: any;
+  contentHeight?: string;
 }
 
 const CustomDialog: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const CustomDialog: React.FC<Props> = ({
   open,
   onClose,
   onAction,
+  contentHeight,
 }) => {
   return (
     <Dialog
@@ -40,7 +42,7 @@ const CustomDialog: React.FC<Props> = ({
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "450px",
+          height: contentHeight ?? "450px",
           justifyContent: "space-around",
         }}
       >

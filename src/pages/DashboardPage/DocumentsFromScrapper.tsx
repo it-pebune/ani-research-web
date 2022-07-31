@@ -6,7 +6,6 @@ import {
   Checkbox,
   Icon,
   IconButton,
-  Radio,
   RadioGroup,
   Snackbar,
   Table,
@@ -40,6 +39,8 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import AddInstitutionDialogue from "../../components/DialoguesComponents/AddInstitutionDialogue";
 import Loader from "../../components/Shared/Loader";
 import { ApiErrors } from "../../enums/ErrorsEnums";
+import { JobOption } from "../../components/Documents/JobOption";
+import { MouseEvent } from "react";
 
 interface IJobErrors {
   institutionId?: string;
@@ -56,15 +57,19 @@ export const DocumentsFromScrapper = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [subject, setSubject] = useState<SubjectFromDataBase>();
-  const [addJobOpened, setAddJobOpened] = useState(false);
+  const [addEditJobOpened, setAddEditJobOpened] = useState(false);
   const [addInstitutionOpened, setAddInstitutionOpened] = useState(false);
   const [dataUrl, setDataUrl] = useState("");
   const [institutions, setInstitutions] = useState<string[]>([]);
   const [institutionsResponse, setInstitutionsResponse] =
     useState<Institution[]>();
   const [subjectJobs, setSubjectJobs] = useState<Job[]>([]);
+  const [editedJob, setEditedJob] = useState<Job | undefined>();
   const [selectedInstitutionId, setSelectedInstitutionId] = useState<
     number | undefined
+  >();
+  const [selectedInstitutionName, setSelectedInstitutionName] = useState<
+    string | undefined
   >();
   const [dateStart, setDateStart] = useState<object | null>();
   const [dateEnd, setDateEnd] = useState<object | null>();
@@ -158,6 +163,7 @@ export const DocumentsFromScrapper = () => {
           (institution) => institution.name === element.value
         )?.id
       );
+      setSelectedInstitutionName(element.value);
       setSirutaId(
         institutionsResponse?.find(
           (institution) => institution.name === element.value
@@ -180,7 +186,19 @@ export const DocumentsFromScrapper = () => {
     setDateEnd(date);
   };
 
-  const handleAddJob = async (): Promise<void> => {
+  const handleStartEditJob = (job: Job): void => {
+    setEditedJob(job);
+    setSelectedInstitutionId(parseInt(job.institutionId));
+    setSelectedInstitutionName(job.institution);
+    setSirutaId(parseInt(job.sirutaId));
+    setFunctionName(job.name);
+    setDateStart(moment(job.dateStart));
+    setDateEnd(job.dateEnd ? moment(job.dateEnd) : undefined);
+
+    setAddEditJobOpened(true);
+  };
+
+  const handleAddEditJob = async (): Promise<void> => {
     const job = {
       subjectId: subject?.id as number,
       institutionId: selectedInstitutionId as number,
@@ -193,13 +211,17 @@ export const DocumentsFromScrapper = () => {
     setJobErrors({});
 
     try {
-      await jobService.addJob({
+      const methodName = editedJob ? "editJob" : "addJob";
+
+      /** @ts-ignore */
+      await jobService[methodName]({
         token: tokenStatus.token,
         active: tokenStatus.active,
+        ...(editedJob ? { id: editedJob.id } : {}),
         ...job,
       });
     } catch (e: any) {
-      handleAddJobError(e);
+      handleAddEditJobError(e);
 
       return;
     }
@@ -211,10 +233,11 @@ export const DocumentsFromScrapper = () => {
     });
 
     setSubjectJobs(jobsResponse);
-    setAddJobOpened(false);
+    setAddEditJobOpened(false);
+    setEditedJob(undefined);
   };
 
-  const handleAddJobError = (error: any): void => {
+  const handleAddEditJobError = (error: any): void => {
     if (ApiErrors.VALIDATION !== error?.response?.data?.code) {
       return;
     }
@@ -239,10 +262,24 @@ export const DocumentsFromScrapper = () => {
     setPage(0);
   };
 
-  const handleClickJob = (event: any): void => {
-    const jobId = parseInt(event.target.value);
+  const handleClickJob = (event: MouseEvent): void => {
+    const jobId = parseInt((event.target as HTMLInputElement).value);
 
     if (jobId === selectedJob?.id) {
+      setSelectedJob(undefined);
+      setFilteredDocuments(filterDocumentsByJob(documents));
+      setPage(0);
+    }
+  };
+
+  const handleDeleteJob = (job: Job): void => {
+    setSubjectJobs((prevSubjectJobs: Job[]) =>
+      prevSubjectJobs.filter(
+        (prevSubjectJob: Job): boolean => prevSubjectJob !== job
+      )
+    );
+
+    if (job === selectedJob) {
       setSelectedJob(undefined);
       setFilteredDocuments(filterDocumentsByJob(documents));
       setPage(0);
@@ -452,22 +489,32 @@ export const DocumentsFromScrapper = () => {
           <Box sx={{ boxShadow: 1, m: 1, pb: 4 }}>
             <Box>
               <IconButton
-                onClick={() => setAddJobOpened((prevState) => !prevState)}
+                onClick={() =>
+                  setAddEditJobOpened(
+                    (prevState: boolean | undefined): boolean => {
+                      if (prevState) {
+                        setEditedJob(undefined);
+                      }
+
+                      return !prevState;
+                    }
+                  )
+                }
                 sx={{ marginLeft: "auto", width: "40px", float: "right" }}
                 color="primary"
               >
                 {" "}
-                <Icon> {!addJobOpened ? "add" : "close"} </Icon>
+                <Icon> {!addEditJobOpened ? "add" : "close"} </Icon>
               </IconButton>
             </Box>
 
             <Box sx={{ clear: "both" }} />
 
-            {addJobOpened && (
+            {addEditJobOpened && (
               <Box
                 sx={{
                   p: 1,
-                  height: addJobOpened ? "auto" : 0,
+                  height: addEditJobOpened ? "auto" : 0,
                   overflow: "hidden",
                   display: "grid",
                   mb: 2,
@@ -499,6 +546,14 @@ export const DocumentsFromScrapper = () => {
                         ),
                     })
                   )}
+                  value={
+                    selectedInstitutionName
+                      ? {
+                          value: selectedInstitutionName,
+                          label: selectedInstitutionName,
+                        }
+                      : undefined
+                  }
                   getOptionLabel={(option) =>
                     option.value !== "adauga" ? option.value : ""
                   }
@@ -602,9 +657,9 @@ export const DocumentsFromScrapper = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleAddJob}
+                  onClick={handleAddEditJob}
                 >
-                  Adauga functie
+                  {editedJob ? "Actualizeaza" : "Adauga"} functie
                 </Button>
               </Box>
             )}
@@ -614,53 +669,14 @@ export const DocumentsFromScrapper = () => {
               onChange={handleChangeJob}
             >
               {subjectJobs.map((subjectJob: Job) => (
-                <Box
+                <JobOption
                   key={subjectJob.id}
-                  sx={{
-                    px: "16px",
-                    display: "grid",
-                    gridTemplateColumns: "60px 1fr",
-                  }}
-                >
-                  <Radio
-                    value={subjectJob.id}
-                    checked={subjectJob.id === selectedJob?.id}
-                    onClick={handleClickJob}
-                  />
-
-                  <Box>
-                    <Typography variant="body1">
-                      <b>{subjectJob.name}</b>
-                    </Typography>
-
-                    <Typography variant="body2">
-                      {subjectJob.institution
-                        .toLowerCase()
-                        .split(" ")
-                        .map(
-                          (str: string) =>
-                            str.charAt(0).toUpperCase() + str.slice(1)
-                        )
-                        .join(" ")}{" "}
-                      {subjectJob.uat
-                        .toLowerCase()
-                        .split(" ")
-                        .map(
-                          (str: string) =>
-                            str.charAt(0).toUpperCase() + str.slice(1)
-                        )
-                        .join(" ")}
-                    </Typography>
-
-                    <Typography variant="body2">
-                      {moment(subjectJob.dateStart).format("MM.YYYY")}
-                      {" - "}
-                      {subjectJob.dateEnd
-                        ? moment(subjectJob.dateEnd).format("MM.YYYY")
-                        : " prezent"}
-                    </Typography>
-                  </Box>
-                </Box>
+                  job={subjectJob}
+                  checked={subjectJob.id === selectedJob?.id}
+                  handleRadioClick={handleClickJob}
+                  onEdit={handleStartEditJob}
+                  onDeleteSuccess={handleDeleteJob}
+                />
               ))}
             </RadioGroup>
           </Box>
