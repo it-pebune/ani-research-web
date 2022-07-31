@@ -129,7 +129,7 @@ export const DocumentsFromScrapper = () => {
   };
 
   const handleChangeRowsPerPage = (e: any) => {
-    setRowsPerPage(e.currentTarget.value);
+    setRowsPerPage(e.target.value);
     setPage(0);
   };
 
@@ -241,7 +241,7 @@ export const DocumentsFromScrapper = () => {
   };
 
   const handleClickJob = (event: MouseEvent): void => {
-    const jobId = parseInt((event.currentTarget as HTMLInputElement).value);
+    const jobId = parseInt((event.target as HTMLInputElement).value);
 
     if (jobId === selectedJob?.id) {
       setSelectedJob(undefined);
@@ -254,7 +254,7 @@ export const DocumentsFromScrapper = () => {
     event: ChangeEvent<HTMLInputElement>,
     checked: boolean
   ) => {
-    const documentUid = event.currentTarget.value;
+    const documentUid = event.target.value;
 
     if (checked) {
       setSelectedDocumentUids((selectedDocumentUids: string[]): string[] =>
