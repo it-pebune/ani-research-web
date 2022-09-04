@@ -14,6 +14,7 @@ import AssignedSubjects from "./pages/DashboardPage/AssignedSubjects";
 import ReviewPdf from "./pages/DashboardPage/ReviewPdf";
 import UserProfilePage from "./pages/UserProfilePage/UserProfilePage";
 import { DocumentsFromScrapper } from "./pages/DashboardPage/DocumentsFromScrapper";
+import { AssignedSubjectDocuments } from "./pages/DashboardPage/AssignedSubjectDocuments";
 
 const App: React.FC = () => {
   return (
@@ -36,6 +37,10 @@ const App: React.FC = () => {
               <Route path="/subjects" element={<Subjects />} />
               <Route path="/assigned-subjects" element={<AssignedSubjects />} />
               <Route path="/review-pdf/:id" element={<ReviewPdf />} />
+              <Route
+                path="/documents/:subjectId"
+                element={<AssignedSubjectDocuments />}
+              />
               <Route
                 path="/scrapped-docs/:subjectId"
                 element={<DocumentsFromScrapper />}
