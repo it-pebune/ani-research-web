@@ -21,8 +21,9 @@ const AssignedSubjects = () => {
     action: string
   ) => {
     setSelectedSubject((prevData) => ({ ...prevData, ...subject }));
+
     if (action === "to-documents") {
-      setDocumentsListOpen(true);
+      navigate(`/documents/${subject.id}`);
     } else if (action === "to-download") {
       navigate(`/scrapped-docs/${subject.id}`);
     }
