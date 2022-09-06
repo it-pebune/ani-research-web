@@ -121,10 +121,12 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <SearchBarWithFiltersController
-        onSearchChanged={handleSearch}
-        onFiltersOpen={handleFiltersOpen}
-      ></SearchBarWithFiltersController>
+      <Box sx={{ p: "16px" }}>
+        <SearchBarWithFiltersController
+          onSearchChanged={handleSearch}
+          onFiltersOpen={handleFiltersOpen}
+        />
+      </Box>
 
       <TableContainer
         style={{ display: "flex", flexDirection: "column", height: "100%" }}
