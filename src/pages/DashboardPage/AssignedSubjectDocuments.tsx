@@ -94,50 +94,48 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
               onFiltersOpen={() => {}}
               onSearchChanged={handleSearch}
             />
-
-            <TableContainer
-              style={{ display: "flex", flexDirection: "column" }}
-            >
-              <Table style={{ display: "flex", flexDirection: "column" }}>
-                <CustomTableHeader
-                  headerCells={assignedSubjectDocumentsTableHeaderData}
-                  columnsGrid={columnsGrid}
-                />
-
-                <TableBody style={{ flex: "1", overflow: "auto" }}>
-                  {visibleDocuments
-                    .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
-                    .map(formatRow)
-                    .map(
-                      (
-                        documentData: DocumentFromDataBase,
-                        index: number
-                      ): ReactElement => (
-                        <CustomTableRow
-                          key={`table-row-${index}`}
-                          data={documentData}
-                          columnsGrid={columnsGrid}
-                          rowDefs={assignedSubjectDocumentsTableRowDefs}
-                          onAction={handleAction}
-                        />
-                      )
-                    )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-
-            <TablePagination
-              count={visibleDocuments.length}
-              page={page}
-              onPageChange={handlePageChange}
-              rowsPerPage={rowsPerPage}
-              labelRowsPerPage="Randuri pe pagina"
-              rowsPerPageOptions={[5, 10, 25]}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              component="div"
-              style={{ height: "60px", borderTop: "1px solid #bdbdbd" }}
-            />
           </Box>
+
+          <TableContainer style={{ display: "flex", flexDirection: "column" }}>
+            <Table style={{ display: "flex", flexDirection: "column" }}>
+              <CustomTableHeader
+                headerCells={assignedSubjectDocumentsTableHeaderData}
+                columnsGrid={columnsGrid}
+              />
+
+              <TableBody style={{ flex: "1", overflow: "auto" }}>
+                {visibleDocuments
+                  .slice(page * rowsPerPage, (page + 1) * rowsPerPage)
+                  .map(formatRow)
+                  .map(
+                    (
+                      documentData: DocumentFromDataBase,
+                      index: number
+                    ): ReactElement => (
+                      <CustomTableRow
+                        key={`table-row-${index}`}
+                        data={documentData}
+                        columnsGrid={columnsGrid}
+                        rowDefs={assignedSubjectDocumentsTableRowDefs}
+                        onAction={handleAction}
+                      />
+                    )
+                  )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          <TablePagination
+            count={visibleDocuments.length}
+            page={page}
+            onPageChange={handlePageChange}
+            rowsPerPage={rowsPerPage}
+            labelRowsPerPage="Randuri pe pagina"
+            rowsPerPageOptions={[5, 10, 25]}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            component="div"
+            style={{ height: "60px", borderTop: "1px solid #bdbdbd" }}
+          />
         </Box>
       )}
     </>
