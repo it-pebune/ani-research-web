@@ -17,14 +17,14 @@ import React, { useEffect, useState } from "react";
 import { documentService } from "../../services/documentsServices";
 import useTokenStatus from "../../utils/useTokenStatus";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
-import { documentsFromDataBaseTableHeader } from "../../resources/tableHeaders/documentsTableHeaderData";
-import { documentsFromDataBaseTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
 import { DocumentFromDataBase } from "../../interfaces/DocumentInterfaces";
 import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
 import { Box } from "@mui/system";
 import { Job } from "../../interfaces/JobInterfaces";
 import moment from "moment";
 import { useNavigate } from "react-router";
+import { assignedSubjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
+import { assignedSubjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTableHeaderData";
 
 interface Props {
   subject?: SubjectFromDataBase;
@@ -211,7 +211,7 @@ const DocumentsListDialog: React.FC<Props> = ({
           >
             <CustomTableHeader
               columnsGrid={columnsGrid}
-              headerCells={documentsFromDataBaseTableHeader}
+              headerCells={assignedSubjectsTableHeaderData}
               onSorted={handleScrappedSort}
             ></CustomTableHeader>
             <TableBody style={{ flex: "1", overflow: "auto" }}>
@@ -237,7 +237,7 @@ const DocumentsListDialog: React.FC<Props> = ({
                     <CustomTableRow
                       onAction={handleDocumentAction}
                       columnsGrid={columnsGrid}
-                      rowDefs={documentsFromDataBaseTableRowDefs}
+                      rowDefs={assignedSubjectsTableRowDefs}
                       key={`table-row-${index}`}
                       data={document}
                     ></CustomTableRow>

@@ -30,7 +30,8 @@ const CustomTableHeader: React.FC<Props> = ({
         cell.field === field ? { ...cell, direction } : cell
       );
     });
-    onSorted(direction, field);
+
+    onSorted && onSorted(direction, field);
   };
 
   return (

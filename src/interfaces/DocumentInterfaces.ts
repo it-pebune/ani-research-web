@@ -30,6 +30,12 @@ export interface DocumentFromDataBase {
   updated: string;
   updatedByName: string;
   institution?: string;
+  date: string;
   dateStart?: string;
   dateEnd?: string;
+  type: number | string;
+}
+
+export enum DocumentTypes {
+  WEALTH_DECLARATION = 1,
 }
