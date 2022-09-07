@@ -6,8 +6,8 @@ import Paper from "@mui/material/Paper";
 import React from "react";
 
 interface Props {
-  onFiltersOpen: React.MouseEventHandler<HTMLButtonElement>;
   onSearchChanged: (string: string) => void;
+  onFiltersOpen?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const SearchBarWithFiltersController: React.FC<Props> = ({
@@ -31,6 +31,7 @@ const SearchBarWithFiltersController: React.FC<Props> = ({
       }}
     >
       <Icon>search</Icon>
+
       <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder="Cauta in lista"
@@ -38,14 +39,19 @@ const SearchBarWithFiltersController: React.FC<Props> = ({
         onKeyUp={handleSearch}
       />
 
-      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <IconButton
-        sx={{ p: "10px" }}
-        aria-label="directions"
-        onClick={onFiltersOpen}
-      >
-        <Icon>tune</Icon>
-      </IconButton>
+      {onFiltersOpen && (
+        <>
+          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+
+          <IconButton
+            sx={{ p: "10px" }}
+            aria-label="directions"
+            onClick={onFiltersOpen}
+          >
+            <Icon>tune</Icon>
+          </IconButton>
+        </>
+      )}
     </Paper>
   );
 };

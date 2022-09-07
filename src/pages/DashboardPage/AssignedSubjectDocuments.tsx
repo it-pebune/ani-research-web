@@ -90,10 +90,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       {!loading && (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
           <Box sx={{ p: "16px" }}>
-            <SearchBarWithFiltersController
-              onFiltersOpen={() => {}}
-              onSearchChanged={handleSearch}
-            />
+            <SearchBarWithFiltersController onSearchChanged={handleSearch} />
           </Box>
 
           <TableContainer style={{ display: "flex", flexDirection: "column" }}>
