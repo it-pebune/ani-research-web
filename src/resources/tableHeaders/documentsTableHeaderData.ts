@@ -23,7 +23,7 @@ export const scrappedDocumentsTableHeaderData: HeaderCell[] = [
   },
 ];
 
-export const documentsFromDataBaseTableHeader: HeaderCell[] = [
+export const assignedSubjectDocumentsTableHeaderData: HeaderCell[] = [
   {
     field: "",
     align: "center",

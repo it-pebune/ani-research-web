@@ -8,7 +8,7 @@ import {
   mobileTableData,
   parcelsTableData,
   transportTableData,
-} from "../tableHeaders/assetsTable";
+} from "../tableHeaders/assetsTableHeaderData";
 
 export const assetsOrder = [
   {

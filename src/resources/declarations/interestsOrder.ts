@@ -4,7 +4,7 @@ import {
   contractsTableData,
   partyTableData,
   sindicateTableData,
-} from "../tableHeaders/interestsTable";
+} from "../tableHeaders/interestsTableHeaderData";
 
 export const interestsOrder = [
   {
