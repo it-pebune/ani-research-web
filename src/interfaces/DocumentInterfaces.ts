@@ -33,9 +33,15 @@ export interface DocumentFromDataBase {
   date: string;
   dateStart?: string;
   dateEnd?: string;
-  type: number | string;
+  type: DocumentTypes | string;
 }
 
 export enum DocumentTypes {
   WEALTH_DECLARATION = 1,
+  INTERESTS_DECLARATIONS = 2,
 }
+
+export const DocumentTypeLabels: any = {
+  [DocumentTypes.WEALTH_DECLARATION]: "Declaratie de avere",
+  [DocumentTypes.INTERESTS_DECLARATIONS]: "Declaratie de interese",
+};

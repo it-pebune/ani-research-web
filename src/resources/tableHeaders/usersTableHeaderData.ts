@@ -1,4 +1,4 @@
-import { HeaderCell } from "../../interfaces/TableHeaderInterface";
+import { Directions, HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 export const usersTableHeaderData: HeaderCell[] = [
   {
@@ -10,7 +10,7 @@ export const usersTableHeaderData: HeaderCell[] = [
     title: "NUME",
     hasSortFunction: true,
     sortActive: true,
-    direction: "asc",
+    direction: Directions.ASC,
   },
   {
     title: "ROL",
@@ -22,7 +22,7 @@ export const usersTableHeaderData: HeaderCell[] = [
     title: "MODIFICAT",
     hasSortFunction: true,
     sortActive: true,
-    direction: "desc",
+    direction: Directions.DESC,
   },
   {
     title: "STATUS",
@@ -43,7 +43,7 @@ export const researchersTableHeaderData: HeaderCell[] = [
     title: "NUME",
     hasSortFunction: true,
     sortActive: true,
-    direction: "asc",
+    direction: Directions.ASC,
   },
   {
     field: "email",
