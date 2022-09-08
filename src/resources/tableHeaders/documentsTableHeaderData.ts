@@ -1,4 +1,4 @@
-import { HeaderCell } from "../../interfaces/TableHeaderInterface";
+import { Directions, HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 export const scrappedDocumentsTableHeaderData: HeaderCell[] = [
   {
@@ -33,25 +33,16 @@ export const assignedSubjectDocumentsTableHeaderData: HeaderCell[] = [
     field: "type",
     title: "TIPUL DOCUMENTULUI",
     align: "center",
-    hasSortFunction: false,
-    sortActive: false,
-    direction: "asc",
   },
   {
     field: "job",
     title: "FUNCTIA",
     align: "center",
-    hasSortFunction: false,
-    sortActive: false,
-    direction: "asc",
   },
   {
     field: "institution",
     title: "INSTITUTIA",
     align: "center",
-    hasSortFunction: false,
-    sortActive: false,
-    direction: "asc",
   },
   {
     field: "dateStart",
@@ -59,7 +50,7 @@ export const assignedSubjectDocumentsTableHeaderData: HeaderCell[] = [
     align: "center",
     hasSortFunction: true,
     sortActive: true,
-    direction: "asc",
+    direction: Directions.ASC,
   },
 
   {
@@ -68,7 +59,7 @@ export const assignedSubjectDocumentsTableHeaderData: HeaderCell[] = [
     align: "center",
     hasSortFunction: true,
     sortActive: true,
-    direction: "asc",
+    direction: Directions.ASC,
   },
   {
     field: "",

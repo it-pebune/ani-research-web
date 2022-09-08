@@ -11,15 +11,16 @@ import { useParams } from "react-router";
 import useTokenStatus from "../../utils/useTokenStatus";
 import {
   DocumentFromDataBase,
-  DocumentTypes,
+  DocumentTypeLabels,
 } from "../../interfaces/DocumentInterfaces";
 import { documentService } from "../../services/documentsServices";
 import Loader from "../../components/Shared/Loader";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import CustomTableRow from "../../components/Shared/CustomTableRow";
 import { assignedSubjectDocumentsTableHeaderData } from "../../resources/tableHeaders/documentsTableHeaderData";
 import { assignedSubjectDocumentsTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
+import { Directions } from "../../interfaces/TableHeaderInterface";
 
 export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
   const tokenStatus = useTokenStatus(),
@@ -33,7 +34,56 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
     [page, setPage] = useState<number>(0),
     [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
-  const handleSearch = () => {},
+  const handleSearch = (value: string): void => {
+      setVisibleDocuments(
+        documents.filter((document: DocumentFromDataBase): boolean =>
+          DocumentTypeLabels[document.type]
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
+        )
+      );
+    },
+    handleSort = (
+      direction: Directions | undefined,
+      field: string | undefined
+    ): void => {
+      if (!direction || !field) {
+        return;
+      }
+
+      setVisibleDocuments(
+        (
+          previousVisibleDocuments: DocumentFromDataBase[]
+        ): DocumentFromDataBase[] => {
+          const sortedVisibleDocuments = new Array<DocumentFromDataBase>();
+
+          sortedVisibleDocuments.push(
+            ...previousVisibleDocuments.sort(
+              (
+                documentA: DocumentFromDataBase,
+                documentB: DocumentFromDataBase
+              ): number => {
+                const dateA = moment(documentA[field]),
+                  dateB = moment(documentB[field]);
+                let compareResult;
+
+                if ("dateStart" === field) {
+                  compareResult = compareStartDates(dateA, dateB);
+                } else {
+                  compareResult = compareDates(dateA, dateB);
+                }
+
+                return Directions.ASC === direction
+                  ? compareResult
+                  : -1 * compareResult;
+              }
+            )
+          );
+
+          return sortedVisibleDocuments;
+        }
+      );
+    },
     handleAction = () => {},
     handlePageChange = (
       event: React.MouseEvent<HTMLButtonElement> | null,
@@ -47,23 +97,39 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
     };
 
   const formatRow = (
-    document: DocumentFromDataBase,
-    index: number
-  ): DocumentFromDataBase => {
-    return {
-      ...document,
-      index: index + 1,
-      date: moment(document.date).format("DD MMMM YYYY"),
-      dateStart: document.dateStart
-        ? moment(document.dateStart).format("YYYY")
-        : "",
-      dateEnd: document.dateEnd ? moment(document.dateEnd).format("YYYY") : "",
-      type:
-        DocumentTypes.WEALTH_DECLARATION === document.type
-          ? "Declaratie de avere"
-          : "Declaratie de interese",
+      document: DocumentFromDataBase,
+      index: number
+    ): DocumentFromDataBase => {
+      return {
+        ...document,
+        index: index + 1,
+        date: moment(document.date).format("DD MMMM YYYY"),
+        dateStart: document.dateStart
+          ? moment(document.dateStart).format("YYYY")
+          : "",
+        dateEnd: document.dateEnd
+          ? moment(document.dateEnd).format("YYYY")
+          : "",
+        type: DocumentTypeLabels[document.type],
+      };
+    },
+    compareStartDates = (startDateA: Moment, startDateB: Moment): number => {
+      const startYearA = startDateA.year(),
+        startYearB = startDateB.year();
+
+      if (startYearA === startYearB) {
+        return 0;
+      }
+
+      return startYearA < startYearB ? -1 : 1;
+    },
+    compareDates = (dateA: Moment, dateB: Moment): number => {
+      if (dateA.isSame(dateB)) {
+        return 0;
+      }
+
+      return dateA.isBefore(dateB) ? -1 : 1;
     };
-  };
 
   useEffect((): void => {
     const loadDocuments = async (): Promise<void> => {
@@ -98,6 +164,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
               <CustomTableHeader
                 headerCells={assignedSubjectDocumentsTableHeaderData}
                 columnsGrid={columnsGrid}
+                onSorted={handleSort}
               />
 
               <TableBody style={{ flex: "1", overflow: "auto" }}>

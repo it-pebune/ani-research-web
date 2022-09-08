@@ -6,7 +6,7 @@ import {
   TableSortLabel,
 } from "@mui/material";
 import React, { useState } from "react";
-import { HeaderCell } from "../../interfaces/TableHeaderInterface";
+import { Directions, HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 interface Props {
   headerCells: HeaderCell[];
@@ -22,7 +22,7 @@ const CustomTableHeader: React.FC<Props> = ({
   const [headerData, setHeaderData] = useState(headerCells);
 
   const handleDirection = (
-    direction: "asc" | "desc" | undefined,
+    direction: Directions | undefined,
     field: string | undefined
   ) => {
     setHeaderData((prevState: HeaderCell[]) => {
@@ -49,16 +49,17 @@ const CustomTableHeader: React.FC<Props> = ({
             align={cell.align || "justify"}
           >
             {cell.title}
+
             {cell.hasSortFunction && (
               <TableSortLabel
                 direction={cell.direction}
                 active={cell.sortActive}
                 IconComponent={() => (
                   <>
-                    {cell.direction === "desc" && (
+                    {cell.direction === Directions.DESC && (
                       <Icon
                         onClick={() => {
-                          handleDirection("asc", cell.field);
+                          handleDirection(Directions.ASC, cell.field);
                         }}
                         sx={{
                           color: "#6B636B",
@@ -71,7 +72,8 @@ const CustomTableHeader: React.FC<Props> = ({
                         arrow_drop_down
                       </Icon>
                     )}
-                    {cell.direction === "asc" && (
+
+                    {cell.direction === Directions.ASC && (
                       <Icon
                         sx={{
                           color: "#6B636B",
@@ -81,7 +83,7 @@ const CustomTableHeader: React.FC<Props> = ({
                           },
                         }}
                         onClick={() => {
-                          handleDirection("desc", cell.field);
+                          handleDirection(Directions.DESC, cell.field);
                         }}
                       >
                         arrow_drop_up
@@ -89,7 +91,7 @@ const CustomTableHeader: React.FC<Props> = ({
                     )}
                   </>
                 )}
-              ></TableSortLabel>
+              />
             )}
           </TableCell>
         ))}

@@ -1,4 +1,4 @@
-import { HeaderCell } from "../../interfaces/TableHeaderInterface";
+import { Directions, HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 export const jobsTableHeaderData: HeaderCell[] = [
   {
@@ -10,7 +10,7 @@ export const jobsTableHeaderData: HeaderCell[] = [
     title: "FUNCTIA",
     hasSortFunction: true,
     sortActive: true,
-    direction: "asc",
+    direction: Directions.ASC,
   },
   {
     field: "institution",
@@ -18,7 +18,7 @@ export const jobsTableHeaderData: HeaderCell[] = [
     title: "INSTITUTIA",
     hasSortFunction: true,
     sortActive: true,
-    direction: "asc",
+    direction: Directions.ASC,
   },
   {
     field: "uat",
@@ -26,7 +26,7 @@ export const jobsTableHeaderData: HeaderCell[] = [
     title: "LOCATIA",
     hasSortFunction: true,
     sortActive: true,
-    direction: "asc",
+    direction: Directions.ASC,
   },
   {
     field: "dateStart",
@@ -34,7 +34,7 @@ export const jobsTableHeaderData: HeaderCell[] = [
     title: "ANUL",
     hasSortFunction: true,
     sortActive: true,
-    direction: "asc",
+    direction: Directions.ASC,
   },
   {
     field: "",
