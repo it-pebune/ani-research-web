@@ -214,4 +214,24 @@ export const documentService = {
     }
     return response;
   },
+
+  /**
+   * @throws {Error}
+   */
+  deleteDocument: async (
+    tokenStatus: { token: string; active: boolean },
+    id: number
+  ): Promise<void> => {
+    if (!tokenStatus.active) {
+      throw new Error("Active token required for deleting document.");
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${tokenStatus.token}`,
+      },
+    };
+
+    await axios.delete(`${API_BASE_URL}/docs/${id}`, config);
+  },
 };
