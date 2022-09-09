@@ -37,7 +37,14 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       direction: Directions;
     } | null>(null),
     [page, setPage] = useState<number>(0),
-    [rowsPerPage, setRowsPerPage] = useState<number>(10);
+    [rowsPerPage, setRowsPerPage] = useState<number>(10),
+    [documentToBeDeleted, setDocumentToBeDeleted] =
+      useState<DocumentFromDataBase | null>(null),
+    [deleteDialogOpened, setDeleteDialogOpened] = useState<boolean>(false),
+    [documentDeletedWithFailure, setDocumentDeletedWithFailure] =
+      useState<boolean>(false),
+    [documentDeletedWithSuccess, setDocumentDeletedWithSuccess] =
+      useState<boolean>(false);
 
   const handleSearch = (searchKey: string): void => {
       setSearchKey(searchKey);
@@ -64,6 +71,30 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
     ) => {
       setRowsPerPage(parseInt(event.target.value));
       setPage(0);
+    },
+    deleteDocument = async (): Promise<void> => {
+      try {
+        await documentService.deleteDocument(
+          tokenStatus,
+          documentToBeDeleted?.id as number
+        );
+      } catch (error: any) {
+        setDocumentToBeDeleted(null);
+        setDocumentDeletedWithFailure(true);
+
+        return;
+      }
+
+      setDocuments(
+        (previousDocuments: DocumentFromDataBase[]): DocumentFromDataBase[] =>
+          previousDocuments.filter(
+            (document: DocumentFromDataBase): boolean =>
+              document !== documentToBeDeleted
+          )
+      );
+      setPage(0);
+      setDocumentToBeDeleted(null);
+      setDocumentDeletedWithSuccess(true);
     };
 
   const formatRow = (
@@ -153,11 +184,15 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       setLoading(false);
 
       setDocuments(loadedDocuments);
-      setVisibleDocuments(loadedDocuments);
     };
 
     loadDocuments();
   }, [subjectId]);
+
+  useEffect(
+    (): void => filterAndSortDocuments(searchKey, sortOptions),
+    [documents]
+  );
 
   return (
     <>
