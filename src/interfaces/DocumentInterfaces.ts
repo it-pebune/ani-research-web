@@ -20,7 +20,7 @@ export interface DocumentsFromScrapper {
 
 export interface DocumentFromDataBase {
   [key: string]: any;
-  id: number;
+  id: string;
   name: string;
   md5: string;
   downloadedUrl: string;

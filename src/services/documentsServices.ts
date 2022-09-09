@@ -220,7 +220,7 @@ export const documentService = {
    */
   deleteDocument: async (
     tokenStatus: { token: string; active: boolean },
-    id: number
+    id: string
   ): Promise<void> => {
     if (!tokenStatus.active) {
       throw new Error("Active token required for deleting document.");
