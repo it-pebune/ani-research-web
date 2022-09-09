@@ -1,13 +1,16 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import {
+  Alert,
   Box,
+  Snackbar,
   Table,
   TableBody,
   TableContainer,
   TablePagination,
+  Typography,
 } from "@mui/material";
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useTokenStatus from "../../utils/useTokenStatus";
 import {
   DocumentFromDataBase,
@@ -21,9 +24,11 @@ import CustomTableRow from "../../components/Shared/CustomTableRow";
 import { assignedSubjectDocumentsTableHeaderData } from "../../resources/tableHeaders/documentsTableHeaderData";
 import { assignedSubjectDocumentsTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
 import { Directions } from "../../interfaces/TableHeaderInterface";
+import CustomDialog from "../../components/Shared/CustomDialog";
 
 export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
-  const tokenStatus = useTokenStatus(),
+  const navigate = useNavigate(),
+    tokenStatus = useTokenStatus(),
     subjectId = useParams().subjectId as unknown as number,
     [loading, setLoading] = useState<boolean>(false),
     [documents, setDocuments] = useState<DocumentFromDataBase[]>([]),
@@ -42,9 +47,9 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       useState<DocumentFromDataBase | null>(null),
     [deleteDialogOpened, setDeleteDialogOpened] = useState<boolean>(false),
     [documentDeletedWithFailure, setDocumentDeletedWithFailure] =
-      useState<boolean>(false),
+      useState<DocumentFromDataBase | null>(null),
     [documentDeletedWithSuccess, setDocumentDeletedWithSuccess] =
-      useState<boolean>(false);
+      useState<DocumentFromDataBase | null>(null);
 
   const handleSearch = (searchKey: string): void => {
       setSearchKey(searchKey);
@@ -61,7 +66,22 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
         filterAndSortDocuments(searchKey, sortOptions);
       }
     },
-    handleAction = () => {},
+    handleAction = (action: string, id: any): void => {
+      if (typeof id !== "string") {
+        return;
+      }
+
+      if ("review-document" === action) {
+        navigate(`/review-pdf/${id}`);
+      } else {
+        const document = documents.find(
+          (document: DocumentFromDataBase): boolean => document?.id === id
+        );
+
+        setDocumentToBeDeleted(document as DocumentFromDataBase);
+        setDeleteDialogOpened(true);
+      }
+    },
     handlePageChange = (
       event: React.MouseEvent<HTMLButtonElement> | null,
       page: number
@@ -73,14 +93,16 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       setPage(0);
     },
     deleteDocument = async (): Promise<void> => {
+      setDeleteDialogOpened(false);
+
       try {
         await documentService.deleteDocument(
           tokenStatus,
-          documentToBeDeleted?.id as number
+          documentToBeDeleted?.id as string
         );
       } catch (error: any) {
         setDocumentToBeDeleted(null);
-        setDocumentDeletedWithFailure(true);
+        setDocumentDeletedWithFailure(documentToBeDeleted);
 
         return;
       }
@@ -94,7 +116,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       );
       setPage(0);
       setDocumentToBeDeleted(null);
-      setDocumentDeletedWithSuccess(true);
+      setDocumentDeletedWithSuccess(documentToBeDeleted);
     };
 
   const formatRow = (
@@ -247,6 +269,45 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
           />
         </Box>
       )}
+
+      <CustomDialog
+        title="Sterge document"
+        actionText="sterge"
+        icon="delete"
+        open={deleteDialogOpened}
+        onClose={(): void => setDeleteDialogOpened(false)}
+        onAction={deleteDocument}
+        contentHeight="100px"
+      >
+        <Typography variant="h6" align="center" color="error">
+          Sunteti sigur ca doriti sa stergeti documentul "
+          {documentToBeDeleted?.name}"?
+        </Typography>
+      </CustomDialog>
+
+      <Snackbar
+        open={!!documentDeletedWithSuccess}
+        autoHideDuration={5000}
+        onClose={(): void => setDocumentDeletedWithSuccess(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert severity="info">
+          Documentul "{documentDeletedWithSuccess?.name}" a fost sters cu
+          succes.
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={!!documentDeletedWithFailure}
+        autoHideDuration={5000}
+        onClose={(): void => setDocumentDeletedWithFailure(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert severity="error">
+          Documentul "{documentDeletedWithFailure?.name}" nu a putut fi sters.
+          Va rog sa incercati din nou.
+        </Alert>
+      </Snackbar>
     </>
   );
 };
