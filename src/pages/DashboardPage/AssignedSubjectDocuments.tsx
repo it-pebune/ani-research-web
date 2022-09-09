@@ -45,7 +45,6 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
     [rowsPerPage, setRowsPerPage] = useState<number>(10),
     [documentToBeDeleted, setDocumentToBeDeleted] =
       useState<DocumentFromDataBase | null>(null),
-    [deleteDialogOpened, setDeleteDialogOpened] = useState<boolean>(false),
     [documentDeletedWithFailure, setDocumentDeletedWithFailure] =
       useState<DocumentFromDataBase | null>(null),
     [documentDeletedWithSuccess, setDocumentDeletedWithSuccess] =
@@ -74,12 +73,11 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       if ("review-document" === action) {
         navigate(`/review-pdf/${id}`);
       } else {
-        const document = documents.find(
-          (document: DocumentFromDataBase): boolean => document?.id === id
+        setDocumentToBeDeleted(
+          documents.find(
+            (document: DocumentFromDataBase): boolean => document?.id === id
+          ) as DocumentFromDataBase
         );
-
-        setDocumentToBeDeleted(document as DocumentFromDataBase);
-        setDeleteDialogOpened(true);
       }
     },
     handlePageChange = (
@@ -93,8 +91,6 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       setPage(0);
     },
     deleteDocument = async (): Promise<void> => {
-      setDeleteDialogOpened(false);
-
       try {
         await documentService.deleteDocument(
           tokenStatus,
@@ -274,8 +270,8 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
         title="Sterge document"
         actionText="sterge"
         icon="delete"
-        open={deleteDialogOpened}
-        onClose={(): void => setDeleteDialogOpened(false)}
+        open={!!documentToBeDeleted}
+        onClose={(): void => setDocumentToBeDeleted(null)}
         onAction={deleteDocument}
         contentHeight="100px"
       >
