@@ -31,58 +31,28 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       []
     ),
     columnsGrid = "60px 1fr 1fr 1fr 1fr 1fr 1fr 70px",
+    [searchKey, setSearchKey] = useState<string | null>(null),
+    [sortOptions, setSortOptions] = useState<{
+      field: string;
+      direction: Directions;
+    } | null>(null),
     [page, setPage] = useState<number>(0),
     [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
-  const handleSearch = (value: string): void => {
-      setVisibleDocuments(
-        documents.filter((document: DocumentFromDataBase): boolean =>
-          DocumentTypeLabels[document.type]
-            .toLocaleLowerCase()
-            .includes(value.toLocaleLowerCase())
-        )
-      );
+  const handleSearch = (searchKey: string): void => {
+      setSearchKey(searchKey);
+      filterAndSortDocuments(searchKey, sortOptions);
     },
     handleSort = (
       direction: Directions | undefined,
       field: string | undefined
     ): void => {
-      if (!direction || !field) {
-        return;
+      if (direction && field) {
+        const sortOptions = { field, direction };
+
+        setSortOptions(sortOptions);
+        filterAndSortDocuments(searchKey, sortOptions);
       }
-
-      setVisibleDocuments(
-        (
-          previousVisibleDocuments: DocumentFromDataBase[]
-        ): DocumentFromDataBase[] => {
-          const sortedVisibleDocuments = new Array<DocumentFromDataBase>();
-
-          sortedVisibleDocuments.push(
-            ...previousVisibleDocuments.sort(
-              (
-                documentA: DocumentFromDataBase,
-                documentB: DocumentFromDataBase
-              ): number => {
-                const dateA = moment(documentA[field]),
-                  dateB = moment(documentB[field]);
-                let compareResult;
-
-                if ("dateStart" === field) {
-                  compareResult = compareStartDates(dateA, dateB);
-                } else {
-                  compareResult = compareDates(dateA, dateB);
-                }
-
-                return Directions.ASC === direction
-                  ? compareResult
-                  : -1 * compareResult;
-              }
-            )
-          );
-
-          return sortedVisibleDocuments;
-        }
-      );
     },
     handleAction = () => {},
     handlePageChange = (
@@ -129,6 +99,46 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       }
 
       return dateA.isBefore(dateB) ? -1 : 1;
+    },
+    filterAndSortDocuments = (
+      searchKey: string | null,
+      sortOptions: { field: string; direction: Directions } | null
+    ): void => {
+      let visibleDocuments = [...documents];
+
+      if (null !== searchKey) {
+        visibleDocuments = visibleDocuments.filter(
+          (document: DocumentFromDataBase): boolean =>
+            DocumentTypeLabels[document.type]
+              .toLocaleLowerCase()
+              .includes(searchKey.toLocaleLowerCase())
+        );
+      }
+
+      if (sortOptions) {
+        visibleDocuments.sort(
+          (
+            documentA: DocumentFromDataBase,
+            documentB: DocumentFromDataBase
+          ): number => {
+            const dateA = moment(documentA[sortOptions.field]),
+              dateB = moment(documentB[sortOptions.field]);
+            let compareResult;
+
+            if ("dateStart" === sortOptions.field) {
+              compareResult = compareStartDates(dateA, dateB);
+            } else {
+              compareResult = compareDates(dateA, dateB);
+            }
+
+            return Directions.ASC === sortOptions.direction
+              ? compareResult
+              : -1 * compareResult;
+          }
+        );
+      }
+
+      setVisibleDocuments(visibleDocuments);
     };
 
   useEffect((): void => {
