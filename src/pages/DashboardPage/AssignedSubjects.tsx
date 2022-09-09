@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import DocumentsListDialog from "../../components/ReviewerComponents/DocumentsListDialog";
 import MySubjects from "../../components/ReviewerComponents/MySubjects";
 import { SubjectFromDataBase } from "../../interfaces/SubjectInterfaces";
 import { subjectService } from "../../services/subjectService";
@@ -9,30 +8,20 @@ import useTokenStatus from "../../utils/useTokenStatus";
 import { useNavigate } from "react-router";
 
 const AssignedSubjects = () => {
-  const navigate = useNavigate();
-  const [subjects, setSubjects] = useState<SubjectFromDataBase[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<SubjectFromDataBase>();
-  const [documentsListOpen, setDocumentsListOpen] = useState(false);
-  const tokenStatus = useTokenStatus();
-  const userContext = useContext(UserContext);
+  const navigate = useNavigate(),
+    tokenStatus = useTokenStatus(),
+    userContext = useContext(UserContext),
+    [subjects, setSubjects] = useState<SubjectFromDataBase[]>([]);
 
   const handleSelectedSubject = (
     subject: SubjectFromDataBase,
     action: string
   ) => {
-    setSelectedSubject((prevData) => ({ ...prevData, ...subject }));
-
     if (action === "to-documents") {
       navigate(`/documents/${subject.id}`);
     } else if (action === "to-download") {
       navigate(`/scrapped-docs/${subject.id}`);
     }
-  };
-
-  const handleDocumentFromListAction = () => {};
-
-  const handleDocumentsListClose = () => {
-    setDocumentsListOpen(false);
   };
 
   useEffect(() => {
@@ -41,6 +30,7 @@ const AssignedSubjects = () => {
         const response = await subjectService.getSubjectsFromDataBase({
           ...tokenStatus,
         });
+
         if (response && response.length > 0) {
           setSubjects(
             response
@@ -49,6 +39,7 @@ const AssignedSubjects = () => {
           );
         }
       };
+
       subjectsResponse();
     }
   }, []);
@@ -58,13 +49,6 @@ const AssignedSubjects = () => {
       <MySubjects
         onSubjectSelected={handleSelectedSubject}
         subjects={subjects}
-      />
-
-      <DocumentsListDialog
-        open={documentsListOpen}
-        subject={selectedSubject}
-        onClose={handleDocumentsListClose}
-        onAction={handleDocumentFromListAction}
       />
     </Box>
   );
