@@ -155,7 +155,7 @@ export const JobOption: React.FC<Props> = ({
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <Alert severity="error">
-          Functia "{job.name}" nu a putut fi stearsa. Va rog sa incercati din
+          Functia "{job.name}" nu a putut fi stearsa. Va rugam sa incercati din
           nou.
         </Alert>
       </Snackbar>

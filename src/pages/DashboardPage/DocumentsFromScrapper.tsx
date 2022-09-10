@@ -862,7 +862,7 @@ export const DocumentsFromScrapper = () => {
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <Alert severity="success">
-          Selected documents were successfully uploaded.
+          Documentele selectate au fost incarcate cu succes.
         </Alert>
       </Snackbar>
 
@@ -872,7 +872,10 @@ export const DocumentsFromScrapper = () => {
         onClose={(): void => setDocumentsUploadedWithFailure(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <Alert severity="error">Could not upload all selected documents.</Alert>
+        <Alert severity="error">
+          Unele documente nu au putut fi incarcate. Va rugam sa incercati din
+          nou.
+        </Alert>
       </Snackbar>
     </Box>
   );
