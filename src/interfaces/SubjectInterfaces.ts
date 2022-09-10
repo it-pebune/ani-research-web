@@ -19,6 +19,7 @@ export interface SubjectFromDataBase {
   photoUrl: string;
   sirutaId: number;
   status: number;
+  docCount: number | null;
 }
 
 export interface SubjectFromScrapper {
