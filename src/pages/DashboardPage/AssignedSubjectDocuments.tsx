@@ -45,10 +45,10 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
     [rowsPerPage, setRowsPerPage] = useState<number>(10),
     [documentToBeDeleted, setDocumentToBeDeleted] =
       useState<DocumentFromDataBase | null>(null),
-    [documentDeletedWithFailure, setDocumentDeletedWithFailure] =
-      useState<DocumentFromDataBase | null>(null),
     [documentDeletedWithSuccess, setDocumentDeletedWithSuccess] =
-      useState<DocumentFromDataBase | null>(null);
+      useState<boolean>(false),
+    [documentDeletedWithFailure, setDocumentDeletedWithFailure] =
+      useState<boolean>(false);
 
   const handleSearch = (searchKey: string): void => {
       setSearchKey(searchKey);
@@ -75,7 +75,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       } else {
         setDocumentToBeDeleted(
           documents.find(
-            (document: DocumentFromDataBase): boolean => document?.id === id
+            (document: DocumentFromDataBase): boolean => document.id === id
           ) as DocumentFromDataBase
         );
       }
@@ -98,7 +98,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
         );
       } catch (error: any) {
         setDocumentToBeDeleted(null);
-        setDocumentDeletedWithFailure(documentToBeDeleted);
+        setDocumentDeletedWithFailure(true);
 
         return;
       }
@@ -112,7 +112,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       );
       setPage(0);
       setDocumentToBeDeleted(null);
-      setDocumentDeletedWithSuccess(documentToBeDeleted);
+      setDocumentDeletedWithSuccess(true);
     };
 
   const formatRow = (
@@ -276,32 +276,27 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
         contentHeight="100px"
       >
         <Typography variant="h6" align="center" color="error">
-          Sunteti sigur ca doriti sa stergeti documentul "
-          {documentToBeDeleted?.name}"?
+          Sunteti sigur ca doriti sa stergeti documentul?
         </Typography>
       </CustomDialog>
 
       <Snackbar
-        open={!!documentDeletedWithSuccess}
+        open={documentDeletedWithSuccess}
         autoHideDuration={5000}
-        onClose={(): void => setDocumentDeletedWithSuccess(null)}
+        onClose={(): void => setDocumentDeletedWithSuccess(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
-        <Alert severity="info">
-          Documentul "{documentDeletedWithSuccess?.name}" a fost sters cu
-          succes.
-        </Alert>
+        <Alert severity="info">Documentul a fost sters cu succes.</Alert>
       </Snackbar>
 
       <Snackbar
-        open={!!documentDeletedWithFailure}
+        open={documentDeletedWithFailure}
         autoHideDuration={5000}
-        onClose={(): void => setDocumentDeletedWithFailure(null)}
+        onClose={(): void => setDocumentDeletedWithFailure(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       >
         <Alert severity="error">
-          Documentul "{documentDeletedWithFailure?.name}" nu a putut fi sters.
-          Va rog sa incercati din nou.
+          Documentul nu a putut fi sters. Va rugam sa incercati din nou.
         </Alert>
       </Snackbar>
     </>
