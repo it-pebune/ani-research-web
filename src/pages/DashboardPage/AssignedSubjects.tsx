@@ -16,7 +16,7 @@ const AssignedSubjects = () => {
   const handleSelectedSubject = (
     subject: SubjectFromDataBase,
     action: string
-  ) => {
+  ): void => {
     if (action === "to-documents") {
       navigate(`/documents/${subject.id}`);
     } else if (action === "to-download") {

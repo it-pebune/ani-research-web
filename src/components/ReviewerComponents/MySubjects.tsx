@@ -147,6 +147,11 @@ const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
             {filteredResult.length > 0 &&
               filteredResult
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((subject: SubjectFromDataBase): SubjectFromDataBase => {
+                  subject.docCount = subject.docCount ?? 0;
+
+                  return subject;
+                })
                 .map((subject, index) => (
                   <CustomTableRow
                     onAction={handleSubjectAction}
