@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   Chip,
   Icon,
@@ -127,26 +128,28 @@ const CustomTableRow: React.FC<Props> = ({
             </Typography>
           )}
           {cellDef.cellType === "icon-action" && (
-            <IconButton
-              color={
-                cellDef.color
-                  ? highlighted
-                    ? "error"
-                    : cellDef.color
-                  : "warning"
-              }
-              disabled={disabled}
-              onClick={() =>
-                handleAction(
-                  cellDef.action,
-                  cellDef.fields?.map((field) => ({
-                    [field.name]: data[field.name],
-                  }))
-                )
-              }
-            >
-              <Icon>{cellDef.icon}</Icon>
-            </IconButton>
+            <Box>
+              <IconButton
+                color={
+                  cellDef.color
+                    ? highlighted
+                      ? "error"
+                      : cellDef.color
+                    : "warning"
+                }
+                disabled={disabled}
+                onClick={() =>
+                  handleAction(
+                    cellDef.action,
+                    cellDef.fields?.map((field) => ({
+                      [field.name]: data[field.name],
+                    }))
+                  )
+                }
+              >
+                <Icon>{cellDef.icon}</Icon>
+              </IconButton>
+            </Box>
           )}
           {cellDef.cellType === "action-button" && (
             <Button
@@ -218,16 +221,18 @@ const CustomTableRow: React.FC<Props> = ({
           {cellDef.cellType === "dropdown-button" && cellDef.menuItems && (
             <>
               {" "}
-              <IconButton
-                aria-label="more"
-                id={`long-button-${data.id}`}
-                aria-controls={open ? "long-menu" : undefined}
-                aria-expanded={open ? "true" : undefined}
-                aria-haspopup="true"
-                onClick={handleDropDown}
-              >
-                <Icon>more_vert</Icon>
-              </IconButton>
+              <Box>
+                <IconButton
+                  aria-label="more"
+                  id={`long-button-${data.id}`}
+                  aria-controls={open ? "long-menu" : undefined}
+                  aria-expanded={open ? "true" : undefined}
+                  aria-haspopup="true"
+                  onClick={handleDropDown}
+                >
+                  <Icon>more_vert</Icon>
+                </IconButton>
+              </Box>
               <Menu
                 id={`long-menu-${data.id}`}
                 MenuListProps={{
