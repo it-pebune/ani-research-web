@@ -256,6 +256,6 @@ export const documentService = {
       },
     };
 
-    return await axios.get(`${API_BASE_URL}/docs/status`, config);
+    return (await axios.get(`${API_BASE_URL}/docs/status`, config)).data;
   },
 };

@@ -70,6 +70,9 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
         filterAndSortDocuments(searchKey, sortOptions);
       }
     },
+    disableIf = (action: string, id: any): boolean =>
+      "review-document" === action &&
+      !ValidDocumentStatuses.includes(documentStatuses[id]),
     handleAction = (action: string, id: any): void => {
       if (typeof id !== "string") {
         return;
@@ -231,9 +234,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
 
         setDocumentStatuses(mappedDocumentStatuses);
       },
-      interval = setInterval((): void => {
-        getDocumentStatuses();
-      }, 1000);
+      interval = setInterval((): Promise<void> => getDocumentStatuses(), 5000);
 
     return (): void => clearInterval(interval);
   }, [subjectId]);
@@ -271,11 +272,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
                         columnsGrid={columnsGrid}
                         rowDefs={assignedSubjectDocumentsTableRowDefs}
                         onAction={handleAction}
-                        disabled={
-                          !ValidDocumentStatuses.includes(
-                            documentStatuses[documentData.id]
-                          )
-                        }
+                        disableIf={disableIf}
                       />
                     )
                   )}
