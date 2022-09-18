@@ -1,3 +1,5 @@
+import { DocumentStatuses, DocumentTypes } from "../enums/DocumentsEnums";
+
 export interface DocumentsFromScrapperResult {
   [key: string]: any;
   name: string;
@@ -36,12 +38,7 @@ export interface DocumentFromDataBase {
   type: DocumentTypes | string;
 }
 
-export enum DocumentTypes {
-  WEALTH_DECLARATION = 1,
-  INTERESTS_DECLARATIONS = 2,
+export interface DocumentStatus {
+  id: string;
+  status: DocumentStatuses;
 }
-
-export const DocumentTypeLabels: any = {
-  [DocumentTypes.WEALTH_DECLARATION]: "Declaratie de avere",
-  [DocumentTypes.INTERESTS_DECLARATIONS]: "Declaratie de interese",
-};

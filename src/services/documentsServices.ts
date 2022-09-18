@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   DocumentFromDataBase,
   DocumentsFromScrapper,
+  DocumentStatus,
 } from "../interfaces/DocumentInterfaces";
 import { API_BASE_URL } from "../resources/apiLinks";
 import { jobService } from "./jobsService";
@@ -233,5 +234,28 @@ export const documentService = {
     };
 
     await axios.delete(`${API_BASE_URL}/docs/${id}`, config);
+  },
+
+  /**
+   * @throws {Error}
+   */
+  getDocumentStatuses: async (
+    tokenStatus: { token: string; active: boolean },
+    subjectId: number
+  ): Promise<DocumentStatus[]> => {
+    if (!tokenStatus.active) {
+      throw new Error("Active token required for fetching document statuses.");
+    }
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${tokenStatus.token}`,
+      },
+      params: {
+        subjectId,
+      },
+    };
+
+    return await axios.get(`${API_BASE_URL}/docs/status`, config);
   },
 };
