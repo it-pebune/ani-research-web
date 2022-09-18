@@ -236,6 +236,8 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
       },
       interval = setInterval((): Promise<void> => getDocumentStatuses(), 5000);
 
+    getDocumentStatuses();
+
     return (): void => clearInterval(interval);
   }, [subjectId]);
 
