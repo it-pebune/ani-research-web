@@ -215,6 +215,60 @@ export const documentService = {
     }
     return response;
   },
+  getProcessedData: async (reqData: {
+    token: string;
+    active: boolean;
+    docId?: string;
+  }): Promise<any> => {
+    if (!reqData.active) {
+      throw new Error("Active token required for deleting document.");
+    }
+    let response: any;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${reqData.token}`,
+      },
+    };
+    try {
+      response = await axios.get(
+        `${API_BASE_URL}/docs/${reqData.docId}/data`,
+        config
+      );
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      response = error;
+      console.log(error);
+    }
+  },
+  updateDocumentData: async (reqData: {
+    token: string;
+    active: boolean;
+    docId?: string;
+    data: string;
+  }): Promise<void> => {
+    if (!reqData.active) {
+      throw new Error("Active token required for deleting document.");
+    }
+    let response: any;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${reqData.token}`,
+      },
+    };
+    try {
+      response = await axios.put(
+        `${API_BASE_URL}/docs/${reqData.docId}/data`,
+        { data: reqData.data },
+        config
+      );
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      response = error;
+      console.log(error);
+    }
+  },
 
   /**
    * @throws {Error}

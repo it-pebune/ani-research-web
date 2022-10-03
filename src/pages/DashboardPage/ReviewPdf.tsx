@@ -1,5 +1,7 @@
 import {
   Box,
+  Icon,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -715,6 +717,15 @@ const ReviewPdf: React.FC<Props> = () => {
     }
   };
 
+  const handleSave = async () => {
+    await documentService.updateDocumentData({
+      docId: params.id,
+      active: tokenStatus.active,
+      token: tokenStatus.token,
+      data: JSON.stringify(tableArray),
+    });
+  };
+
   const handleValueCanged = (
     cellIndex: number,
     rowIndex: number,
@@ -788,19 +799,30 @@ const ReviewPdf: React.FC<Props> = () => {
         active: tokenStatus.active,
         token: tokenStatus.token,
       });
-      const docRaw = await documentService.getDocumentRawData({
-        docId: params.id,
-        active: tokenStatus.active,
-        token: tokenStatus.token,
-      });
+      setDocument(response.url);
+
       const docDetails = await documentService.getDocumentDetails({
         docId: params.id,
         active: tokenStatus.active,
         token: tokenStatus.token,
       });
-      setData(JSON.parse(docRaw.dataRaw));
       setDocDetails(docDetails);
-      setDocument(response.url);
+
+      const processedDoc = await documentService.getProcessedData({
+        docId: params.id,
+        active: tokenStatus.active,
+        token: tokenStatus.token,
+      });
+      if (!processedDoc.data) {
+        const docRaw = await documentService.getDocumentRawData({
+          docId: params.id,
+          active: tokenStatus.active,
+          token: tokenStatus.token,
+        });
+        setData(JSON.parse(docRaw.dataRaw));
+      } else {
+        setTableArray(JSON.parse(processedDoc.data));
+      }
     };
     docResponse();
   }, []);
@@ -813,7 +835,10 @@ const ReviewPdf: React.FC<Props> = () => {
         height: "100%",
       }}
     >
-      <Paper elevation={2} sx={{ m: "16px", mr: "8px", overflowY: "auto" }}>
+      <Paper
+        elevation={2}
+        sx={{ m: "16px", mr: "8px", overflowY: "auto", position: "relative" }}
+      >
         {tableArray.map((table, tIndex) => (
           <Box key={`table-${tIndex}`}>
             <Typography sx={{ px: "16px" }}>{table.name}</Typography>
@@ -904,6 +929,27 @@ const ReviewPdf: React.FC<Props> = () => {
           </Document>
         )}
       </Paper>
+      <IconButton
+        color="primary"
+        sx={{
+          position: "absolute",
+          top: "24px",
+          left: "170px",
+        }}
+      >
+        <Icon>arrow_back_ios</Icon>
+      </IconButton>
+      <IconButton
+        onClick={handleSave}
+        color="success"
+        sx={{
+          position: "absolute",
+          top: "24px",
+          left: "220px",
+        }}
+      >
+        <Icon>save</Icon>
+      </IconButton>
     </Box>
   );
 };

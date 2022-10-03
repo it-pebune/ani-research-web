@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Box,
   Button,
   Chip,
   Icon,
@@ -120,6 +121,12 @@ const CustomTableRow: React.FC<Props> = ({
                 style={{ height: "50px", width: "auto", margin: "0 auto" }}
               />
             )}
+            {cellDef.cellType === "image" && cellDef.field && (
+              <img
+                style={{ height: "50px", width: "auto", margin: "0 auto" }}
+                src={data[cellDef.field]}
+              />
+            )}
             {cellDef.cellType === "text" &&
               cellDef.fields &&
               cellDef.inline && (
@@ -130,16 +137,58 @@ const CustomTableRow: React.FC<Props> = ({
             {cellDef.cellType === "text" &&
               cellDef.fields &&
               !cellDef.inline &&
-              cellDef.fields.map(
-                (field: TextField): ReactElement => (
-                  <Typography
-                    key={field.name}
-                    sx={{ fontWeight: field.weight }}
-                  >
-                    {data[field.name]}
-                  </Typography>
-                )
-              )}
+              cellDef.fields.map((field) => (
+                <Typography key={field.name} sx={{ fontWeight: field.weight }}>
+                  {data[field.name]}
+                </Typography>
+              ))}
+            {cellDef.cellType === "date" && cellDef.field && (
+              <Typography>
+                {moment(data[cellDef.field]).format(cellDef.dateFormat)}
+              </Typography>
+            )}
+            {cellDef.cellType === "icon-action" && (
+              <Box>
+                <IconButton
+                  color={
+                    cellDef.color
+                      ? highlighted
+                        ? "error"
+                        : cellDef.color
+                      : "warning"
+                  }
+                  disabled={disabled}
+                  onClick={() =>
+                    handleAction(
+                      cellDef.action,
+                      cellDef.fields?.map((field) => ({
+                        [field.name]: data[field.name],
+                      }))
+                    )
+                  }
+                >
+                  <Icon>{cellDef.icon}</Icon>
+                </IconButton>
+              </Box>
+            )}
+            {cellDef.cellType === "action-button" && (
+              <Button
+                color="primary"
+                variant="contained"
+                sx={{ width: "200px", margin: "0 auto" }}
+                onClick={() =>
+                  handleAction(
+                    cellDef.action,
+                    cellDef.fields?.map((field) => ({
+                      [field.name]: data[field.name],
+                    }))
+                  )
+                }
+              >
+                {cellDef.text}
+              </Button>
+            )}
+
             {cellDef.cellType === "date" && cellDef.field && (
               <Typography>
                 {moment(data[cellDef.field]).format(cellDef.dateFormat)}
@@ -167,24 +216,6 @@ const CustomTableRow: React.FC<Props> = ({
               >
                 <Icon>{cellDef.icon}</Icon>
               </IconButton>
-            )}
-            {cellDef.cellType === "action-button" && (
-              <Button
-                color="primary"
-                variant="contained"
-                sx={{ width: "200px", margin: "0 auto" }}
-                onClick={(): any =>
-                  handleAction(
-                    cellDef.action,
-                    !disabled &&
-                      cellDef.fields?.map((field: TextField): any => ({
-                        [field.name]: data[field.name],
-                      }))
-                  )
-                }
-              >
-                {cellDef.text}
-              </Button>
             )}
             {cellDef.cellType === "index" && cellDef.field && (
               <Typography>{data[cellDef.field]}</Typography>
@@ -240,19 +271,22 @@ const CustomTableRow: React.FC<Props> = ({
                 )}
               </>
             )}
+
             {cellDef.cellType === "dropdown-button" && cellDef.menuItems && (
               <>
                 {" "}
-                <IconButton
-                  aria-label="more"
-                  id={`long-button-${data.id}`}
-                  aria-controls={open ? "long-menu" : undefined}
-                  aria-expanded={open ? "true" : undefined}
-                  aria-haspopup="true"
-                  onClick={handleDropDown}
-                >
-                  <Icon>more_vert</Icon>
-                </IconButton>
+                <Box>
+                  <IconButton
+                    aria-label="more"
+                    id={`long-button-${data.id}`}
+                    aria-controls={open ? "long-menu" : undefined}
+                    aria-expanded={open ? "true" : undefined}
+                    aria-haspopup="true"
+                    onClick={handleDropDown}
+                  >
+                    <Icon>more_vert</Icon>
+                  </IconButton>
+                </Box>
                 <Menu
                   id={`long-menu-${data.id}`}
                   MenuListProps={{
@@ -270,24 +304,14 @@ const CustomTableRow: React.FC<Props> = ({
                     },
                   }}
                 >
-                  {cellDef.menuItems.map(
-                    (item: MenuItemAction): ReactElement => {
-                      const disabled =
-                        disableIf && disableIf(item.action, data.id);
-
-                      return (
-                        <MenuItem
-                          key={item.action}
-                          disabled={disabled}
-                          onClick={(): any =>
-                            !disabled && handleAction(item.action, data.id)
-                          }
-                        >
-                          {item.text}
-                        </MenuItem>
-                      );
-                    }
-                  )}
+                  {cellDef.menuItems.map((item) => (
+                    <MenuItem
+                      key={item.action}
+                      onClick={() => handleAction(item.action, data.id)}
+                    >
+                      {item.text}
+                    </MenuItem>
+                  ))}
                 </Menu>
               </>
             )}

@@ -70,9 +70,8 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   onMoveUp,
 }) => {
   const textField = useRef<HTMLTextAreaElement | null>(null);
-  const [selectionStart, setSelectionStart] = useState<number>(0);
   const [myValue, setValue] = useState("");
-
+  const [height, setHeight] = useState("20px");
   const handleEnter = () => {
     if (!cellActive) {
       onHoveredState(index, rowIndex, true);
@@ -82,7 +81,6 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   const handleClick = (e: React.MouseEvent<HTMLTableCellElement>) => {
     e.stopPropagation();
     if (textField.current) {
-      setSelectionStart(textField.current.selectionStart);
       setTimeout(() => {
         textField.current?.focus();
       }, 20);
@@ -93,7 +91,6 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   const handleTextChange = () => {
     if (textField.current) {
       onValueChanged(index, rowIndex, textField.current.value);
-      setSelectionStart(textField.current.selectionStart);
     }
   };
 
@@ -123,12 +120,10 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    if (data.active) {
-      if (textField.current) {
-        textField.current.selectionStart = selectionStart;
-      }
+    if (data.value) {
+      setHeight(textField.current?.scrollHeight + "px");
     }
-  }, [data]);
+  }, []);
 
   return (
     <TableCell
@@ -245,20 +240,19 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
           <Icon>list</Icon>
         </IconButton>
       )}
-      <StyledTextareaAutosize
+      <textarea
         ref={textField}
         style={{
+          width: "100%",
           display: "grid",
           border: "1px solid rgba(0, 0, 0, .01)",
           cursor: "pointer",
           textAlign: "center",
+          height: height,
         }}
-        touched={data.valid === 2}
-        validated={data.valid === 1}
-        unTouched={data.valid === 0}
         value={data.value}
         onChange={handleTextChange}
-      ></StyledTextareaAutosize>
+      />
     </TableCell>
   );
 };
