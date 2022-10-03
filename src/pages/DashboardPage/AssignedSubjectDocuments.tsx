@@ -12,10 +12,7 @@ import {
 import SearchBarWithFiltersController from "../../components/Shared/SearchBarWithFiltersController";
 import { useNavigate, useParams } from "react-router";
 import useTokenStatus from "../../utils/useTokenStatus";
-import {
-  DocumentFromDataBase,
-  DocumentTypeLabels,
-} from "../../interfaces/DocumentInterfaces";
+import { DocumentFromDataBase } from "../../interfaces/DocumentInterfaces";
 import { documentService } from "../../services/documentsServices";
 import Loader from "../../components/Shared/Loader";
 import CustomTableHeader from "../../components/Shared/CustomTableHeader";
@@ -25,6 +22,11 @@ import { assignedSubjectDocumentsTableHeaderData } from "../../resources/tableHe
 import { assignedSubjectDocumentsTableRowDefs } from "../../resources/tableRowDefs/documentsTableRowDefs";
 import { Directions } from "../../interfaces/TableHeaderInterface";
 import CustomDialog from "../../components/Shared/CustomDialog";
+import {
+  DocumentStatuses,
+  DocumentTypeLabels,
+  ValidDocumentStatuses,
+} from "../../enums/DocumentsEnums";
 
 export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
   const navigate = useNavigate(),
@@ -43,6 +45,9 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
     } | null>(null),
     [page, setPage] = useState<number>(0),
     [rowsPerPage, setRowsPerPage] = useState<number>(10),
+    [documentStatuses, setDocumentStatuses] = useState<{
+      [id: string]: DocumentStatuses;
+    }>({}),
     [documentToBeDeleted, setDocumentToBeDeleted] =
       useState<DocumentFromDataBase | null>(null),
     [documentDeletedWithSuccess, setDocumentDeletedWithSuccess] =
@@ -65,6 +70,9 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
         filterAndSortDocuments(searchKey, sortOptions);
       }
     },
+    disableIf = (action: string, id: any): boolean =>
+      "review-document" === action &&
+      !ValidDocumentStatuses.includes(documentStatuses[id]),
     handleAction = (action: string, id: any): void => {
       if (typeof id !== "string") {
         return;
@@ -212,6 +220,27 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
     [documents]
   );
 
+  useEffect((): any => {
+    const getDocumentStatuses = async (): Promise<void> => {
+        const documentStatuses = await documentService.getDocumentStatuses(
+            tokenStatus,
+            subjectId
+          ),
+          mappedDocumentStatuses: { [id: string]: DocumentStatuses } = {};
+
+        for (const documentStatus of documentStatuses) {
+          mappedDocumentStatuses[documentStatus.id] = documentStatus.status;
+        }
+
+        setDocumentStatuses(mappedDocumentStatuses);
+      },
+      interval = setInterval((): Promise<void> => getDocumentStatuses(), 5000);
+
+    getDocumentStatuses();
+
+    return (): void => clearInterval(interval);
+  }, [subjectId]);
+
   return (
     <>
       {loading && <Loader />}
@@ -245,6 +274,7 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
                         columnsGrid={columnsGrid}
                         rowDefs={assignedSubjectDocumentsTableRowDefs}
                         onAction={handleAction}
+                        disableIf={disableIf}
                       />
                     )
                   )}
