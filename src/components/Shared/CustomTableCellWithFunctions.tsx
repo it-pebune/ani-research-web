@@ -88,6 +88,10 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
     onCellActive(index, rowIndex, true);
   };
 
+  const handleTouched = (e: React.FocusEvent<HTMLTextAreaElement, Element>) => {
+    onTouched(index, rowIndex);
+  };
+
   const handleTextChange = () => {
     if (textField.current) {
       onValueChanged(index, rowIndex, textField.current.value);
@@ -120,6 +124,12 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    if (index === 0 && rowIndex === 0) {
+      console.log(data);
+    }
+  }, [rowIndex]);
+
+  useEffect(() => {
     if (data.value) {
       setHeight(textField.current?.scrollHeight + "px");
     }
@@ -145,7 +155,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
       onClick={handleClick}
       onMouseEnter={handleEnter}
     >
-      {(data.hovered || data.active) && rowIndex !== 0 && (
+      {(data.hovered || data.active) && !data.valid && rowIndex !== 0 && (
         <IconButton
           sx={{
             position: "absolute",
@@ -159,7 +169,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
           <Icon>expand_less</Icon>
         </IconButton>
       )}
-      {(data.hovered || data.active) && (
+      {(data.hovered || data.active) && !data.valid && (
         <IconButton
           sx={{
             position: "absolute",
@@ -174,7 +184,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
           <Icon>chevron_left</Icon>
         </IconButton>
       )}
-      {(data.hovered || data.active) && (
+      {(data.hovered || data.active) && !data.valid && (
         <IconButton
           sx={{
             position: "absolute",
@@ -193,7 +203,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
           <Icon>chevron_right</Icon>
         </IconButton>
       )}
-      {(data.hovered || data.active) && (
+      {(data.hovered || data.active) && !data.valid && (
         <IconButton
           sx={{
             position: "absolute",
@@ -208,7 +218,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
           <Icon>keyboard_double_arrow_left</Icon>
         </IconButton>
       )}
-      {(data.hovered || data.active) && (
+      {(data.hovered || data.active) && !data.valid && (
         <IconButton
           sx={{
             position: "absolute",
@@ -227,7 +237,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
           <Icon>keyboard_double_arrow_right</Icon>
         </IconButton>
       )}
-      {(data.hovered || data.active) && (
+      {(data.hovered || data.active) && !data.valid && (
         <IconButton
           sx={{
             position: "absolute",
@@ -248,9 +258,11 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
           border: "1px solid rgba(0, 0, 0, .01)",
           cursor: "pointer",
           textAlign: "center",
+          color: data.valid ? "green" : data.touched ? "orange" : "red",
           height: height,
         }}
         value={data.value}
+        onFocus={handleTouched}
         onChange={handleTextChange}
       />
     </TableCell>

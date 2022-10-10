@@ -2,6 +2,10 @@ import { HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 export const parcelsTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "adress",
     align: "center",
     title: "Adresa sau zona",
@@ -39,6 +43,10 @@ export const parcelsTableData: HeaderCell[] = [
 ];
 
 export const buildingsTableData: HeaderCell[] = [
+  {
+    field: "",
+    title: "",
+  },
   {
     field: "adress",
     align: "center",
@@ -78,6 +86,10 @@ export const buildingsTableData: HeaderCell[] = [
 
 export const transportTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "type_of_transport",
     align: "center",
     title: "Natura",
@@ -106,6 +118,10 @@ export const transportTableData: HeaderCell[] = [
 
 export const artTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "short_description",
     align: "center",
     title: "Descriere sumara",
@@ -123,6 +139,10 @@ export const artTableData: HeaderCell[] = [
 ];
 
 export const mobileTableData: HeaderCell[] = [
+  {
+    field: "",
+    title: "",
+  },
   {
     field: "type_of_product",
     align: "center",
@@ -152,6 +172,10 @@ export const mobileTableData: HeaderCell[] = [
 
 export const financeTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "adm_institution",
     align: "center",
     title: "Institutia care administreaza",
@@ -180,6 +204,10 @@ export const financeTableData: HeaderCell[] = [
 
 export const investmentTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "issuer",
     align: "center",
     title: "Emitent",
@@ -202,6 +230,10 @@ export const investmentTableData: HeaderCell[] = [
 ];
 
 export const debtTableData: HeaderCell[] = [
+  {
+    field: "",
+    title: "",
+  },
   {
     field: "lender",
     align: "center",
@@ -226,6 +258,10 @@ export const debtTableData: HeaderCell[] = [
 
 export const giftTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "owner",
     align: "center",
     title: "Cine a realizat venitul",
@@ -248,6 +284,10 @@ export const giftTableData: HeaderCell[] = [
 ];
 
 export const incomeTableData: HeaderCell[] = [
+  {
+    field: "",
+    title: "",
+  },
   {
     field: "owner",
     align: "center",

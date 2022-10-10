@@ -627,6 +627,25 @@ const ReviewPdf: React.FC<Props> = () => {
     }
   };
 
+  const setRowValid = (rowIndex: number, tableIndex: number) => {
+    setTableArray((prevState) =>
+      prevState.map((table, tIndex) =>
+        tableIndex === tIndex
+          ? {
+              ...table,
+              data: table.data?.map((item, rIndex) => ({
+                ...item,
+                row:
+                  rowIndex === rIndex
+                    ? item.row.map((cell) => ({ ...cell, valid: !cell.valid }))
+                    : item.row,
+              })),
+            }
+          : table
+      )
+    );
+  };
+
   const handleShiftAllRight = (
     cellIndex: number,
     rowIndex: number,
@@ -652,7 +671,8 @@ const ReviewPdf: React.FC<Props> = () => {
           ...tableArray[tableIndex].cells.map((cell) => ({
             field: cell.field || "",
             value: "",
-            valid: 0,
+            valid: false,
+            touched: false,
             hovered: false,
             active: false,
           })),
@@ -726,6 +746,33 @@ const ReviewPdf: React.FC<Props> = () => {
     });
   };
 
+
+  const handleTouched = (
+    cellIndex: number,
+    rowIndex: number,
+    tableIndex: number
+  ) => {
+    setTableArray((prevState) =>
+      prevState.map((table, tIndex) =>
+        tableIndex === tIndex
+          ? {
+              ...table,
+              data: table.data?.map((item, rIndex) => ({
+                ...item,
+                row:
+                  rowIndex === rIndex
+                    ? item.row.map((cell, cIndex) =>
+                        cellIndex === cIndex ? { ...cell, touched: true } : cell
+                      )
+                    : item.row,
+              })),
+            }
+          : table
+      )
+    );
+  };
+
+
   const handleValueCanged = (
     cellIndex: number,
     rowIndex: number,
@@ -767,7 +814,8 @@ const ReviewPdf: React.FC<Props> = () => {
       const variable = Object.keys(obj).map((key) => ({
         field: key,
         value: obj[key].text,
-        valid: 0,
+        valid: false,
+        touched: false,
         hovered: false,
         active: false,
       }));
@@ -857,7 +905,7 @@ const ReviewPdf: React.FC<Props> = () => {
                 }}
               >
                 <CustomTableHeader
-                  columnsGrid={table.grid}
+                  columnsGrid={`50px ${table.grid}`}
                   headerCells={table.cells}
                 ></CustomTableHeader>
                 <TableBody sx={{ flex: "1", overflow: "auto", p: "24px" }}>
@@ -872,7 +920,12 @@ const ReviewPdf: React.FC<Props> = () => {
                       cellActive={cellActive}
                       tableTouched={tableTouched}
                       onElementSelected={handleElementSelected}
-                      onTouched={() => setTableTouched(!tableTouched)}
+                      onRowValidate={(rIndex: number) =>
+                        setRowValid(rIndex, tIndex)
+                      }
+                      onTouched={(index: number, rIndex: number) =>
+                        handleTouched(index, rIndex, tIndex)
+                      }
                       onHoveredState={(
                         index: number,
                         rIndex: number,
