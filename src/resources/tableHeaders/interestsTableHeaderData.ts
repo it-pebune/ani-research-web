@@ -2,6 +2,10 @@ import { HeaderCell } from "../../interfaces/TableHeaderInterface";
 
 export const companyTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "company",
     align: "center",
     title: "Societatea comerciala",
@@ -25,6 +29,10 @@ export const companyTableData: HeaderCell[] = [
 
 export const boardTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "company",
     align: "center",
     title: "Unitatea",
@@ -43,6 +51,10 @@ export const boardTableData: HeaderCell[] = [
 
 export const sindicateTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "line",
     title: "Membru de sindicat",
     align: "center",
@@ -51,6 +63,10 @@ export const sindicateTableData: HeaderCell[] = [
 
 export const partyTableData: HeaderCell[] = [
   {
+    field: "",
+    title: "",
+  },
+  {
     field: "line",
     title: "Membru de partid",
     align: "center",
@@ -58,6 +74,10 @@ export const partyTableData: HeaderCell[] = [
 ];
 
 export const contractsTableData: HeaderCell[] = [
+  {
+    field: "",
+    title: "",
+  },
   {
     field: "owner",
     title: "Beneficiar contract",

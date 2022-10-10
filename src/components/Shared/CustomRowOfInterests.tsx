@@ -1,5 +1,6 @@
-import { TableRow } from "@mui/material";
-import React from "react";
+import { IconButton, Icon, TableRow, Box, TableCell } from "@mui/material";
+import { useEffect } from "@storybook/addons";
+import React, { useLayoutEffect, useState } from "react";
 import { FieldData } from "../../interfaces/ReviewPdf";
 import CustomTableCellWithFunctions from "./CustomTableCellWithFunctions";
 
@@ -21,6 +22,7 @@ interface Props {
   onMoveLeft: any;
   onMoveRight: any;
   onMoveUp: any;
+  onRowValidate: any;
 }
 
 const CustomRowOfInterests: React.FC<Props> = ({
@@ -34,6 +36,7 @@ const CustomRowOfInterests: React.FC<Props> = ({
   cellActive,
   tableTouched,
   onTouched,
+  onRowValidate,
   onCellActive,
   onValueChanged,
   onShiftAllLeft,
@@ -45,11 +48,28 @@ const CustomRowOfInterests: React.FC<Props> = ({
   const handleSelectElement = (index: number, rowIndex: number) => {
     onElementSelected(index, rowIndex);
   };
+
+  const [valid, setValid] = useState(true);
+
+  const handleValidate = () => {
+    onRowValidate(index);
+  };
+
+  useLayoutEffect(() => {
+    let validRow = true;
+    values.forEach((value) => {
+      if (!value.valid) {
+        validRow = false;
+      }
+    });
+    setValid(validRow);
+  }, [values]);
+
   return (
     <TableRow
       sx={{
         display: "grid",
-        gridTemplateColumns: columnsGrid,
+        gridTemplateColumns: `50px ${columnsGrid}`,
         "&:hover": {
           background: "#f6f6f6",
         },
@@ -69,6 +89,20 @@ const CustomRowOfInterests: React.FC<Props> = ({
         },
       }}
     >
+      <TableCell sx={{ alignSelf: "center", background: "white", py: "30px" }}>
+        <Box>
+          <IconButton
+            style={{
+              background: valid ? "green" : "white",
+              color: valid ? "white" : "grey",
+            }}
+            onClick={handleValidate}
+          >
+            <Icon>done</Icon>
+          </IconButton>
+        </Box>
+      </TableCell>
+
       {values.map((data, vIndex) => (
         <CustomTableCellWithFunctions
           key={`cell-${index}-${vIndex}`}
