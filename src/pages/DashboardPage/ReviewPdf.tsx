@@ -746,6 +746,7 @@ const ReviewPdf: React.FC<Props> = () => {
     });
   };
 
+
   const handleTouched = (
     cellIndex: number,
     rowIndex: number,
@@ -770,6 +771,7 @@ const ReviewPdf: React.FC<Props> = () => {
       )
     );
   };
+
 
   const handleValueCanged = (
     cellIndex: number,
