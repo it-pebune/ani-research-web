@@ -114,6 +114,7 @@ const CustomTableRow: React.FC<Props> = ({
                   src={data[cellDef.field]}
                 />
               )}
+
             {cellDef.cellType === "image" && cellDef.field && (
               <img
                 alt={cellDef.altField ? data[cellDef.altField] : ""}
@@ -121,12 +122,7 @@ const CustomTableRow: React.FC<Props> = ({
                 style={{ height: "50px", width: "auto", margin: "0 auto" }}
               />
             )}
-            {cellDef.cellType === "image" && cellDef.field && (
-              <img
-                style={{ height: "50px", width: "auto", margin: "0 auto" }}
-                src={data[cellDef.field]}
-              />
-            )}
+
             {cellDef.cellType === "text" &&
               cellDef.fields &&
               cellDef.inline && (
@@ -134,6 +130,7 @@ const CustomTableRow: React.FC<Props> = ({
                   {cellDef.fields.map((field) => `${data[field.name]} `)}
                 </Typography>
               )}
+
             {cellDef.cellType === "text" &&
               cellDef.fields &&
               !cellDef.inline &&
@@ -142,11 +139,13 @@ const CustomTableRow: React.FC<Props> = ({
                   {data[field.name]}
                 </Typography>
               ))}
+
             {cellDef.cellType === "date" && cellDef.field && (
               <Typography>
                 {moment(data[cellDef.field]).format(cellDef.dateFormat)}
               </Typography>
             )}
+
             {cellDef.cellType === "icon-action" && (
               <Box>
                 <IconButton
@@ -171,6 +170,7 @@ const CustomTableRow: React.FC<Props> = ({
                 </IconButton>
               </Box>
             )}
+
             {cellDef.cellType === "action-button" && (
               <Button
                 color="primary"
@@ -189,37 +189,10 @@ const CustomTableRow: React.FC<Props> = ({
               </Button>
             )}
 
-            {cellDef.cellType === "date" && cellDef.field && (
-              <Typography>
-                {moment(data[cellDef.field]).format(cellDef.dateFormat)}
-              </Typography>
-            )}
-            {cellDef.cellType === "icon-action" && (
-              <IconButton
-                color={
-                  cellDef.color
-                    ? highlighted
-                      ? "error"
-                      : cellDef.color
-                    : "warning"
-                }
-                disabled={disabled}
-                onClick={(): any =>
-                  !disabled &&
-                  handleAction(
-                    cellDef.action,
-                    cellDef.fields?.map((field: TextField): any => ({
-                      [field.name]: data[field.name],
-                    }))
-                  )
-                }
-              >
-                <Icon>{cellDef.icon}</Icon>
-              </IconButton>
-            )}
             {cellDef.cellType === "index" && cellDef.field && (
               <Typography>{data[cellDef.field]}</Typography>
             )}
+
             {cellDef.cellType === "status-chip" && cellDef.field && (
               <>
                 {data[cellDef.field] !== undefined && cellDef.states && (
