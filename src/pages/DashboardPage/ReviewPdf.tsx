@@ -21,6 +21,7 @@ import { assetsOrder } from "../../resources/declarations/assetsOrder";
 import { interestsOrder } from "../../resources/declarations/interestsOrder";
 import { documentService } from "../../services/documentsServices";
 import useTokenStatus from "../../utils/useTokenStatus";
+import useUndoableState from "../../utils/useUndoableState";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -246,6 +247,15 @@ const ReviewPdf: React.FC<Props> = () => {
   });
   const [pdfNumPages, setPdfNumPages] = useState<number>();
   const [tableArray, setTableArray] = useState<TableData[]>([]);
+  const [
+    savedTableArray,
+    setSavedTableArray,
+    resetSavedTableArray,
+    isSavedTableArrayUndoable,
+    undoSavedTableArray,
+    isSavedTableArrayRedoable,
+    redoSavedTableArray,
+  ] = useUndoableState<TableData[]>([]);
   const [loadedData, setLoadedData] = useState<FormatedTableI[]>([]);
   const [tableTouched, setTableTouched] = useState(false);
   const [cellActive, setCellActive] = useState(false);
@@ -375,8 +385,8 @@ const ReviewPdf: React.FC<Props> = () => {
   ) => {
     setCellActive(false);
     if (rowIndex !== 0) {
-      setTableArray((prevState) =>
-        prevState.map((table, tIndex) =>
+      setTableArray((prevState) => {
+        const newState = prevState.map((table, tIndex) =>
           tableIndex === tIndex
             ? {
                 ...table,
@@ -404,8 +414,12 @@ const ReviewPdf: React.FC<Props> = () => {
                   ),
               }
             : table
-        )
-      );
+        );
+
+        setSavedTableArray(newState);
+
+        return newState;
+      });
     }
   };
 
@@ -468,16 +482,20 @@ const ReviewPdf: React.FC<Props> = () => {
             ),
           }));
 
-        setTableArray((prevState) =>
-          prevState.map((table, tIndex) =>
+        setTableArray((prevState) => {
+          const newState = prevState.map((table, tIndex) =>
             tableIndex === tIndex
               ? {
                   ...table,
                   data: [...newRowsArray],
                 }
               : table
-          )
-        );
+          );
+
+          setSavedTableArray(newState);
+
+          return newState;
+        });
       }
     }
   };
@@ -540,16 +558,20 @@ const ReviewPdf: React.FC<Props> = () => {
             ),
           }));
 
-        setTableArray((prevState) =>
-          prevState.map((table, tIndex) =>
+        setTableArray((prevState) => {
+          const newState = prevState.map((table, tIndex) =>
             tableIndex === tIndex
               ? {
                   ...table,
                   data: [...newRowsArray],
                 }
               : table
-          )
-        );
+          );
+
+          setSavedTableArray(newState);
+
+          return newState;
+        });
       }
     }
   };
@@ -613,23 +635,27 @@ const ReviewPdf: React.FC<Props> = () => {
             ),
           }));
 
-        setTableArray((prevState) =>
-          prevState.map((table, tIndex) =>
+        setTableArray((prevState) => {
+          const newState = prevState.map((table, tIndex) =>
             tableIndex === tIndex
               ? {
                   ...table,
                   data: [...newRowsArray],
                 }
               : table
-          )
-        );
+          );
+
+          setSavedTableArray(newState);
+
+          return newState;
+        });
       }
     }
   };
 
   const setRowValid = (rowIndex: number, tableIndex: number) => {
-    setTableArray((prevState) =>
-      prevState.map((table, tIndex) =>
+    setTableArray((prevState) => {
+      const newState = prevState.map((table, tIndex) =>
         tableIndex === tIndex
           ? {
               ...table,
@@ -642,8 +668,12 @@ const ReviewPdf: React.FC<Props> = () => {
               })),
             }
           : table
-      )
-    );
+      );
+
+      setSavedTableArray(newState);
+
+      return newState;
+    });
   };
 
   const handleShiftAllRight = (
@@ -723,16 +753,20 @@ const ReviewPdf: React.FC<Props> = () => {
             ),
           }));
 
-        setTableArray((prevState) =>
-          prevState.map((table, tIndex) =>
+        setTableArray((prevState) => {
+          const newState = prevState.map((table, tIndex) =>
             tableIndex === tIndex
               ? {
                   ...table,
                   data: [...newRowsArray],
                 }
               : { ...table }
-          )
-        );
+          );
+
+          setSavedTableArray(newState);
+
+          return newState;
+        });
       }
     }
   };
@@ -792,6 +826,7 @@ const ReviewPdf: React.FC<Props> = () => {
         grid: table.grid,
       }));
       setTableArray(array);
+      setSavedTableArray(array);
     } else if (loadedData.length > 0 && docDetails?.type === 1) {
       const array = assetsOrder.map((table) => ({
         name: table.name,
@@ -801,6 +836,7 @@ const ReviewPdf: React.FC<Props> = () => {
         grid: table.grid,
       }));
       setTableArray(array);
+      setSavedTableArray(array);
     }
   }, [loadedData]);
 
@@ -863,7 +899,10 @@ const ReviewPdf: React.FC<Props> = () => {
         });
         setData(JSON.parse(docRaw.dataRaw));
       } else {
-        setTableArray(JSON.parse(processedDoc.data));
+        const processedData = JSON.parse(processedDoc.data);
+
+        setTableArray(processedData);
+        setSavedTableArray(processedData);
       }
     };
     docResponse();
