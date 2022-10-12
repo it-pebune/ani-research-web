@@ -835,10 +835,6 @@ const ReviewPdf: React.FC<Props> = () => {
   }, [data]);
 
   useEffect(() => {
-    // console.log(tableArray);
-  }, [tableArray]);
-
-  useEffect(() => {
     const docResponse = async () => {
       const response = await documentService.getOriginalDocument({
         docId: params.id,

@@ -1,22 +1,24 @@
 import { useMemo, useState } from "react";
 import isEqual from "lodash/isEqual";
 
-export default function useUndoableState<T>(initialState: T): {
-  state: T;
-  setState: (state: T) => void;
-  resetState: (initialState: T) => void;
-  isStateUndoable: () => boolean;
-  undoState: () => void;
-  isStateRedoable: () => boolean;
-  redoState: () => void;
-} {
+export default function useUndoableState<T>(
+  initialState: T
+): [
+  T,
+  (state: T) => void,
+  (initialState: T) => void,
+  () => boolean,
+  () => void,
+  () => boolean,
+  () => void
+] {
   const [states, setStates] = useState<T[]>([initialState]),
     [index, setIndex] = useState<number>(0),
     state = useMemo<T>((): T => states[index], [states, index]);
 
-  return {
+  return [
     state,
-    setState(newState: T): void {
+    (newState: T): void => {
       if (isEqual(state, newState)) {
         return;
       }
@@ -28,13 +30,13 @@ export default function useUndoableState<T>(initialState: T): {
       setStates(newStates);
       setIndex(newStates.length - 1);
     },
-    resetState(initialState: T): void {
+    (initialState: T): void => {
       setStates([initialState]);
       setIndex(0);
     },
-    isStateUndoable: (): boolean => index > 0,
-    undoState: (): void => setIndex(index - 1),
-    isStateRedoable: (): boolean => index < states.length - 1,
-    redoState: (): void => setIndex(index + 1),
-  };
+    (): boolean => index > 0,
+    (): void => setIndex(index - 1),
+    (): boolean => index < states.length - 1,
+    (): void => setIndex(index + 1),
+  ];
 }
