@@ -416,7 +416,7 @@ const ReviewPdf: React.FC<Props> = () => {
             : table
         );
 
-        setSavedTableArray(newState);
+        savedTableArrayCheckpoint(newState);
 
         return newState;
       });
@@ -492,7 +492,7 @@ const ReviewPdf: React.FC<Props> = () => {
               : table
           );
 
-          setSavedTableArray(newState);
+          savedTableArrayCheckpoint(newState);
 
           return newState;
         });
@@ -568,7 +568,7 @@ const ReviewPdf: React.FC<Props> = () => {
               : table
           );
 
-          setSavedTableArray(newState);
+          savedTableArrayCheckpoint(newState);
 
           return newState;
         });
@@ -645,7 +645,7 @@ const ReviewPdf: React.FC<Props> = () => {
               : table
           );
 
-          setSavedTableArray(newState);
+          savedTableArrayCheckpoint(newState);
 
           return newState;
         });
@@ -670,7 +670,7 @@ const ReviewPdf: React.FC<Props> = () => {
           : table
       );
 
-      setSavedTableArray(newState);
+      savedTableArrayCheckpoint(newState);
 
       return newState;
     });
@@ -763,7 +763,7 @@ const ReviewPdf: React.FC<Props> = () => {
               : { ...table }
           );
 
-          setSavedTableArray(newState);
+          savedTableArrayCheckpoint(newState);
 
           return newState;
         });
@@ -817,17 +817,23 @@ const ReviewPdf: React.FC<Props> = () => {
   const handleElementSelected = () => {};
 
   const handleBlur = (): void => {
-    setSavedTableArray(tableArray);
+    savedTableArrayCheckpoint(tableArray);
   };
 
-  const handleUndo = (): void => {
-    undoSavedTableArray();
-    setTableArray(savedTableArray);
-  };
+  const savedTableArrayCheckpoint = (tableData: TableData[]): void => {
+    setSavedTableArray(
+      tableData.map((tableItem: TableData): TableData => {
+        tableItem.data?.forEach((row: RowI): void => {
+          row.row.forEach((field: FieldData): void => {
+            delete field.touched;
+            delete field.active;
+            delete field.hovered;
+          });
+        });
 
-  const handleRedo = (): void => {
-    redoSavedTableArray();
-    setTableArray(savedTableArray);
+        return tableItem;
+      })
+    );
   };
 
   useEffect(() => {
@@ -1052,7 +1058,7 @@ const ReviewPdf: React.FC<Props> = () => {
         <Icon>save</Icon>
       </IconButton>
       <IconButton
-        onClick={handleUndo}
+        onClick={undoSavedTableArray}
         color="success"
         disabled={!isSavedTableArrayUndoable()}
         sx={{
@@ -1064,7 +1070,7 @@ const ReviewPdf: React.FC<Props> = () => {
         <Icon>undo</Icon>
       </IconButton>
       <IconButton
-        onClick={handleRedo}
+        onClick={redoSavedTableArray}
         color="success"
         disabled={!isSavedTableArrayRedoable()}
         sx={{
