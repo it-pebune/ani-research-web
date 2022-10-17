@@ -23,6 +23,7 @@ interface Props {
   onMoveRight: any;
   onMoveUp: any;
   onRowValidate: any;
+  onBlur: any;
 }
 
 const CustomRowOfInterests: React.FC<Props> = ({
@@ -44,6 +45,7 @@ const CustomRowOfInterests: React.FC<Props> = ({
   onMoveLeft,
   onMoveRight,
   onMoveUp,
+  onBlur,
 }) => {
   const handleSelectElement = (index: number, rowIndex: number) => {
     onElementSelected(index, rowIndex);
@@ -123,6 +125,7 @@ const CustomRowOfInterests: React.FC<Props> = ({
           onMoveLeft={onMoveLeft}
           onMoveRight={onMoveRight}
           onMoveUp={onMoveUp}
+          onBlur={onBlur}
         ></CustomTableCellWithFunctions>
       ))}
     </TableRow>

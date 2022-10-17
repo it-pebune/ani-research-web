@@ -816,6 +816,20 @@ const ReviewPdf: React.FC<Props> = () => {
 
   const handleElementSelected = () => {};
 
+  const handleBlur = (): void => {
+    setSavedTableArray(tableArray);
+  };
+
+  const handleUndo = (): void => {
+    undoSavedTableArray();
+    setTableArray(savedTableArray);
+  };
+
+  const handleRedo = (): void => {
+    redoSavedTableArray();
+    setTableArray(savedTableArray);
+  };
+
   useEffect(() => {
     if (loadedData.length > 0 && docDetails?.type === 2) {
       const array = interestsOrder.map((table) => ({
@@ -826,7 +840,7 @@ const ReviewPdf: React.FC<Props> = () => {
         grid: table.grid,
       }));
       setTableArray(array);
-      setSavedTableArray(array);
+      resetSavedTableArray(array);
     } else if (loadedData.length > 0 && docDetails?.type === 1) {
       const array = assetsOrder.map((table) => ({
         name: table.name,
@@ -836,7 +850,7 @@ const ReviewPdf: React.FC<Props> = () => {
         grid: table.grid,
       }));
       setTableArray(array);
-      setSavedTableArray(array);
+      resetSavedTableArray(array);
     }
   }, [loadedData]);
 
@@ -902,7 +916,7 @@ const ReviewPdf: React.FC<Props> = () => {
         const processedData = JSON.parse(processedDoc.data);
 
         setTableArray(processedData);
-        setSavedTableArray(processedData);
+        resetSavedTableArray(processedData);
       }
     };
     docResponse();
@@ -989,6 +1003,7 @@ const ReviewPdf: React.FC<Props> = () => {
                       onMoveUp={(index: number, rIndex: number) =>
                         handleMoveUp(index, rIndex, tIndex)
                       }
+                      onBlur={handleBlur}
                     />
                   ))}
                 </TableBody>
@@ -1035,6 +1050,30 @@ const ReviewPdf: React.FC<Props> = () => {
         }}
       >
         <Icon>save</Icon>
+      </IconButton>
+      <IconButton
+        onClick={handleUndo}
+        color="success"
+        disabled={!isSavedTableArrayUndoable()}
+        sx={{
+          position: "absolute",
+          top: "24px",
+          left: "250px",
+        }}
+      >
+        <Icon>undo</Icon>
+      </IconButton>
+      <IconButton
+        onClick={handleRedo}
+        color="success"
+        disabled={!isSavedTableArrayRedoable()}
+        sx={{
+          position: "absolute",
+          top: "24px",
+          left: "280px",
+        }}
+      >
+        <Icon>redo</Icon>
       </IconButton>
     </Box>
   );

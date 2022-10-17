@@ -27,6 +27,7 @@ interface Props {
   onMoveLeft: any;
   onMoveRight: any;
   onMoveUp: any;
+  onBlur: any;
 }
 
 interface StyledTextareaAutosizeProps extends TextareaAutosizeProps {
@@ -68,6 +69,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   onMoveLeft,
   onMoveRight,
   onMoveUp,
+  onBlur,
 }) => {
   const textField = useRef<HTMLTextAreaElement | null>(null);
   const [myValue, setValue] = useState("");
@@ -121,6 +123,10 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   const handleMoveUp = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     onMoveUp(index, rowIndex);
+  };
+
+  const handleBlur = (): void => {
+    onBlur(index, rowIndex, textField.current?.value ?? "");
   };
 
   useEffect(() => {
@@ -264,6 +270,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
         value={data.value}
         onFocus={handleTouched}
         onChange={handleTextChange}
+        onBlur={handleBlur}
       />
     </TableCell>
   );
