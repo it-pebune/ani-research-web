@@ -22,6 +22,7 @@ import { interestsOrder } from "../../resources/declarations/interestsOrder";
 import { documentService } from "../../services/documentsServices";
 import useTokenStatus from "../../utils/useTokenStatus";
 import useUndoableState from "../../utils/useUndoableState";
+import clone from "lodash/clone";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -416,7 +417,7 @@ const ReviewPdf: React.FC<Props> = () => {
             : table
         );
 
-        savedTableArrayCheckpoint(newState);
+        setSavedTableArray(processTableArrayForSave(newState));
 
         return newState;
       });
@@ -492,7 +493,7 @@ const ReviewPdf: React.FC<Props> = () => {
               : table
           );
 
-          savedTableArrayCheckpoint(newState);
+          setSavedTableArray(processTableArrayForSave(newState));
 
           return newState;
         });
@@ -568,7 +569,7 @@ const ReviewPdf: React.FC<Props> = () => {
               : table
           );
 
-          savedTableArrayCheckpoint(newState);
+          setSavedTableArray(processTableArrayForSave(newState));
 
           return newState;
         });
@@ -645,7 +646,7 @@ const ReviewPdf: React.FC<Props> = () => {
               : table
           );
 
-          savedTableArrayCheckpoint(newState);
+          setSavedTableArray(processTableArrayForSave(tableArray));
 
           return newState;
         });
@@ -670,7 +671,7 @@ const ReviewPdf: React.FC<Props> = () => {
           : table
       );
 
-      savedTableArrayCheckpoint(newState);
+      setSavedTableArray(processTableArrayForSave(newState));
 
       return newState;
     });
@@ -763,7 +764,7 @@ const ReviewPdf: React.FC<Props> = () => {
               : { ...table }
           );
 
-          savedTableArrayCheckpoint(newState);
+          setSavedTableArray(processTableArrayForSave(newState));
 
           return newState;
         });
@@ -817,23 +818,27 @@ const ReviewPdf: React.FC<Props> = () => {
   const handleElementSelected = () => {};
 
   const handleBlur = (): void => {
-    savedTableArrayCheckpoint(tableArray);
+    setSavedTableArray(processTableArrayForSave(tableArray));
   };
 
-  const savedTableArrayCheckpoint = (tableData: TableData[]): void => {
-    setSavedTableArray(
-      tableData.map((tableItem: TableData): TableData => {
-        tableItem.data?.forEach((row: RowI): void => {
-          row.row.forEach((field: FieldData): void => {
-            delete field.touched;
-            delete field.active;
-            delete field.hovered;
-          });
-        });
+  const handleUndo = (): void => setTableArray(undoSavedTableArray());
 
-        return tableItem;
-      })
-    );
+  const handleRedo = (): void => setTableArray(redoSavedTableArray());
+
+  const processTableArrayForSave = (tableData: TableData[]): TableData[] => {
+    const processedTableData = clone(tableData);
+
+    processedTableData.forEach((tableItem: TableData): void => {
+      tableItem.data?.forEach((row: RowI): void => {
+        row.row.forEach((field: FieldData): void => {
+          delete field.touched;
+          delete field.active;
+          delete field.hovered;
+        });
+      });
+    });
+
+    return processedTableData;
   };
 
   useEffect(() => {
@@ -1058,7 +1063,7 @@ const ReviewPdf: React.FC<Props> = () => {
         <Icon>save</Icon>
       </IconButton>
       <IconButton
-        onClick={undoSavedTableArray}
+        onClick={handleUndo}
         color="success"
         disabled={!isSavedTableArrayUndoable()}
         sx={{
@@ -1070,7 +1075,7 @@ const ReviewPdf: React.FC<Props> = () => {
         <Icon>undo</Icon>
       </IconButton>
       <IconButton
-        onClick={redoSavedTableArray}
+        onClick={handleRedo}
         color="success"
         disabled={!isSavedTableArrayRedoable()}
         sx={{
