@@ -825,6 +825,18 @@ const ReviewPdf: React.FC<Props> = () => {
 
   const handleRedo = (): void => setTableArray(redoSavedTableArray());
 
+  const handleKeyDown = (e: KeyboardEvent): void => {
+    if (!e.ctrlKey) {
+      return;
+    }
+
+    if (e.key === "z" && isSavedTableArrayUndoable()) {
+      handleUndo();
+    } else if (e.key === "y" && isSavedTableArrayRedoable()) {
+      handleRedo();
+    }
+  };
+
   const processTableArrayForSave = (tableData: TableData[]): TableData[] => {
     const processedTableData = clone(tableData);
 
@@ -931,6 +943,10 @@ const ReviewPdf: React.FC<Props> = () => {
       }
     };
     docResponse();
+  }, []);
+
+  useEffect((): void => {
+    window.addEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
