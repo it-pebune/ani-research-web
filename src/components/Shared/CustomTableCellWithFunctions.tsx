@@ -267,7 +267,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
           color: data.valid ? "green" : data.touched ? "orange" : "red",
           height: height,
         }}
-        value={data.value}
+        value={data.value ?? ""}
         onFocus={handleTouched}
         onChange={handleTextChange}
         onBlur={handleBlur}
