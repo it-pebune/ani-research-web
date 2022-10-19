@@ -238,6 +238,11 @@ interface TableData {
   data?: RowI[];
 }
 
+const handleBeforeUnload = (e: BeforeUnloadEvent): void => {
+  e.preventDefault();
+  e.returnValue = true;
+};
+
 const ReviewPdf: React.FC<Props> = () => {
   const [data, setData] = useState<DataI>({
     company_shares: [],
@@ -852,11 +857,6 @@ const ReviewPdf: React.FC<Props> = () => {
     } else if (e.key === "y" && isSavedTableArrayRedoable()) {
       handleRedo();
     }
-  };
-
-  const handleBeforeUnload = (e: BeforeUnloadEvent): void => {
-    e.preventDefault();
-    e.returnValue = true;
   };
 
   const processTableArrayForSave = (tableData: TableData[]): TableData[] => {
