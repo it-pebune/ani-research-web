@@ -777,7 +777,7 @@ const ReviewPdf: React.FC<Props> = () => {
       docId: params.id,
       active: tokenStatus.active,
       token: tokenStatus.token,
-      data: JSON.stringify(tableArray),
+      data: JSON.stringify(processTableArrayForSave(tableArray)),
     });
   };
 
@@ -824,6 +824,16 @@ const ReviewPdf: React.FC<Props> = () => {
   const handleUndo = (): void => setTableArray(undoSavedTableArray());
 
   const handleRedo = (): void => setTableArray(redoSavedTableArray());
+
+  const handleReset = async (): Promise<void> => {
+    const docRaw = await documentService.getDocumentRawData({
+      docId: params.id,
+      active: tokenStatus.active,
+      token: tokenStatus.token,
+    });
+
+    setData(JSON.parse(docRaw.dataRaw));
+  };
 
   const handleKeyDown = (e: KeyboardEvent): void => {
     if (!e.ctrlKey) {
@@ -1101,6 +1111,17 @@ const ReviewPdf: React.FC<Props> = () => {
         }}
       >
         <Icon>redo</Icon>
+      </IconButton>
+      <IconButton
+        onClick={handleReset}
+        color="success"
+        sx={{
+          position: "absolute",
+          top: "24px",
+          left: "310px",
+        }}
+      >
+        <Icon>refresh</Icon>
       </IconButton>
     </Box>
   );
