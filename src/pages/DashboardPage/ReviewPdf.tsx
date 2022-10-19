@@ -23,6 +23,7 @@ import { documentService } from "../../services/documentsServices";
 import useTokenStatus from "../../utils/useTokenStatus";
 import useUndoableState from "../../utils/useUndoableState";
 import clone from "lodash/clone";
+import isEqual from "lodash/isEqual";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -257,6 +258,10 @@ const ReviewPdf: React.FC<Props> = () => {
     isSavedTableArrayRedoable,
     redoSavedTableArray,
   ] = useUndoableState<TableData[]>([]);
+  const [lastSavedTableArray, setLastSavedTableArray] = useState<
+    TableData[] | null
+  >(null);
+  const [isTableArraySaved, setIsTableArraySaved] = useState<boolean>(false);
   const [loadedData, setLoadedData] = useState<FormatedTableI[]>([]);
   const [tableTouched, setTableTouched] = useState(false);
   const [cellActive, setCellActive] = useState(false);
@@ -773,11 +778,13 @@ const ReviewPdf: React.FC<Props> = () => {
   };
 
   const handleSave = async () => {
+    setLastSavedTableArray(savedTableArray);
+
     await documentService.updateDocumentData({
       docId: params.id,
       active: tokenStatus.active,
       token: tokenStatus.token,
-      data: JSON.stringify(processTableArrayForSave(tableArray)),
+      data: JSON.stringify(savedTableArray),
     });
   };
 
@@ -862,6 +869,10 @@ const ReviewPdf: React.FC<Props> = () => {
 
     return processedTableData;
   };
+
+  useEffect((): void => {
+    setIsTableArraySaved(isEqual(savedTableArray, lastSavedTableArray));
+  }, [savedTableArray, lastSavedTableArray]);
 
   useEffect(() => {
     if (loadedData.length > 0 && docDetails?.type === 2) {
@@ -950,6 +961,7 @@ const ReviewPdf: React.FC<Props> = () => {
 
         setTableArray(processedData);
         resetSavedTableArray(processedData);
+        setLastSavedTableArray(processedData);
       }
     };
     docResponse();
@@ -1080,6 +1092,7 @@ const ReviewPdf: React.FC<Props> = () => {
       <IconButton
         onClick={handleSave}
         color="success"
+        disabled={isTableArraySaved}
         sx={{
           position: "absolute",
           top: "24px",
