@@ -854,6 +854,11 @@ const ReviewPdf: React.FC<Props> = () => {
     }
   };
 
+  const handleBeforeUnload = (e: BeforeUnloadEvent): void => {
+    e.preventDefault();
+    e.returnValue = true;
+  };
+
   const processTableArrayForSave = (tableData: TableData[]): TableData[] => {
     const processedTableData = clone(tableData);
 
@@ -869,6 +874,14 @@ const ReviewPdf: React.FC<Props> = () => {
 
     return processedTableData;
   };
+
+  useEffect((): void => {
+    if (isTableArraySaved) {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    } else {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+    }
+  }, [isTableArraySaved]);
 
   useEffect((): void => {
     setIsTableArraySaved(isEqual(savedTableArray, lastSavedTableArray));
