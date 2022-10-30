@@ -441,9 +441,8 @@ const ReviewPdf: React.FC<Props> = () => {
   ) => {
     setCellActive(false);
     if (!(cellIndex === 0 && rowIndex === 0) && tableArray[tableIndex]) {
-      const tableStructureLength = tableArray[tableIndex].cells.map(
-        (cell) => cell.field
-      ).length;
+      const tableStructureLength =
+        tableArray[tableIndex].cells.map((cell) => cell.field).length - 1;
       const tableDataArray = tableArray[tableIndex].data?.reduce(
         (accumulator: FieldData[], element) => {
           return [...accumulator, ...element.row];
@@ -451,7 +450,7 @@ const ReviewPdf: React.FC<Props> = () => {
         []
       );
       const tableDataValues = tableDataArray
-        ? tableDataArray.map((item) => item.value)
+        ? tableDataArray.map((item) => (item.value ? item.value : ""))
         : [];
       const positionInArray = tableStructureLength * rowIndex + cellIndex;
 
@@ -518,9 +517,8 @@ const ReviewPdf: React.FC<Props> = () => {
   ) => {
     setCellActive(false);
     if (tableArray[tableIndex]) {
-      const tableStructureLength = tableArray[tableIndex].cells.map(
-        (cell) => cell.field
-      ).length;
+      const tableStructureLength =
+        tableArray[tableIndex].cells.map((cell) => cell.field).length - 1;
       let tableDataArray = tableArray[tableIndex].data?.reduce(
         (accumulator: FieldData[], element) => {
           return [...accumulator, ...element.row];
@@ -594,9 +592,8 @@ const ReviewPdf: React.FC<Props> = () => {
   ) => {
     setCellActive(false);
     if (!(cellIndex === 0 && rowIndex === 0) && tableArray[tableIndex]) {
-      const tableStructureLength = tableArray[tableIndex].cells.map(
-        (cell) => cell.field
-      ).length;
+      const tableStructureLength =
+        tableArray[tableIndex].cells.map((cell) => cell.field).length - 1;
       const tableDataArray = tableArray[tableIndex].data?.reduce(
         (accumulator: FieldData[], element) => {
           return [...accumulator, ...element.row];
@@ -604,10 +601,10 @@ const ReviewPdf: React.FC<Props> = () => {
         []
       );
       const tableDataValues = tableDataArray
-        ? tableDataArray.map((item) => item.value)
+        ? tableDataArray.map((item) => (item.value ? item.value : ""))
         : [];
       const positionInArray = tableStructureLength * rowIndex + cellIndex;
-
+      console.log(positionInArray);
       const newValuesArray =
         tableDataValues.length > 0
           ? tableDataValues.map((value, index) =>
@@ -620,7 +617,6 @@ const ReviewPdf: React.FC<Props> = () => {
                 : tableDataValues[index + 1]
             )
           : [];
-
       if (tableDataArray) {
         const newTableDataArray: FieldData[] = tableDataArray.map(
           (item, index) => ({
@@ -636,7 +632,6 @@ const ReviewPdf: React.FC<Props> = () => {
         const noOfRows = newTableDataArray
           ? Math.ceil(newTableDataArray?.length / tableStructureLength)
           : 0;
-
         const newRowsArray: RowI[] = Array(noOfRows)
           .fill(null)
           .map((row, index) => ({
@@ -645,7 +640,6 @@ const ReviewPdf: React.FC<Props> = () => {
               (index + 1) * tableStructureLength
             ),
           }));
-
         setTableArray((prevState) => {
           const newState = prevState.map((table, tIndex) =>
             tableIndex === tIndex
@@ -655,9 +649,7 @@ const ReviewPdf: React.FC<Props> = () => {
                 }
               : table
           );
-
           setSavedTableArray(processTableArrayForSave(tableArray));
-
           return newState;
         });
       }
@@ -694,15 +686,17 @@ const ReviewPdf: React.FC<Props> = () => {
   ) => {
     setCellActive(false);
     if (tableArray[tableIndex]) {
-      const tableStructureLength = tableArray[tableIndex].cells.map(
-        (cell) => cell.field
-      ).length;
+      const tableStructureLength =
+        tableArray[tableIndex].cells.map((cell) => cell.field).length - 1;
       let tableDataArray = tableArray[tableIndex].data?.reduce(
         (accumulator: FieldData[], element) => {
           return [...accumulator, ...element.row];
         },
         []
       );
+
+      console.log(tableDataArray);
+
       if (
         tableDataArray &&
         tableDataArray[tableDataArray?.length - 1].value !== ""
@@ -720,7 +714,7 @@ const ReviewPdf: React.FC<Props> = () => {
         ];
       }
       const tableDataValues = tableDataArray
-        ? tableDataArray.map((item) => item.value)
+        ? tableDataArray.map((item) => (item.value ? item.value : ""))
         : [];
       const positionInArray =
         tableDataValues.length - (tableStructureLength * rowIndex + cellIndex);

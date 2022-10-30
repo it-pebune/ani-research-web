@@ -105,19 +105,16 @@ const CustomRowOfInterests: React.FC<Props> = ({
       }}
     >
       <TableCell sx={{ alignSelf: "center", background: "white", py: "30px" }}>
-        <Box>
-          <IconButton
-            style={{
-              background: valid ? "green" : "white",
-              color: valid ? "white" : "grey",
-            }}
-            onClick={handleValidate}
-          >
-            <Icon>done</Icon>
-          </IconButton>
-        </Box>
+        <IconButton
+          style={{
+            background: valid ? "green" : "white",
+            color: valid ? "white" : "grey",
+          }}
+          onClick={handleValidate}
+        >
+          <Icon>done</Icon>
+        </IconButton>
       </TableCell>
-
       {values.map((data, vIndex) => (
         <CustomTableCellWithFunctions
           key={`cell-${index}-${vIndex}`}
