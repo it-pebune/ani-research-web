@@ -1,6 +1,5 @@
 import { IconButton, Icon, TableRow, Box, TableCell } from "@mui/material";
-import { useEffect } from "@storybook/addons";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { FieldData } from "../../interfaces/ReviewPdf";
 import CustomTableCellWithFunctions from "./CustomTableCellWithFunctions";
 
@@ -52,10 +51,24 @@ const CustomRowOfInterests: React.FC<Props> = ({
   };
 
   const [valid, setValid] = useState(true);
+  const [cellHeights, setCellHeights] = useState(
+    [...Array.from(Array(noOfColumns).keys())].map((i) => 20)
+  );
+  const [rowHeight, setRowHeight] = useState(Math.max(...cellHeights));
 
   const handleValidate = () => {
     onRowValidate(index);
   };
+
+  const handleRowHeight = (index: number, height: number) => {
+    setCellHeights((prevState) =>
+      prevState.map((value, idx) => (idx === index ? height : value))
+    );
+  };
+
+  useEffect(() => {
+    setRowHeight(Math.max(...cellHeights));
+  }, [cellHeights]);
 
   useLayoutEffect(() => {
     let validRow = true;
@@ -113,6 +126,7 @@ const CustomRowOfInterests: React.FC<Props> = ({
           noOfColumns={noOfColumns}
           index={vIndex}
           rowIndex={index}
+          cellHeight={rowHeight}
           cellActive={cellActive}
           tableTouched={tableTouched}
           onTouched={onTouched}
@@ -122,6 +136,7 @@ const CustomRowOfInterests: React.FC<Props> = ({
           onValueChanged={onValueChanged}
           onShiftAllLeft={onShiftAllLeft}
           onShiftAllRight={onShiftAllRight}
+          onHeightChanged={handleRowHeight}
           onMoveLeft={onMoveLeft}
           onMoveRight={onMoveRight}
           onMoveUp={onMoveUp}
