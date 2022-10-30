@@ -13,9 +13,9 @@ interface Props {
   data: FieldData;
   index: number;
   rowIndex: number;
+  cellHeight: number;
   noOfColumns: number;
   noOfRows: number | undefined;
-  onElementSelected: any;
   onHoveredState: any;
   cellActive: boolean;
   tableTouched: boolean;
@@ -24,6 +24,8 @@ interface Props {
   onValueChanged: any;
   onShiftAllLeft: any;
   onShiftAllRight: any;
+  onHeightChanged: any;
+  onElementSelected: any;
   onMoveLeft: any;
   onMoveRight: any;
   onMoveUp: any;
@@ -57,9 +59,10 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   rowIndex,
   noOfColumns,
   noOfRows,
-  onElementSelected,
+  cellHeight,
   cellActive,
-  tableTouched,
+  onHeightChanged,
+  onElementSelected,
   onHoveredState,
   onTouched,
   onCellActive,
@@ -73,7 +76,7 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
 }) => {
   const textField = useRef<HTMLTextAreaElement | null>(null);
   const [myValue, setValue] = useState("");
-  const [height, setHeight] = useState("20px");
+  const [height, setHeight] = useState(`${cellHeight}px`);
   const handleEnter = () => {
     if (!cellActive) {
       onHoveredState(index, rowIndex, true);
@@ -130,16 +133,21 @@ const CustomTableCellWithFunctions: React.FC<Props> = ({
   };
 
   useEffect(() => {
+    if (data.value) {
+      onHeightChanged(index, textField.current?.scrollHeight);
+    }
+  }, [data.value]);
+
+  useEffect(() => {
     if (index === 0 && rowIndex === 0) {
-      console.log(data);
+      // console.log(data);
     }
   }, [rowIndex]);
 
   useEffect(() => {
-    if (data.value) {
-      setHeight(textField.current?.scrollHeight + "px");
-    }
-  }, []);
+    setHeight(cellHeight + "px");
+    onHeightChanged(index, textField.current?.scrollHeight);
+  }, [cellHeight]);
 
   return (
     <TableCell
