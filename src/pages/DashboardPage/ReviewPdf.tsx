@@ -857,12 +857,23 @@ const ReviewPdf: React.FC<Props> = () => {
     return processedTableData;
   };
 
-  useEffect((): void => {
+  useEffect((): any => {
     if (isTableArraySaved) {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     } else {
       window.addEventListener("beforeunload", handleBeforeUnload);
     }
+
+    return async (): Promise<void> => {
+      if (isTableArraySaved) {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      } else if (
+        0 !== tableArray.length &&
+        window.confirm("Save changes before you leave?")
+      ) {
+        await handleSave();
+      }
+    };
   }, [isTableArraySaved]);
 
   useEffect((): void => {
