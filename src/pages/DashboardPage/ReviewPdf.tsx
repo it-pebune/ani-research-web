@@ -1072,6 +1072,7 @@ const ReviewPdf: React.FC<Props> = () => {
       </Paper>
       <IconButton
         color="primary"
+        title="Back"
         sx={{
           position: "absolute",
           top: "24px",
@@ -1083,6 +1084,7 @@ const ReviewPdf: React.FC<Props> = () => {
       <IconButton
         onClick={handleSave}
         color="success"
+        title="Save"
         disabled={isTableArraySaved}
         sx={{
           position: "absolute",
@@ -1095,6 +1097,7 @@ const ReviewPdf: React.FC<Props> = () => {
       <IconButton
         onClick={handleUndo}
         color="success"
+        title="Undo"
         disabled={!isSavedTableArrayUndoable()}
         sx={{
           position: "absolute",
@@ -1107,6 +1110,7 @@ const ReviewPdf: React.FC<Props> = () => {
       <IconButton
         onClick={handleRedo}
         color="success"
+        title="Redo"
         disabled={!isSavedTableArrayRedoable()}
         sx={{
           position: "absolute",
@@ -1119,6 +1123,7 @@ const ReviewPdf: React.FC<Props> = () => {
       <IconButton
         onClick={handleReset}
         color="success"
+        title="Reset"
         sx={{
           position: "absolute",
           top: "24px",
