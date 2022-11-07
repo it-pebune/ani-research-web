@@ -1082,15 +1082,16 @@ const ReviewPdf: React.FC<Props> = () => {
         )}
       </Paper>
       <IconButton
-        color="primary"
-        title="Back"
+        color="success"
+        title="Validate"
+        disabled
         sx={{
           position: "absolute",
           top: "24px",
           left: "170px",
         }}
       >
-        <Icon>arrow_back_ios</Icon>
+        <Icon>check</Icon>
       </IconButton>
       <IconButton
         onClick={handleSave}
