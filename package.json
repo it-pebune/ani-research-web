@@ -1,6 +1,6 @@
 {
   "name": "ani_pe_bune",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "private": true,
   "dependencies": {
     "@date-io/moment": "^2.13.1",
