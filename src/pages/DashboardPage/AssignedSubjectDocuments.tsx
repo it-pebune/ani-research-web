@@ -70,9 +70,9 @@ export const AssignedSubjectDocuments: React.FC = (): ReactElement => {
         filterAndSortDocuments(searchKey, sortOptions);
       }
     },
-    disableIf = (action: string, id: any): boolean =>
+    disableIf = (action: string, data: DocumentFromDataBase): boolean =>
       "review-document" === action &&
-      !ValidDocumentStatuses.includes(documentStatuses[id]),
+      !ValidDocumentStatuses.includes(documentStatuses[data.id]),
     handleAction = (action: string, id: any): void => {
       if (typeof id !== "string") {
         return;
