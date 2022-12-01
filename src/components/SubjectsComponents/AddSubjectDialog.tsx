@@ -137,6 +137,11 @@ const AddSubjectDialog: React.FC<Props> = ({
     }
   };
 
+  const disableScrappedSubjectActionIf = (
+    action: string,
+    data: SubjectFromScrapper
+  ): boolean => action === "view-subject" && data.added;
+
   const handleLastNameChange = (e: any) => {
     setSubjectData((prevData: SubjectData) => ({
       ...prevData,
@@ -344,6 +349,7 @@ const AddSubjectDialog: React.FC<Props> = ({
                   .map((subject, index) => (
                     <CustomTableRow
                       onAction={handleScrappedSubjectAction}
+                      disableIf={disableScrappedSubjectActionIf}
                       columnsGrid={columnsGrid}
                       rowDefs={scrappedSubjectsTableRowDefs}
                       key={`table-row-${index}`}

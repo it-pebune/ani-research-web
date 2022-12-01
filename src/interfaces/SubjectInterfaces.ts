@@ -29,6 +29,7 @@ export interface SubjectFromScrapper {
   party: string;
   district: string;
   chamber: number | string;
+  added: boolean;
 }
 
 export interface SubjectFromScrapperResult {

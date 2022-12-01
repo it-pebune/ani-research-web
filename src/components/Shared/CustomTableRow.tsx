@@ -92,7 +92,7 @@ const CustomTableRow: React.FC<Props> = ({
       {rowDefs.map((cellDef: RowCell, index: number): React.ReactElement => {
         const disabled = (disableIf &&
           cellDef.action &&
-          disableIf(cellDef.action, data.id)) as boolean;
+          disableIf(cellDef.action, data)) as boolean;
 
         return (
           <TableCell
