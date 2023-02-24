@@ -37,6 +37,7 @@ import useTokenStatus from "../../utils/useTokenStatus";
 import CustomTableHeader from "../Shared/CustomTableHeader";
 import CustomTableRow from "../Shared/CustomTableRow";
 import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
+import { ApiErrors } from "../../enums/ErrorsEnums";
 
 interface Props {
   open: boolean;
@@ -72,6 +73,7 @@ const AddSubjectDialog: React.FC<Props> = ({ open, onClose }) => {
   const [counties, setCounties] = useState<County[]>([]);
   const [allUats, setAllUats] = useState<Uat[]>([]);
   const [uats, setUats] = useState<Uat[]>([]);
+  const [errors, setErrors] = useState<any>({});
   const tokenStatus = useTokenStatus();
 
   const handleView = (e: any) => {
@@ -98,6 +100,7 @@ const AddSubjectDialog: React.FC<Props> = ({ open, onClose }) => {
   };
 
   const onSubjectDialogClose = () => {
+    setErrors({});
     setSubjectDialogOpened(false);
   };
 
@@ -107,13 +110,13 @@ const AddSubjectDialog: React.FC<Props> = ({ open, onClose }) => {
   };
 
   const handleCounty = (evt: any, data: any) => {
-    setUats(allUats.filter((uat) => uat.countyId === data.id));
+    setUats(allUats.filter((uat) => uat.countyId === data?.id));
   };
 
   const handleUat = (evt: any, data: any) => {
     setSubjectData((prevData: SubjectData) => ({
       ...prevData,
-      sirutaId: data.sirutaId,
+      sirutaId: data ? data.sirutaId : null,
     }));
   };
 
@@ -151,15 +154,31 @@ const AddSubjectDialog: React.FC<Props> = ({ open, onClose }) => {
   const handleDOBChange = (e: any) => {};
 
   const handleAddSubject = async (): Promise<void> => {
-    await subjectService.addSubject({
-      token: tokenStatus.token as string,
-      active: tokenStatus.active,
-      firstName: subjectData.firstName,
-      lastName: subjectData.lastName,
-      photoUrl: subjectData.photoUrl,
-      dob: subjectData.dob,
-      sirutaId: subjectData.sirutaId,
-    });
+    setErrors({});
+
+    try {
+      await subjectService.addSubject({
+        token: tokenStatus.token as string,
+        active: tokenStatus.active,
+        firstName: subjectData.firstName,
+        lastName: subjectData.lastName,
+        photoUrl: subjectData.photoUrl,
+        dob: subjectData.dob,
+        sirutaId: subjectData.sirutaId,
+      });
+    } catch (error: any) {
+      if (ApiErrors.VALIDATION === error?.response?.data?.code) {
+        const errors: any = {};
+
+        for (const validationError of error.response.data.details) {
+          errors[validationError.context.key] = true;
+        }
+
+        setErrors(errors);
+      }
+
+      return;
+    }
 
     subjectToAdd!.added = true;
     setSubjectDialogOpened(false);
@@ -448,12 +467,16 @@ const AddSubjectDialog: React.FC<Props> = ({ open, onClose }) => {
                 type="text"
                 label="Nume"
                 value={subjectData?.lastName}
+                required
+                error={errors.lastName}
                 onChange={(e) => handleLastNameChange(e)}
               ></TextField>
               <TextField
                 type="text"
                 label="Prenume"
                 value={subjectData?.firstName}
+                required
+                error={errors.firstName}
                 onChange={(e) => handleFirstNameChange(e)}
               ></TextField>
 
