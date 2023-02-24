@@ -23,6 +23,7 @@ import { subjectsTableHeaderData } from "../../resources/tableHeaders/subjectsTa
 import { subjectsTableRowDefs } from "../../resources/tableRowDefs/subjectsTableRowDefs";
 import { subjectService } from "../../services/subjectService";
 import useTokenStatus from "../../utils/useTokenStatus";
+import { SubjectStatuses } from "../../enums/SubjectsEnums";
 
 const Subjects = (props: any) => {
   const columnsGrid = "100px .8fr .7fr .6fr .8fr .5fr .9fr 60px ";
@@ -82,16 +83,18 @@ const Subjects = (props: any) => {
     }
   };
 
-  const handleAssingDialogAction = (
+  const handleAssignDialogAction = (
     subjectId: number,
     userId: number,
-    userName: string
-  ) => {
+    userName: string,
+    status: SubjectStatuses
+  ): void => {
     setSubjects((prevData) =>
       prevData.map((item) => ({
         ...item,
         assignedToId: item.id === subjectId ? userId : item.assignedToId,
         assignedTo: item.id === subjectId ? userName : item.assignedTo,
+        status: item.id === subjectId ? status : item.status,
       }))
     );
     setFilteredSubjects((prevData) =>
@@ -99,6 +102,7 @@ const Subjects = (props: any) => {
         ...item,
         assignedToId: item.id === subjectId ? userId : item.assignedToId,
         assignedTo: item.id === subjectId ? userName : item.assignedTo,
+        status: item.id === subjectId ? status : item.status,
       }))
     );
     setAssignDialogOpened(false);
@@ -276,7 +280,7 @@ const Subjects = (props: any) => {
         open={assignDialogOpened}
         subject={selectedSubject}
         onClose={handleCloseAssignDialog}
-        onAction={handleAssingDialogAction}
+        onAction={handleAssignDialogAction}
       ></AssignDialog>
     </Box>
   );
