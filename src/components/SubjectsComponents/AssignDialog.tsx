@@ -22,6 +22,7 @@ import useTokenStatus from "../../utils/useTokenStatus";
 import CustomTableHeader from "../Shared/CustomTableHeader";
 import CustomTableRow from "../Shared/CustomTableRow";
 import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersController";
+import { SubjectStatuses } from "../../enums/SubjectsEnums";
 
 interface Props {
   open: boolean;
@@ -90,14 +91,16 @@ const AssignDialog: React.FC<Props> = ({
   };
 
   const handleAction = async (action: any, data: any) => {
-    const response = await subjectService.assignSubject({
+    const status = SubjectStatuses.ASSIGNED;
+
+    await subjectService.assignSubject({
       ...tokenStatus,
       subjectId: subject?.id,
       userId: data[0].id,
-      status: subject?.status,
+      status,
     });
-    console.log(data);
-    onAction(subject?.id, data[0].id, data[1].displayName);
+
+    onAction(subject?.id, data[0].id, data[1].displayName, status);
   };
 
   useEffect(() => {

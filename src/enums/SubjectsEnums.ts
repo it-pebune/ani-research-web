@@ -1,0 +1,6 @@
+export enum SubjectStatuses {
+  UNASSIGNED,
+  ASSIGNED,
+  WORK_IN_PROGRESS,
+  RESEARCH_COMPLETED,
+}
