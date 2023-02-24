@@ -63,24 +63,21 @@ const Subjects = (props: any) => {
 
   const handleCloseAddDialog = () => {
     setAddDialogOpened(false);
+
+    const subjectsResponse = async () => {
+      const response = await subjectService.getSubjectsFromDataBase({
+        ...tokenStatus,
+      });
+
+      setSubjects([...response]);
+      setFilteredSubjects([...response]);
+    };
+
+    subjectsResponse();
   };
 
   const handleCloseAssignDialog = () => {
     setAssignDialogOpened(false);
-  };
-
-  const handleAddDialogAction = () => {
-    setAddDialogOpened(false);
-    if (tokenStatus.active) {
-      const subjectsResponse = async () => {
-        const response = await subjectService.getSubjectsFromDataBase({
-          ...tokenStatus,
-        });
-        setSubjects([...response]);
-        setFilteredSubjects([...response]);
-      };
-      subjectsResponse();
-    }
   };
 
   const handleAssignDialogAction = (
@@ -269,19 +266,14 @@ const Subjects = (props: any) => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
 
-      <AddSubjectDialog
-        open={addDialogOpened}
-        onClose={handleCloseAddDialog}
-        onAction={handleAddDialogAction}
-        definedSubjects={subjects}
-      ></AddSubjectDialog>
+      <AddSubjectDialog open={addDialogOpened} onClose={handleCloseAddDialog} />
 
       <AssignDialog
         open={assignDialogOpened}
         subject={selectedSubject}
         onClose={handleCloseAssignDialog}
         onAction={handleAssignDialogAction}
-      ></AssignDialog>
+      />
     </Box>
   );
 };
