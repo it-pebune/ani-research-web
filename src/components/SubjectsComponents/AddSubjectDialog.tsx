@@ -150,8 +150,8 @@ const AddSubjectDialog: React.FC<Props> = ({ open, onClose }) => {
 
   const handleDOBChange = (e: any) => {};
 
-  const handleAddSubject = async () => {
-    const response = await subjectService.addSubject({
+  const handleAddSubject = async (): Promise<void> => {
+    await subjectService.addSubject({
       token: tokenStatus.token as string,
       active: tokenStatus.active,
       firstName: subjectData.firstName,
@@ -160,9 +160,9 @@ const AddSubjectDialog: React.FC<Props> = ({ open, onClose }) => {
       dob: subjectData.dob,
       sirutaId: subjectData.sirutaId,
     });
-    if (response) {
-      setSubjectDialogOpened(false);
-    }
+
+    subjectToAdd!.added = true;
+    setSubjectDialogOpened(false);
   };
 
   useEffect(() => {
