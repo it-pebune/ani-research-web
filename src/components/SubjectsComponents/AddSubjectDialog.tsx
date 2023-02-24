@@ -25,7 +25,6 @@ import "moment/locale/ro";
 import React, { useEffect, useState } from "react";
 import {
   SubjectData,
-  SubjectFromDataBase,
   SubjectFromScrapper,
   SubjectFromScrapperResult,
 } from "../../interfaces/SubjectInterfaces";
@@ -42,18 +41,11 @@ import SearchBarWithFiltersController from "../Shared/SearchBarWithFiltersContro
 interface Props {
   open: boolean;
   onClose: any;
-  onAction: any;
-  definedSubjects: SubjectFromDataBase[];
 }
 
 moment().locale("ro");
 
-const AddSubjectDialog: React.FC<Props> = ({
-  definedSubjects,
-  open,
-  onClose,
-  onAction,
-}) => {
+const AddSubjectDialog: React.FC<Props> = ({ open, onClose }) => {
   const columnsGrid = "60px 1fr 1fr 1fr 1fr 70px";
   const [scrappedSubjects, setScrappedSubjects] = useState<
     SubjectFromScrapper[]
@@ -373,7 +365,7 @@ const AddSubjectDialog: React.FC<Props> = ({
       </DialogContent>
 
       <DialogActions sx={{ padding: "16px", borderTop: "1px solid #bdbdbd" }}>
-        <Button onClick={() => onAction()}>Inapoi la lista principala</Button>
+        <Button onClick={() => onClose()}>Inapoi la lista principala</Button>
       </DialogActions>
 
       <Dialog
