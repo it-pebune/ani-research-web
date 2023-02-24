@@ -110,6 +110,10 @@ export const subjectService = {
     }
     return response;
   },
+
+  /**
+   * @throws {Error}
+   */
   addSubject: async (reqData: {
     token: string;
     active: boolean;
@@ -118,37 +122,23 @@ export const subjectService = {
     photoUrl?: string;
     dob?: string;
     sirutaId?: number | null;
-  }): Promise<any> => {
-    let response: any;
-    if (reqData.active) {
-      const config = {
-        headers: { Authorization: `Bearer ${reqData.token}` },
-      };
-      const payload = JSON.parse(
-        JSON.stringify({
-          firstName: reqData.firstName,
-          lastName: reqData.lastName,
-          photoUrl: reqData.photoUrl,
-          dob: reqData.dob,
-          sirutaId: reqData.sirutaId && reqData.sirutaId,
-        })
-      );
-
-      try {
-        response = await axios.post(
-          `${API_BASE_URL}/subjects`,
-          payload,
-          config
-        );
-        const data = await response.data;
-        return data;
-      } catch (error) {
-        response = error;
-        console.log(error);
-      }
+  }): Promise<void> => {
+    if (!reqData.active) {
+      throw new Error("Active token required for adding subject.");
     }
-    return response;
+
+    const config = { headers: { Authorization: `Bearer ${reqData.token}` } },
+      payload = {
+        firstName: reqData.firstName,
+        lastName: reqData.lastName,
+        photoUrl: reqData.photoUrl,
+        dob: reqData.dob,
+        sirutaId: reqData.sirutaId && reqData.sirutaId,
+      };
+
+    await axios.post(`${API_BASE_URL}/subjects`, payload, config);
   },
+
   assignSubject: async (reqData: {
     token: string;
     active: boolean;
