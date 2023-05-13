@@ -79,6 +79,12 @@ export const assignedSubjectsTableRowDefs: RowCell[] = [
     align: "left",
   },
   {
+    cellType: "date",
+    dateFormat: "DD.MM.YYYY",
+    field: "dob",
+    align: "center",
+  },
+  {
     cellType: "text",
     field: "city",
     fields: [{ name: "city" }],
