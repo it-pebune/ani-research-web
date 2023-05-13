@@ -92,6 +92,10 @@ export const DocumentsFromScrapper = () => {
   const [documentsUploadedWithFailure, setDocumentsUploadedWithFailure] =
     useState<boolean>(false);
 
+  const isDeclarationOfWealth = (
+    document: DocumentsFromScrapperResult
+  ): boolean => "A" === document.type || document.type.includes("avere");
+
   const loadInstitutions = async () => {
     const response = await institutionService.getInstitutions({
       token: tokenStatus.token,
@@ -314,12 +318,7 @@ export const DocumentsFromScrapper = () => {
         subjectId: subject?.id,
         status: 0,
         jobId: selectedJob?.id,
-        type:
-          selectedDocument.type === "I"
-            ? 2
-            : selectedDocument.type === "A"
-            ? 1
-            : 2,
+        type: isDeclarationOfWealth(selectedDocument) ? 1 : 2,
         name: selectedDocument.filename,
         downloadUrl: dataUrl
           .replace(":filename", selectedDocument.filename)
@@ -715,10 +714,9 @@ export const DocumentsFromScrapper = () => {
                       .map((document, index) => ({
                         ...document,
                         index: index + 1,
-                        type:
-                          document.type === "A"
-                            ? "Declaratie de avere"
-                            : "Declaratie de interese",
+                        type: isDeclarationOfWealth(document)
+                          ? "Declaratie de avere"
+                          : "Declaratie de interese",
                         chamberName:
                           document.chamber === 1
                             ? "Senat"
