@@ -23,7 +23,7 @@ type Props = {
 };
 
 const MySubjects = ({ subjects, onSubjectSelected }: Props) => {
-  const columnsGrid = "100px .5fr .5fr .3fr .3fr 60px";
+  const columnsGrid = "100px .5fr .5fr .5fr .5fr .5fr 60px";
 
   const [filteredResult, setFilteredResult] = useState<SubjectFromDataBase[]>(
     []

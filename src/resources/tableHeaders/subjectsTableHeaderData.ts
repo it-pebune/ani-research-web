@@ -103,13 +103,19 @@ export const scrappedSubjectsTableHeaderData: HeaderCell[] = [
 export const assignedSubjectsTableHeaderData: HeaderCell[] = [
   {
     field: "",
-    align: "center",
-    title: "#",
   },
   {
     field: "lastName",
     align: "justify",
     title: "NUME",
+    hasSortFunction: true,
+    sortActive: true,
+    direction: Directions.ASC,
+  },
+  {
+    field: "dob",
+    title: "DATA NASTERII",
+    align: "center",
     hasSortFunction: true,
     sortActive: true,
     direction: Directions.ASC,
