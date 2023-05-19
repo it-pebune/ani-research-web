@@ -123,14 +123,10 @@ export const DocumentsFromScrapper = () => {
               .localeCompare(job.name.toLowerCase(), "en", {
                 sensitivity: "base",
               }) &&
-          0 ===
-            document.locality
-              .toLowerCase()
-              .localeCompare(job.uat.toLowerCase(), "en", {
-                sensitivity: "base",
-              }) &&
-          moment(document.date, "DD.MM.YYYY") >= moment(job.dateStart) &&
-          moment(document.date, "DD.MM.YYYY") <= moment(job.dateEnd)
+          moment(document.date, "DD.MM.YYYY") >=
+            moment(job.dateStart).startOf("month") &&
+          moment(document.date, "DD.MM.YYYY") <=
+            moment(job.dateEnd).endOf("month")
         );
       }
     );
